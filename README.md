@@ -75,6 +75,9 @@ Sample PDFs in several formats and languages. Click any preview to open it.
 npx skills add tw93/kami -a claude-code codex cursor -g -y
 ```
 
+Or tell your agent to install:
+> Install Kami for me by reading https://kami.tw93.fun/llms.txt
+
 One copy lands in `~/.agents/skills`, the shared skills directory. Claude Code is symlinked in; Codex, Cursor, and every other agent that reads that directory picks Kami up as `/kami`. Update with `npx skills update -g -y`.
 
 **Host plugin**, if you prefer the host's own update command (namespaced as `/kami:kami`; Claude Code v2.1.142 or newer)
