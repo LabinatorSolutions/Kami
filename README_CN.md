@@ -1,9 +1,8 @@
-<h4 align="right"><a href="README.md">English</a> | <strong>中文</strong> | <a href="README_TW.md">繁體</a> | <a href="README_JA.md">日本語</a> | <a href="README_KR.md">한국어</a></h4>
-
 <div align="center">
   <img src="skills/kami/assets/images/logo.svg" width="120" />
   <h1>Kami</h1>
-  <p><b>好内容，值得好版面。</b></p>
+  <p><b>好内容，值得好版面</b></p>
+  <p><a href="README.md">English</a> · 中文 · <a href="README_TW.md">繁體</a> · <a href="README_JA.md">日本語</a> · <a href="README_KR.md">한국어</a></p>
   <a href="https://github.com/tw93/kami/stargazers"><img src="https://img.shields.io/github/stars/tw93/kami?style=flat-square" alt="Stars"></a>
   <a href="https://github.com/tw93/kami/releases"><img src="https://img.shields.io/github/v/tag/tw93/kami?label=version&style=flat-square" alt="Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="License"></a>
