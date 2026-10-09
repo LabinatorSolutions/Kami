@@ -1,3 +1,5 @@
+<h4 align="right"><strong>English</strong> | <a href="README_CN.md">中文</a> | <a href="README_TW.md">繁體</a> | <a href="README_JA.md">日本語</a> | <a href="README_KR.md">한국어</a></h4>
+
 <div align="center">
   <img src="skills/kami/assets/images/logo.svg" width="120" />
   <h1>Kami</h1>
@@ -100,7 +102,18 @@ Kami also runs a quiet version check at most once a day and tells you in chat wh
 
 ## Use
 
-The skill auto-triggers from natural requests, no slash command needed. Optimized for English and Chinese; Japanese and Korean are supported via language-specific font fallbacks and layout adjustments, with output checked individually.
+The skill auto-triggers from natural requests, no slash command needed.
+
+### Supported Languages
+
+English and Chinese have the most complete support. Japanese and Korean use language-specific font fallbacks and layout adjustments, with each output checked before delivery:
+
+| Language | Support Level | Default Serif Font |
+| :--- | :--- | :--- |
+| **English** | Complete | Charter |
+| **Chinese** (简体 / 繁體) | Complete | TsangerJinKai02 (仓耳今楷) |
+| **Japanese** (日本語) | Font fallbacks & layout check | YuMincho (游明朝) |
+| **Korean** (한국어) | Font fallbacks & layout check | Source Han Serif K (본명조) |
 
 Example prompts by language:
 
