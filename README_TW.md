@@ -11,7 +11,7 @@
 
 ## 簡介
 
-Kami（紙，かみ）在日文中意為「紙」，為 AI Agent 提供排版規則與範本，可輸出 PDF、PNG 以及可編輯的 PowerPoint，內建 8 種文件範本以及一套官網落地頁。
+Kami（紙，かみ）在日文中意為「紙」，為 AI Agent 提供排版規則與範本，可輸出 PDF、PNG 以及可編輯的 PowerPoint，內建 8 種文件範本和一套官網落地頁。
 
 作為三部曲中負責交付的最後一環，Kami 與專注寫程式碼的 [Kaku](https://github.com/tw93/Kaku) (書く)、規範工程習慣的 [Waza](https://github.com/tw93/Waza) (技) 相互配合，讓技術成果不僅邏輯嚴謹，也有賞心悅目的呈現。
 
@@ -74,12 +74,12 @@ Kami（紙，かみ）在日文中意為「紙」，為 AI Agent 提供排版規
 npx skills add tw93/kami -a claude-code codex cursor -g -y
 ```
 
-技能會統一存放在 `~/.agents/skills` 共享目錄中。Claude Code 自動建立符號連結；Codex、Cursor 以及所有支援該規範的 Agent 會自動將其識別為 `/kami`。後續透過 `npx skills update -g -y` 即可更新。
+技能統一放在 `~/.agents/skills` 共享目錄，Claude Code 透過符號連結讀取，Codex、Cursor 等讀取這個目錄的 Agent 都能用 `/kami` 呼叫，後續用 `npx skills update -g -y` 更新。
 
 或者直接告訴 Agent 自動安裝：
 > 請閱讀 https://kami.tw93.fun/llms.txt 為我安裝 Kami
 
-**Host Plugin 外掛安裝**（若偏好平台原生指令，命名空間為 `/kami:kami`；要求 Claude Code v2.1.142 或更高版本）：
+**宿主外掛安裝**（想用平台內建的升級指令時選這個，命名空間是 `/kami:kami`，需要 Claude Code v2.1.142 或更高版本）：
 
 ```bash
 # Claude Code（升級指令：claude plugin update kami）
@@ -91,28 +91,26 @@ codex plugin marketplace add tw93/kami
 codex plugin add kami@kami
 ```
 
-**Claude Desktop**：從 GitHub Releases 下載正式打包的 [kami.zip](https://github.com/tw93/kami/releases/latest/download/kami.zip)（請勿下載原始碼 ZIP），開啟 Customize > Skills > "+" > Create skill 上傳。後續升級點擊卡片上的 "..." 選擇 Replace 替換為最新包。
+**Claude Desktop**：從 GitHub Releases 下載正式打包的 [kami.zip](https://github.com/tw93/kami/releases/latest/download/kami.zip)（不要下載原始碼 ZIP），開啟 Customize > Skills > "+" > Create skill 上傳。後續升級點擊卡片上的 "..." 選擇 Replace 替換為最新包。
 
 大型中日韓字型不打進發行包，`skills/kami/scripts/ensure-fonts.sh` 會把缺少的中文或韓文字型補到使用者字型目錄（`~/.local/share/fonts/kami`），在本機儲存庫開發時，指令碼還會把儲存庫裡的字型複製進技能目錄，範本優先讀取本機字型，讀不到時才回退至 jsDelivr CDN。
 
-Kami 每天最多檢查一次新版本，有新版就在對話裡提一句。檢查時會在本機 XDG 快取目錄寫入一個標記，再查詢 GitHub 最新的公開 Release，不上傳任何文件和對話內容，離線或沒有快取目錄時直接略過。
+Kami 每天最多檢查一次新版本，有新版就在對話裡提一句，檢查時會在本機 XDG 快取目錄寫入一個標記，再查詢 GitHub 最新的公開 Release，不上傳任何文件和對話內容，離線或沒有快取目錄時直接略過。
 
 ## 使用
 
-無需記憶斜線指令，用日常自然語言向 Agent 提出需求即可自動觸發。
-
 ### 支援語言
 
-英文與中文支援最完整，日文與韓文會依字型和排版逐份調整，交付前再檢查一遍效果：
+英文與中文支援最完整，日文與韓文會依字型和排版逐份調整，交付前再檢查一遍效果，每份文件全頁只用一種襯線字型，字型授權見[授權條款](#授權條款)：
 
 | 語言 | 支援程度 | 預設襯線字型 |
 | :--- | :--- | :--- |
 | **English** | 完整支援 | Charter |
 | **中文**（簡體 / 繁體） | 完整支援 | TsangerJinKai02（倉耳今楷） |
 | **日本語** | 字型回退與逐份檢查 | YuMincho（游明朝） |
-| **한국어** | 字型回退與逐份檢查 | Source Han Serif K（思源宋體 韓文） |
+| **한국어** | 字型回退與逐份檢查 | Source Han Serif K（思源宋體韓文版） |
 
-各語言提示詞範例：
+用日常自然語言向 Agent 提出需求就會自動觸發，不需要記斜線指令，各語言提示詞範例：
 
 - 中文：`幫我做一份一頁紙` / `幫我排版一份長文件` / `幫我寫一封正式信件` / `幫我做一份作品集` / `幫我做一份履歷` / `幫我做一套演講投影片` / `幫我做一份 Markdown 風格的簡報稿` / `幫我做一個產品落地頁`
 - English: `make a one-pager for my startup` / `turn this research into a long doc` / `write a formal letter` / `make a portfolio of my projects` / `build me a resume` / `design a slide deck for my talk` / `make this talk as a Marp deck` / `build a landing page for my app`
@@ -121,29 +119,23 @@ Kami 每天最多檢查一次新版本，有新版就在對話裡提一句。檢
 
 **個人品牌偏好設定**（可選）
 
-建立 `~/.config/kami/brand.md` 儲存個人偏好、品牌主色、預設習慣與寫作語氣。完整範例參見 [brand.example.md](skills/kami/references/brand.example.md)。
-
-頂部為 YAML 格式欄位（姓名、職位、信箱、品牌色、語言、紙張尺寸、文風），內文為自由格式 Markdown。這次請求沒有指定的地方，Kami 會用設定裡的偏好，對話裡的明確要求始終優先。
+建立 `~/.config/kami/brand.md` 儲存個人偏好、品牌主色、預設習慣與寫作語氣，設定好後不用每次對話都向 AI 叮嚀一遍。頂部為 YAML 格式欄位（姓名、職位、信箱、品牌色、語言、紙張尺寸、文風），內文為自由格式 Markdown。這次請求沒有指定的地方 Kami 會用設定裡的偏好，對話裡的明確要求始終優先，完整範例見 [brand.example.md](skills/kami/references/brand.example.md)。
 
 ## 設計規範
 
 預設採用溫暖的米色底（`#f5f4ed`）、油墨藍強調色（`#1B365D`）與襯線字型。範本依靠字級階層與留白節奏區分標題、內文與標註，這些預設值都可以依你的品牌調整。
 
 - **範本體系**：8 種文件範本（一頁紙、長文件、信件、作品集、履歷、簡報、研究報告、更新日誌）加一套落地頁，都有中、英、韓三個版本，Kami 會依你書寫的語言選擇對應版本。
-- **專業圖表**：18 種行內原生 SVG 圖表，包含單獨成頁的系統全景架構圖。循序圖、類別圖與實體關係圖可直接寫 Mermaid 原始碼：由 [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) 渲染為 SVG，並透過 `skills/kami/scripts/mermaid_normalize.py` 自動調整為 Kami 配色並適配 WeasyPrint，無需本機安裝 Node 環境。
-- **簡報**：支援 3 條交付路徑：預設 WeasyPrint HTML 轉 PDF；按需透過 python-pptx 匯出可二次編輯的 PPTX；以及位於 `skills/kami/assets/templates/marp/` 的 Markdown 優先 Marp 方案。
-- **程式碼高亮**：安裝 Pygments 後自動支援語法著色；未安裝時依然可正常產生純黑灰程式碼區塊。
-- **檢查**：JSON Schema 先行校驗輸入資料完整性；覆蓋率檢測防止關鍵內容在排版時遺漏；交付前透過頁面圖片逐頁檢驗節奏、孤行與排版平衡。
-- **本機 MCP 服務**：內建零外部依賴的 MCP 伺服器（`skills/kami/scripts/mcp_server.py`），提供環境自檢、渲染、結構化檢查與截圖工具，任何相容 MCP 的 Agent 均可直接呼叫。只拿它渲染你信任的本機 HTML，頁面引用的本機檔案和 HTTP、HTTPS 資源會以 MCP 伺服器行程的權限載入。
+- **圖表**：18 種行內原生 SVG 圖表，包含單獨成頁的系統全景架構圖，循序圖、類別圖與實體關係圖可直接寫 Mermaid 原始碼，由 [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) 渲染為 SVG，再透過 `skills/kami/scripts/mermaid_normalize.py` 調整為 Kami 配色並適配 WeasyPrint，無需本機安裝 Node 環境。
+- **簡報**：預設用 WeasyPrint 把 HTML 轉成 PDF，需要時透過 python-pptx 匯出可二次編輯的 PPTX，Markdown 優先的簡報稿用 `skills/kami/assets/templates/marp/` 下的 Marp 方案。
+- **程式碼高亮**：安裝 Pygments 後自動支援語法著色，未安裝時依然可正常產生純黑灰程式碼區塊。
+- **檢查**：JSON Schema 先行校驗輸入資料完整性，覆蓋率檢測防止關鍵內容在排版時遺漏，結構化簡報記錄受眾和交付要求，交付前透過頁面圖片逐頁檢驗節奏、孤行與排版平衡。
+- **本機 MCP 服務**：內建零外部依賴的 MCP 伺服器（`skills/kami/scripts/mcp_server.py`），提供環境自檢、渲染、結構化檢查與截圖工具，任何相容 MCP 的 Agent 不用載入完整的技能提示詞就能直接呼叫。只拿它渲染你信任的本機 HTML，頁面引用的本機檔案和 HTTP、HTTPS 資源會以 MCP 伺服器行程的權限載入。
 - **白底列印**：預設是淺米色底，也可以選用白底列印版，適合家裡和辦公室的印表機，卡片和表格仍保留暖色底。[Kami 介紹一頁紙](site/assets/demos/demo-kami-print.pdf)就是用這個版本渲染的，完整配方見 [production.md](skills/kami/references/production.md)。
 
-**字型約定**：每份文件全頁僅使用單一襯線字型。中文：倉耳今楷（TsangerJinKai02）；日文：游明朝（YuMincho）；韓文：思源宋體（Source Han Serif K）；英文：Charter。詳見 [授權條款](#授權條款)。
-
-完整設計手冊：[design.md](skills/kami/references/design.md)。快速備忘單：[CHEATSHEET.md](skills/kami/CHEATSHEET.md)。
+完整設計手冊見 [design.md](skills/kami/references/design.md)，快速備忘單見 [CHEATSHEET.md](skills/kami/CHEATSHEET.md)。
 
 ## 不止於文件
-
-同一套排版規則也能用在落地頁和 AI 繪圖工具的提示詞上。
 
 <table>
 <tr>
@@ -170,25 +162,25 @@ Kami 每天最多檢查一次新版本，有新版就在對話裡提一句。檢
 </tr>
 </table>
 
-落地頁可以直接部署成多語言網站。宿主內建圖像生成能力時，插圖直接用它來畫，沒有這項能力時，Kami 會給出同樣完整的要求，交給繪圖模型使用：
+同一套排版規則也能用在落地頁和 AI 繪圖工具的提示詞上，落地頁可以直接部署成多語言網站，宿主內建圖像生成能力時插圖直接用它來畫，沒有這項能力時 Kami 會給出同樣完整的要求，交給繪圖模型使用：
 
 ```text
 Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), never pure white. One accent only, ink blue (#1B365D); everything else in warm gray with a yellow-brown undertone, no other colors. Thin single-line geometric strokes and simple flat icons. No gradients, no drop shadows, no 3D. Labels in a serif typeface. Generous whitespace, calm and composed, like a figure in a well-typeset report.
 ```
 
-<sub>上圖由 ChatGPT Images 單次生成完成，無任何人工後期修圖。Kami 負責給出精細要求，繪圖模型負責落筆繪製。</sub>
+<sub>表格裡的兩張插圖由 ChatGPT Images 單次生成，無任何人工後期修圖。</sub>
 
 ## 背景
 
 我喜歡美股投資，經常讓 Claude 寫研究報告。每次出來的東西都是同一種預設文件的樣子：灰撲撲的，結構不清晰，格式老舊，換個對話就換一套排版，沒有一份讓人想讀下去。於是我開始一條一條地調字體、配色、間距，直到報告變成一份自己真正願意看的頁面。
 
-後來要去做《你不知道的 Agent：原理、架構與工程實踐》分享，手上已經有文件，不想再做 PPT，就用 Claude Design 按自己的設計風格來排版，反覆調了很多輪，最後慢慢滿意了。後來加入 SVG 圖表，統一配色與間距，逐漸用在常寫的各種文件上，再把範本和規則整理成了現在的 Kami。
+後來要去做《你不知道的 Agent：原理、架構與工程實踐》分享，手上已經有文件，不想再做 PPT，就用 Claude Design 按自己的設計風格來排版，反覆調了很多輪，最後慢慢滿意了。過程中加入 SVG 圖表，統一配色與間距，逐漸用在常寫的各種文件上，再把範本和規則整理成了現在的 Kami。
 
 ## 支持作者
 
-- 購買我做的 Mac 清理工具 [Mole for Mac](https://mole.fit)，是對我最直接的支持。
-- 如果 Kami 幫到了你，歡迎給它一個 Star，[在 Twitter 分享](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.)，或提交 Issue 和 PR。
-- 我有兩隻貓：湯圓、可樂。如果 Kami 讓你順手，歡迎<a href="https://cats.tw93.fun?name=Kami" target="_blank">請她們吃罐頭 🥩</a>。
+- 購買我做的 Mac 清理工具 [Mole for Mac](https://mole.fit)，是對我最直接的支持
+- 如果 Kami 幫到了你，歡迎給它一個 Star，[在 Twitter 分享](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.)，或提交 Issue 和 PR
+- 我有兩隻貓，湯圓和可樂，如果 Kami 讓你順手，歡迎<a href="https://cats.tw93.fun?name=Kami" target="_blank">請她們吃罐頭 🥩</a>
 
 <details>
 <summary>這些可愛的朋友已經請過啦 🐱</summary>

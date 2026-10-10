@@ -79,7 +79,7 @@ npx skills add tw93/kami -a claude-code codex cursor -g -y
 または Agent に直接指示してインストール：
 > https://kami.tw93.fun/llms.txt を読んで Kami をインストールして
 
-**プラグイン形式での利用**（Claude Code v2.1.142 以降、名前空間は `/kami:kami`）：
+**プラグイン形式での利用**（ホスト自身の更新コマンドを使いたい場合、名前空間は `/kami:kami`、Claude Code v2.1.142 以降）：
 
 ```bash
 # Claude Code（更新：claude plugin update kami）
@@ -93,26 +93,24 @@ codex plugin add kami@kami
 
 **Claude Desktop**：GitHub Releases から正式配布用の [kami.zip](https://github.com/tw93/kami/releases/latest/download/kami.zip) をダウンロードし、Customize > Skills > "+" > Create skill からアップロードします。GitHub のソース ZIP ではなく、このリリースアセットを使ってください。更新はスキルカードの「...」から Replace を選び、最新の ZIP をアップロードします。
 
-大容量の CJK フォントは配布 ZIP に含まれていません：`skills/kami/scripts/ensure-fonts.sh` が不足フォントを自動検出してローカル環境に準備します。
+大容量の CJK フォントは配布パッケージに含まれていません。`skills/kami/scripts/ensure-fonts.sh` が不足している中国語や韓国語のフォントをユーザーフォントディレクトリに補い、リポジトリをチェックアウトしている場合はリポジトリ内のフォントをスキルにコピーするので、テンプレートはまずローカルのフォントを読み込み、見つからないときだけ jsDelivr CDN にフォールバックします。
 
 Kami は一日に一度だけ静かにバージョンを確認し、新しいリリースがあれば会話の中で知らせます。ローカルの XDG キャッシュディレクトリにマーカーを書き込み、GitHub の最新公開リリースを確認しますが、文書や会話の内容は送信しません。オフラインのときやキャッシュディレクトリがないときは何もせずスキップします。
 
 ## 使い方
 
-スラッシュコマンドは不要で、自然言語のリクエストから自動で起動します。
-
 ### 対応言語
 
-英語と中国語に最も手厚く対応しています。日本語と韓国語は専用フォントフォールバックとレイアウト微調整によりサポートされ、出力前に個別検証が行われます：
+英語と中国語に最も手厚く対応しています。日本語と韓国語は専用フォントフォールバックとレイアウト微調整によりサポートされ、出力前に個別検証が行われます。どの言語もページ全体で単一のセリフ書体を使い、フォントの利用条件は [ライセンス](#ライセンス) にあります：
 
 | 言語 | サポート度 | 既定の明朝体・セリフ書体 |
 | :--- | :--- | :--- |
 | **English** | 完全対応 | Charter |
 | **中国語**（簡体字 / 繁体字） | 完全対応 | TsangerJinKai02（倉耳今楷） |
 | **日本語** | フォント代替と個別検証 | YuMincho（游明朝） |
-| **韓国語** | フォント代替と個別検証 | Source Han Serif K（思源宋体 韓文） |
+| **韓国語** | フォント代替と個別検証 | Source Han Serif K（본명조） |
 
-各言語のプロンプト例：
+スラッシュコマンドは不要で、自然言語のリクエストから自動で起動します。各言語のプロンプト例：
 
 - 日本語: `スタートアップ向けの一枚資料を作って` / `この調査を長文レポートに整えて` / `正式な依頼文を作って` / `プロジェクト作品集を作って` / `履歴書を作って` / `登壇用スライドを作って` / `Marp で登壇スライドを作って` / `アプリのランディングページを作って`
 - 中文: `帮我做一份一页纸` / `帮我排版一份长文档` / `帮我写一封正式信件` / `帮我做一份作品集` / `帮我做一份简历` / `帮我做一套演讲幻灯片` / `帮我做一份 Markdown 风格的演示稿` / `帮我做一个产品落地页`
@@ -121,27 +119,23 @@ Kami は一日に一度だけ静かにバージョンを確認し、新しいリ
 
 **ブランド設定**（任意）
 
-`~/.config/kami/brand.md` を作成すると、自身のブランド色、デフォルト言語、トーンを固定できます。設定例は [brand.example.md](skills/kami/references/brand.example.md) を参照してください。
+`~/.config/kami/brand.md` を作成すると、アイデンティティ、ブランド、既定値、書き方の癖を保存でき、文書ごとに好みを伝え直す必要がなくなります。ファイル先頭の YAML フロントマターに名前、役職、メール、ブランド色、言語、用紙サイズ、トーンなどの構造化フィールドを書き、本文の Markdown には自由なメモを書きます。Kami は現在の依頼で決まっていない部分にこの設定を使い、明示的な指示が常に優先されます。設定例は [brand.example.md](skills/kami/references/brand.example.md) を参照してください。
 
 ## 設計原則
 
 基本の配色は淡い紙色の背景（`#f5f4ed`）、インクブルー（`#1B365D`）のアクセント、そしてセリフ書体です。文字の大きさと余白で見出しと本文を区別します。ブランドに合わせて既定値を調整できます。
 
 - **テンプレート群**：一枚資料、長文レポート、書簡、ポートフォリオ、履歴書、スライド、決算レポート、更新履歴の 8 種とランディングページシステム。いずれも中国語、英語、韓国語の 3 バージョンがあり、書いた言語に合わせて Kami が対応するバージョンを選びます。
-- **図表コンポーネント**：18 種のインライン SVG 図表。Mermaid 記述から [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) と `skills/kami/scripts/mermaid_normalize.py` を通じて Kami 色彩のクリーンなベクター図に変換します。
-- **スライド**：WeasyPrint による PDF、python-pptx による編集可能 PPTX、Markdown 優先の Marp 形式に対応。
-- **コード表示**：Pygments による構文ハイライトに対応。
-- **品質検証**：JSON Schema による入力構造検査、記述抜けを防ぐカバレッジ検査、レンダリング画像の目視確認を実施。
-- **ローカル MCP**：`skills/kami/scripts/mcp_server.py` にゼロ依存の MCP サーバーを内蔵。信頼できるローカル HTML だけをレンダリングしてください。参照先のファイルや HTTP、HTTPS のリソースは MCP プロセスの権限で読み込まれます。
-- **白地印刷**：プリンター出力向けの白背景切り替えオプションを用意。
-
-**フォント規約**：一頁につき単一のセリフ書体を使用します。英語：Charter、中国語：倉耳今楷、日本語：游明朝、韓国語：Source Han Serif K。詳細は [ライセンス](#ライセンス) をご覧ください。
+- **図表コンポーネント**：18 種のインライン SVG 図表で、1 ページを使うアーキテクチャ全景図も含みます。シーケンス図、クラス図、ER 図は Mermaid で書け、[beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) が SVG を描画し、`skills/kami/scripts/mermaid_normalize.py` が Kami の配色に直して WeasyPrint 向けに整えます。Node は同梱していません。
+- **スライド**：既定は WeasyPrint による HTML から PDF、依頼に応じて python-pptx による編集可能な PPTX、Markdown 優先のデッキには `skills/kami/assets/templates/marp/` の Marp 形式を使います。
+- **コード表示**：Pygments があれば構文ハイライトし、なくても PDF は生成され、コードは単色で表示されます。
+- **品質検証**：JSON Schema による入力構造検査と記述抜けを防ぐカバレッジ検査を行い、構造化ブリーフが読者と要件を記録し、ページ画像で最終の目視確認をします。
+- **ローカル MCP**：`skills/kami/scripts/mcp_server.py` にゼロ依存の MCP サーバーを内蔵し、環境診断、レンダリング、構造チェック、スクリーンショットのツールを提供するので、MCP 対応の Agent ならスキル全体のプロンプトを読み込まずに Kami を操作できます。信頼できるローカル HTML だけをレンダリングしてください。参照先のファイルや HTTP、HTTPS のリソースは MCP プロセスの権限で読み込まれます。
+- **白地印刷**：既定は紙色の背景で、オプションの白地版に切り替えると家庭やオフィスのプリンター向けになり、カードや表には暖色の背景が残ります。[Kami 紹介の一枚資料](site/assets/demos/demo-kami-print.pdf)（中国語）はこの白地版でレンダリングしており、手順は [production.md](skills/kami/references/production.md) にあります。
 
 詳細仕様：[design.md](skills/kami/references/design.md)、クイックリファレンス：[CHEATSHEET.md](skills/kami/CHEATSHEET.md)。
 
 ## ドキュメントの先へ
-
-同じ組版ルールは、製品の公式ウェブサイト制作や画像生成 AI のプロンプト指定にもそのまま適用できます。
 
 <table>
 <tr>
@@ -168,25 +162,25 @@ Kami は一日に一度だけ静かにバージョンを確認し、新しいリ
 </tr>
 </table>
 
-ランディングページは多言語サイトとしてそのままデプロイできます。ホストに画像生成機能があればそれで挿絵を描き、なければ Kami が同じ内容の完全な指示文を出力し、画像モデルで使えるようにします。
+同じ組版ルールは、製品の公式ウェブサイト制作や画像生成 AI のプロンプト指定にもそのまま適用できます。ランディングページは多言語サイトとしてそのままデプロイできます。ホストに画像生成機能があればそれで挿絵を描き、なければ Kami が同じ内容の完全な指示文を出力し、画像モデルで使えるようにします。
 
 ```text
 Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), never pure white. One accent only, ink blue (#1B365D); everything else in warm gray with a yellow-brown undertone, no other colors. Thin single-line geometric strokes and simple flat icons. No gradients, no drop shadows, no 3D. Labels in a serif typeface. Generous whitespace, calm and composed, like a figure in a well-typeset report.
 ```
 
-<sub>ChatGPT Images で一度に生成し、手作業の修正はしていません。Kami が指示を書き、描画はレンダラーが担います。</sub>
+<sub>表の 2 枚の挿絵は ChatGPT Images で一度に生成し、手作業の修正はしていません。</sub>
 
 ## 開発の背景
 
 米国株投資が好きで、Claude にリサーチレポートを書かせる場面が多いです。出力はいつも既定のドキュメント風で、灰色で平板、セッションごとにレイアウトが変わる。構成は追いづらく書式は古臭く、読み続ける気になれませんでした。書体、配色、余白をひとつずつ直していき、読んでいて心地よいページに仕上げました。
 
-その後「あなたの知らない Agent：原理、アーキテクチャとエンジニアリング実践」の発表をすることになり、Claude Design で自分のスタイルのまま組版し、何度も調整を繰り返して納得のいく仕上がりにしました。その後、SVG 図表を加え、配色と余白を揃え、普段作る文書にも使うようになり、テンプレートとルールをまとめたものが Kami です。
+その後「あなたの知らない Agent：原理、アーキテクチャとエンジニアリング実践」の発表をすることになり、Claude Design で自分のスタイルのまま組版し、何度も調整を繰り返して納得のいく仕上がりにしました。その過程で SVG 図表を加え、配色と余白を揃え、普段作る文書にも使うようになり、テンプレートとルールをまとめたものが Kami です。
 
 ## サポート
 
-- 有料の Mac クリーナーアプリ [Mole for Mac](https://mole.fit) の購入が、最も直接的な支援になります。
-- Kami が役に立った場合は、スターを付けたり、[Twitter で共有](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.)したり、Issue や PR をお寄せください。
-- 私には「湯円（TangYuan）」と「可楽（Coke）」という二匹の猫がいます。もし Kami を気に入っていただけたら、<a href="https://cats.tw93.fun?name=Kami" target="_blank">缶詰をごちそうしてください 🥩</a>。
+- 有料の Mac クリーナーアプリ [Mole for Mac](https://mole.fit) の購入が、最も直接的な支援になります
+- Kami が役に立った場合は、スターを付けたり、[Twitter で共有](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.)したり、Issue や PR をお寄せください
+- 私には湯円（TangYuan）と可楽（Coke）という二匹の猫がいて、もし Kami を気に入っていただけたら、<a href="https://cats.tw93.fun?name=Kami" target="_blank">缶詰をごちそうしてください 🥩</a>
 
 <details>
 <summary>支援してくださった方々 🐱</summary>

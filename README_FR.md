@@ -79,7 +79,7 @@ Une copie est installée dans `~/.agents/skills`, le répertoire partagé des sk
 Ou demandez directement à votre agent :
 > Installe Kami en lisant https://kami.tw93.fun/llms.txt
 
-**Plugin hôte**, si vous préférez la commande de mise à jour native (espace de noms `/kami:kami` ; Claude Code v2.1.142 ou plus récent) :
+**Plugin hôte**, si vous préférez la commande de mise à jour native (espace de noms `/kami:kami`, Claude Code v2.1.142 ou plus récent) :
 
 ```bash
 # Claude Code (mise à jour : claude plugin update kami)
@@ -93,17 +93,15 @@ codex plugin add kami@kami
 
 **Claude Desktop** : téléchargez l'archive officielle [kami.zip](https://github.com/tw93/kami/releases/latest/download/kami.zip) (et non le ZIP du code source GitHub), ouvrez Customize > Skills > « + » > Create skill et déposez l'archive. Pour mettre à jour, cliquez sur « ... » sur la carte du skill, choisissez Replace et déposez la dernière archive ZIP.
 
-Les polices CJK volumineuses ne sont pas incluses dans le paquet : `skills/kami/scripts/ensure-fonts.sh` télécharge les polices chinoises ou coréennes manquantes dans le répertoire des polices de l'utilisateur.
+Les polices CJK volumineuses ne sont pas incluses dans le paquet : `skills/kami/scripts/ensure-fonts.sh` télécharge les polices chinoises ou coréennes manquantes dans le répertoire des polices de l'utilisateur ; dans un dépôt cloné, il copie les polices du dépôt dans le skill pour que les modèles les chargent localement avant de se rabattre sur le CDN jsDelivr.
 
-Kami vérifie discrètement la disponibilité d'une nouvelle version au plus une fois par jour. Aucune donnée personnelle ou contenu de document n'est envoyé ; en mode hors ligne ou sans accès au cache local, la vérification est ignorée en silence.
+Kami vérifie discrètement la disponibilité d'une nouvelle version au plus une fois par jour et vous prévient dans la conversation lorsqu'une version plus récente est publiée. Il écrit un marqueur dans le répertoire de cache XDG local puis interroge la dernière release publique sur GitHub ; aucune donnée personnelle ou contenu de document n'est envoyé, et en mode hors ligne ou sans accès au cache local, la vérification est ignorée en silence.
 
 ## Utilisation
 
-Le skill se déclenche automatiquement à partir de requêtes formulées en langage naturel, sans commande spéciale.
-
 ### Langues prises en charge
 
-L'anglais et le chinois bénéficient du support le plus complet. Le japonais et le coréen utilisent des polices de substitution dédiées et des ajustements de mise en page, chaque document étant vérifié avant livraison :
+L'anglais et le chinois bénéficient du support le plus complet. Le japonais et le coréen utilisent des polices de substitution dédiées et des ajustements de mise en page, chaque document étant vérifié avant livraison. Chaque langue utilise une seule police serif sur toute la page, le français comme l'anglais en Charter ; les conditions des polices figurent dans [Licence](#licence) :
 
 | Langue | Niveau de prise en charge | Police serif par défaut |
 | :--- | :--- | :--- |
@@ -112,35 +110,31 @@ L'anglais et le chinois bénéficient du support le plus complet. Le japonais et
 | **Japonais** (日本語) | Polices de secours & vérification | YuMincho (游明朝) |
 | **Coréen** (한국어) | Polices de secours & vérification | Source Han Serif K (본명조) |
 
-Exemples de requêtes :
+Le skill se déclenche automatiquement à partir de requêtes formulées en langage naturel, sans commande spéciale. Exemples de requêtes :
 
-- Anglais : `make a one-pager for my startup` / `turn this research into a long doc` / `write a formal letter` / `make a portfolio of my projects` / `build me a resume` / `design a slide deck for my talk` / `build a landing page for my app`
-- Chinois : `帮我做一份一页纸` / `帮我排版一份长文档` / `帮我写一封正式信件` / `帮我做一份作品集` / `帮我做一份简历` / `帮我做一套演讲幻灯片` / `帮我做一个产品落地页`
-- Français : `Crée une fiche de synthèse pour mon projet` / `Mets en page cette recherche en document complet` / `Rédige une lettre officielle` / `Conçois un portfolio de mes projets` / `Crée un CV pour moi` / `Prépare des diapositives de présentation` / `Crée une landing page pour mon application`
+- Anglais : `make a one-pager for my startup` / `turn this research into a long doc` / `write a formal letter` / `make a portfolio of my projects` / `build me a resume` / `design a slide deck for my talk` / `make this talk as a Marp deck` / `build a landing page for my app`
+- Chinois : `帮我做一份一页纸` / `帮我排版一份长文档` / `帮我写一封正式信件` / `帮我做一份作品集` / `帮我做一份简历` / `帮我做一套演讲幻灯片` / `帮我做一份 Markdown 风格的演示稿` / `帮我做一个产品落地页`
+- Français : `Crée une fiche de synthèse pour mon projet` / `Mets en page cette recherche en document complet` / `Rédige une lettre officielle` / `Conçois un portfolio de mes projets` / `Crée un CV pour moi` / `Prépare des diapositives de présentation` / `Fais ces diapositives en Marp` / `Crée une landing page pour mon application`
 
 **Profil de marque** (optionnel)
 
-Créez `~/.config/kami/brand.md` pour conserver votre identité, vos couleurs et vos préférences d'écriture. Consultez [brand.example.md](skills/kami/references/brand.example.md) pour voir un modèle complet.
+Créez `~/.config/kami/brand.md` pour conserver votre identité, vos couleurs et vos préférences d'écriture, sans avoir à les répéter pour chaque document. Le fichier contient un en-tête YAML pour les champs structurés (nom, fonction, e-mail, couleur de marque, langue, format de page, ton) et un corps Markdown pour les notes libres. Kami utilise ces réglages là où la requête en cours laisse un choix ouvert ; les instructions explicites priment toujours. Consultez [brand.example.md](skills/kami/references/brand.example.md) pour voir un modèle complet.
 
 ## Principes de conception
 
 Les valeurs par défaut associent un fond parchemin chaleureux (`#f5f4ed`), des touches bleu encre (`#1B365D`) et des polices avec empattement (serif). La hiérarchie visuelle repose sur la taille des caractères et les espaces blancs. Vous pouvez adapter ces valeurs par défaut à votre marque.
 
 - **Modèles.** Huit modèles de documents : Fiche synthétique (One-Pager), Document long, Lettre, Portfolio, CV, Diapositives, Rapport d'analyse et Journal des modifications (Changelog), ainsi qu'un système de landing page, chacun en chinois, anglais et coréen. Kami choisit la variante adaptée à la langue dans laquelle vous écrivez.
-- **Schémas.** 18 types de diagrammes vectoriels SVG intégrés. Les diagrammes de séquence, de classes et entité-association peuvent être rédigés en syntaxe Mermaid : [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) génère le SVG et `skills/kami/scripts/mermaid_normalize.py` l'harmonise avec la palette de Kami.
-- **Diapositives.** Trois moteurs de rendu : WeasyPrint HTML vers PDF par défaut, python-pptx pour des fichiers PowerPoint modifiables sur demande, et une variante Marp dans `skills/kami/assets/templates/marp/`.
+- **Schémas.** 18 types de diagrammes vectoriels SVG intégrés, dont une planche d'architecture pleine page. Les diagrammes de séquence, de classes et entité-association peuvent être rédigés en syntaxe Mermaid : [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) génère le SVG et `skills/kami/scripts/mermaid_normalize.py` l'harmonise avec la palette de Kami et le rend compatible avec WeasyPrint, sans Node.
+- **Diapositives.** Trois moteurs de rendu : WeasyPrint HTML vers PDF par défaut, python-pptx pour des fichiers PowerPoint modifiables sur demande, et une variante Marp dans `skills/kami/assets/templates/marp/` pour les présentations écrites en Markdown.
 - **Code source.** Coloration syntaxique via Pygments si la bibliothèque est installée ; sinon, le code s'affiche en monochrome clair et lisible.
-- **Validation.** Des schémas de contenu valident la structure avant mise en page ; un contrôle de couverture s'assure qu'aucun point clé n'a été oublié.
-- **Serveur MCP.** Un serveur léger (`skills/kami/scripts/mcp_server.py`) expose des outils de diagnostic, de rendu et de capture d'écran pour tout agent compatible MCP. Ne rendez que du HTML local de confiance : les fichiers et les ressources HTTP et HTTPS référencés sont chargés avec les droits du processus MCP.
-- **Impression.** Une variante papier blanc permet d'adapter n'importe quel document aux imprimantes de bureau sans fond parchemin, tout en conservant les teintes douces des encadrés.
-
-Police par défaut selon la langue : chinois (TsangerJinKai02), japonais (YuMincho), coréen (Source Han Serif K), anglais/français (Charter).
+- **Validation.** Des schémas de contenu valident la structure avant mise en page ; un contrôle de couverture s'assure qu'aucun point clé n'a été oublié. Un brief structuré consigne le public et les exigences, et des images des pages servent à la relecture visuelle finale.
+- **Serveur MCP.** Un serveur léger (`skills/kami/scripts/mcp_server.py`) expose des outils de diagnostic, de rendu, de vérification structurée et de capture d'écran, pour que tout agent compatible MCP pilote Kami sans charger le prompt complet du skill. Ne rendez que du HTML local de confiance : les fichiers et les ressources HTTP et HTTPS référencés sont chargés avec les droits du processus MCP.
+- **Impression.** Le parchemin est le fond par défaut ; une variante papier blanc permet d'adapter n'importe quel document aux imprimantes domestiques et de bureau, tout en conservant les teintes douces des encadrés et des tableaux. La [présentation de Kami sur une page](site/assets/demos/demo-kami-print.pdf) (en chinois) est rendue avec cette variante, la recette se trouve dans [production.md](skills/kami/references/production.md).
 
 Spécifications complètes : [design.md](skills/kami/references/design.md). Aide-mémoire : [CHEATSHEET.md](skills/kami/CHEATSHEET.md).
 
 ## Au-delà du document
-
-Les mêmes principes s'appliquent aux pages d'accueil de produits et aux prompts de génération d'images.
 
 <table>
 <tr>
@@ -167,15 +161,13 @@ Les mêmes principes s'appliquent aux pages d'accueil de produits et aux prompts
 </tr>
 </table>
 
-Les landing pages sont livrées prêtes à déployer en versions multilingues. Les illustrations utilisent la génération d'images de l'hôte quand elle est disponible ; sinon, Kami fournit le même brief complet à utiliser dans un modèle d'image.
-
-Exemple de prompt pour modèles d'images :
+Les mêmes principes s'appliquent aux pages d'accueil de produits et aux prompts de génération d'images. Les landing pages sont livrées prêtes à déployer en versions multilingues. Les illustrations utilisent la génération d'images de l'hôte quand elle est disponible ; sinon, Kami fournit le même brief complet à utiliser dans un modèle d'image.
 
 ```text
 Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), never pure white. One accent only, ink blue (#1B365D); everything else in warm gray with a yellow-brown undertone, no other colors. Thin single-line geometric strokes and simple flat icons. No gradients, no drop shadows, no 3D. Labels in a serif typeface. Generous whitespace, calm and composed, like a figure in a well-typeset report.
 ```
 
-<sub>Généré par ChatGPT Images en une seule passe, sans retouche manuelle. Kami formule la demande, le moteur de rendu dessine.</sub>
+<sub>Les deux illustrations ci-dessus ont été générées par ChatGPT Images en une seule passe, sans retouche manuelle.</sub>
 
 ## Genèse
 
@@ -185,9 +177,9 @@ Plus tard, devant préparer une présentation sur les agents d'IA, je disposais 
 
 ## Soutien
 
-1. La façon la plus directe de me soutenir est d'acheter [Mole for Mac](https://mole.fit), mon application de nettoyage pour Mac.
-2. Si Kami vous a été utile, vous pouvez lui attribuer une étoile sur GitHub, [le recommander](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.) ou contribuer via une issue ou une PR.
-3. J'ai deux chats, TangYuan et Coke. Si Kami embellit vos journées, vous pouvez leur offrir <a href="https://cats.tw93.fun?name=Kami" target="_blank">une friandise 🥩</a>.
+- La façon la plus directe de me soutenir est d'acheter [Mole for Mac](https://mole.fit), mon application de nettoyage pour Mac
+- Si Kami vous a été utile, vous pouvez lui attribuer une étoile sur GitHub, [le recommander](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.) ou contribuer via une issue ou une PR
+- J'ai deux chats, TangYuan et Coke, et si Kami embellit vos journées, vous pouvez leur offrir <a href="https://cats.tw93.fun?name=Kami" target="_blank">une friandise 🥩</a>
 
 <details>
 <summary>Ceux qui ont déjà manifesté leur soutien 🐱</summary>

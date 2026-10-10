@@ -79,7 +79,7 @@ One copy lands in `~/.agents/skills`, the shared skills directory. Claude Code i
 Or ask your agent:
 > Install Kami for me by reading https://kami.tw93.fun/llms.txt
 
-**Host plugin**, if you prefer the host's own update command (namespaced as `/kami:kami`; Claude Code v2.1.142 or newer)
+**Host plugin**, if you prefer the host's own update command (namespaced as `/kami:kami`, Claude Code v2.1.142 or newer):
 
 ```bash
 # Claude Code (update: claude plugin update kami)
@@ -99,11 +99,9 @@ Kami also runs a quiet version check at most once a day and tells you in chat wh
 
 ## Use
 
-The skill auto-triggers from natural requests, no slash command needed.
-
 ### Supported Languages
 
-English and Chinese have the most complete support. Japanese and Korean use language-specific font fallbacks and layout adjustments, with each output checked before delivery:
+English and Chinese have the most complete support. Japanese and Korean use language-specific font fallbacks and layout adjustments, with each output checked before delivery. Each language uses a single serif font for the whole page, with font terms under [License](#license):
 
 | Language | Support Level | Default Serif Font |
 | :--- | :--- | :--- |
@@ -112,7 +110,7 @@ English and Chinese have the most complete support. Japanese and Korean use lang
 | **Japanese** (日本語) | Font fallbacks & layout check | YuMincho (游明朝) |
 | **Korean** (한국어) | Font fallbacks & layout check | Source Han Serif K (본명조) |
 
-Example prompts by language:
+The skill auto-triggers from natural requests, no slash command needed. Example prompts by language:
 
 - English: `make a one-pager for my startup` / `turn this research into a long doc` / `write a formal letter` / `make a portfolio of my projects` / `build me a resume` / `design a slide deck for my talk` / `make this talk as a Marp deck` / `build a landing page for my app`
 - 中文: `帮我做一份一页纸` / `帮我排版一份长文档` / `帮我写一封正式信件` / `帮我做一份作品集` / `帮我做一份简历` / `帮我做一套演讲幻灯片` / `帮我做一份 Markdown 风格的演示稿` / `帮我做一个产品落地页`
@@ -121,9 +119,7 @@ Example prompts by language:
 
 **Brand profile** (optional)
 
-Create `~/.config/kami/brand.md` to persist identity, brand, defaults, and writing habits. See [brand.example.md](skills/kami/references/brand.example.md) for a full template.
-
-The file has YAML frontmatter for structured fields like name, role, email, brand color, language, page size, and tone, plus a Markdown body for freeform notes. Kami uses these settings where the current request leaves a choice open; explicit instructions always take priority. Use it to avoid repeating your preferences for each document.
+Create `~/.config/kami/brand.md` to persist identity, brand, defaults, and writing habits, so you don't repeat your preferences for each document. The file has YAML frontmatter for structured fields like name, role, email, brand color, language, page size, and tone, plus a Markdown body for freeform notes. Kami uses these settings where the current request leaves a choice open; explicit instructions always take priority. See [brand.example.md](skills/kami/references/brand.example.md) for a full template.
 
 ## Design
 
@@ -137,13 +133,9 @@ The defaults are a warm parchment background (`#f5f4ed`), ink-blue accents (`#1B
 - **MCP.** A zero-dependency MCP server (`skills/kami/scripts/mcp_server.py`) exposes capability diagnosis, render, structured check, and screenshot tools, so any MCP-capable agent can drive Kami as an engine without loading the full skill prompt. Render only trusted local HTML: referenced file, HTTP, and HTTPS resources load with the MCP process's permissions.
 - **Print.** Parchment is the default canvas; an opt-in white-paper variant flips any document to a white background for home or office printers, keeping warm backgrounds in cards and tables. The [one-page Kami intro](site/assets/demos/demo-kami-print.pdf) (Chinese) is rendered with this variant; recipe in [production.md](skills/kami/references/production.md).
 
-**Fonts**: Each language uses a single serif font for the entire page. Chinese: TsangerJinKai02. Japanese: YuMincho. Korean: Source Han Serif K. English: Charter. See [License](#license) for font terms.
-
 Full spec: [design.md](skills/kami/references/design.md). Cheatsheet: [CHEATSHEET.md](skills/kami/CHEATSHEET.md).
 
 ## Beyond Documents
-
-The same layout rules also work for landing pages and prompts for AI image tools.
 
 <table>
 <tr>
@@ -170,13 +162,13 @@ The same layout rules also work for landing pages and prompts for AI image tools
 </tr>
 </table>
 
-Landing pages ship as deployable multilingual sites. Illustrations use the host's own image generation when that capability is available; otherwise Kami outputs the same complete brief for use in an image model.
+The same layout rules also work for landing pages and prompts for AI image tools. Landing pages ship as deployable multilingual sites. Illustrations use the host's own image generation when that capability is available; otherwise Kami outputs the same complete brief for use in an image model.
 
 ```text
 Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), never pure white. One accent only, ink blue (#1B365D); everything else in warm gray with a yellow-brown undertone, no other colors. Thin single-line geometric strokes and simple flat icons. No gradients, no drop shadows, no 3D. Labels in a serif typeface. Generous whitespace, calm and composed, like a figure in a well-typeset report.
 ```
 
-<sub>Rendered by ChatGPT Images in a single pass with no manual touch-up. Kami specifies, the renderer draws.</sub>
+<sub>The two illustrations above were rendered by ChatGPT Images in a single pass, with no manual touch-up.</sub>
 
 ## Background
 
@@ -186,9 +178,9 @@ Later I needed to present "The Agent You Don't Know: Principles, Architecture an
 
 ## Support
 
-- The most direct way to support me is getting [Mole for Mac](https://mole.fit), my paid Mac cleanup app.
-- If Kami helped you, give it a star, [share it](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.), or open an issue or PR.
-- I have two cats, TangYuan and Coke. If Kami has been useful, you can feed them <a href="https://cats.tw93.fun?name=Kami" target="_blank">canned food 🥩</a>.
+- The most direct way to support me is getting [Mole for Mac](https://mole.fit), my paid Mac cleanup app
+- If Kami helped you, give it a star, [share it](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.), or open an issue or PR
+- I have two cats, TangYuan and Coke, and if Kami has been useful, you can feed them <a href="https://cats.tw93.fun?name=Kami" target="_blank">canned food 🥩</a>
 
 <details>
 <summary>These lovely people already did 🐱</summary>
