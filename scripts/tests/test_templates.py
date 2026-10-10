@@ -556,6 +556,55 @@ def test_chinese_slides_mono_has_cjk_fallback() -> None:
           '"TsangerJinKai02"' in text and '"Source Han Serif SC"' in text)
 
 
+def test_templates_declare_jetbrains_mono_exactly_where_used() -> None:
+    """CN/KO long-doc and changelog named JetBrains Mono without the bundled
+    face, so code fell to the CJK body serif on machines without a system
+    install, while four EN templates declared a face nothing used."""
+    used_rule = re.compile(r'^\s*font-family:\s*"JetBrains Mono"', re.MULTILINE)
+    face_rule = re.compile(r'@font-face\s*\{[^}]*font-family:\s*"JetBrains Mono"')
+    mismatched = []
+    for path in sorted(TEMPLATES.glob("*.html")):
+        text = path.read_text(encoding="utf-8")
+        uses = "var(--mono)" in text or bool(used_rule.search(text))
+        if uses != bool(face_rule.search(text)):
+            mismatched.append(f"{path.name} (uses={uses})")
+    check("templates declare the JetBrains Mono face exactly where code uses it",
+          not mismatched, ", ".join(mismatched))
+
+
+def test_template_web_fonts_resolve_from_kami_cdn() -> None:
+    """landing-page.html loaded TsangerJinKai02 from an unregistered jsDelivr
+    repo (404, and claimable by anyone). Every jsDelivr GitHub URL in a
+    shipped template must point at tw93/Kami."""
+    offenders = []
+    for path in sorted(TEMPLATES.rglob("*")):
+        if path.suffix not in {".html", ".css", ".md"}:
+            continue
+        for url in re.findall(r"cdn\.jsdelivr\.net/gh/[^\"')\s]+", path.read_text(encoding="utf-8")):
+            if not url.startswith("cdn.jsdelivr.net/gh/tw93/Kami@"):
+                offenders.append(f"{path.name}: {url}")
+    check("template jsDelivr font URLs point at tw93/Kami", not offenders, "; ".join(offenders))
+
+
+def test_brand_logo_slot_matches_across_locale_variants() -> None:
+    """The KO one-pager, portfolio, and slides-weasy shipped without the
+    brand-logo slot, so a brand-profile logo was silently dropped."""
+    rule = re.compile(r"\.brand-logo \{[^}]*\}")
+    drift = []
+    for base in ("one-pager", "portfolio", "slides-weasy"):
+        rules = {}
+        for suffix in ("", "-en", "-ko"):
+            text = (TEMPLATES / f"{base}{suffix}.html").read_text(encoding="utf-8")
+            match = rule.search(text)
+            if '<img class="brand-logo"' not in text or not match:
+                drift.append(f"{base}{suffix}: slot missing")
+                continue
+            rules[suffix] = re.sub(r"\s+", " ", match.group(0))
+        if len(set(rules.values())) > 1:
+            drift.append(f"{base}: .brand-logo rule differs across variants")
+    check("brand-logo slot present and identical in base, -en and -ko", not drift, "; ".join(drift))
+
+
 def test_scan_file_skip_bug() -> None:
     """Lines starting with '#' (CSS id selectors) must NOT be skipped."""
     fixture = """<!doctype html>
@@ -733,6 +782,17 @@ def test_off_palette_ignores_root_and_svg() -> None:
         p.unlink(missing_ok=True)
 
 
+def test_parse_root_vars_reads_last_declaration_and_skips_comments() -> None:
+    from tokens import parse_root_vars
+
+    no_semicolon = parse_root_vars(":root{--brand:#1B365D;--ivory:#ffffff}")
+    check("parse_root_vars keeps a last declaration without a semicolon",
+          no_semicolon == {"--brand": "#1B365D", "--ivory": "#ffffff"}, str(no_semicolon))
+    commented = parse_root_vars(":root{/* --brand:#000000; */ --ivory:#faf9f5;}")
+    check("parse_root_vars ignores commented-out declarations",
+          commented == {"--ivory": "#faf9f5"}, str(commented))
+
+
 def test_root_token_findings_flags_off_palette_definition() -> None:
     """An off-palette hex *defined* in :root (never used as a literal property
     hex) escapes _off_palette_findings, which blanks :root. _root_token_findings
@@ -854,6 +914,55 @@ def test_scan_file_thin_border_with_radius() -> None:
               f"rules found: {rules or '(none)'}")
     finally:
         p.unlink(missing_ok=True)
+
+
+def test_thin_border_radius_is_judged_per_rule_block() -> None:
+    """The old line scan never searched the border line itself, so one-line
+    rules and a radius on the opening-brace line slipped through, while the
+    width pattern read `10.5pt` as a thin `0.5pt` border."""
+    cases = {
+        "one-line rule": (".c { border: 0.5pt solid #e8e6dc; border-radius: 6pt; }", True),
+        "radius on the brace line": (".c { border-radius: 6pt;\n  border: 0.5pt solid #e8e6dc; }", True),
+        "thick 10.5pt border": (".c { border: 10.5pt solid #e8e6dc; border-radius: 6pt; }", False),
+        "thin border without radius": (".c { border: 0.5pt solid #e8e6dc; }\n.d { border-radius: 6pt; }", False),
+        "single-side thin border": (".c { border-left: 0.5pt solid #e8e6dc; border-radius: 6pt; }", False),
+    }
+    for name, (css, expected) in cases.items():
+        rules = {f.rule for f in scan_text(f"<style>\n{css}\n</style>", Path("doc.html"))}
+        check(f"thin-border-radius: {name}",
+              ("thin-border-radius" in rules) == expected, f"rules: {rules or '(none)'}")
+    # A selector-plus-body regex over the whole HTML went quadratic on long
+    # brace-free body text (200k chars took minutes); the body-only scan is linear.
+    import time
+    started = time.monotonic()
+    scan_text("<style>.c { border: 0.5pt solid; }</style>" + "x" * 200_000, Path("doc.html"))
+    elapsed = time.monotonic() - started
+    check("thin-border-radius scan stays linear on long body text",
+          elapsed < 5, f"took {elapsed:.1f}s")
+
+
+def test_emphasis_exemption_matches_whole_class_names() -> None:
+    """`pre` and `tag` used to match as substrings, exempting .preview-box,
+    .stage and .advantage from the emphasis-container count."""
+    drift = """<!doctype html>
+<html><head><style>
+.preview-box { background: #ffffff; border-radius: 6pt; padding: 10pt; }
+.stage { background: #f5f4ed; border-radius: 6pt; padding: 10pt; }
+.tag-soft { background: #E4ECF5; border-radius: 2pt; padding: 1pt 4pt; }
+pre code { background: #EEF2F7; border-radius: 2pt; padding: 8pt; }
+</style></head><body></body></html>
+"""
+    p = write_temp_html(drift)
+    try:
+        found = _emphasis_container_findings(p)
+        detail = found[0].excerpt if found else ""
+    finally:
+        p.unlink(missing_ok=True)
+    check("substring-named classes still count as emphasis containers",
+          len(found) == 1 and ".preview-box" in detail and ".stage" in detail,
+          detail or "(none)")
+    check("whole tag/pre class names stay exempt",
+          ".tag-soft" not in detail and "pre code" not in detail, detail)
 
 
 def test_check_placeholders_flags_unfilled() -> None:
