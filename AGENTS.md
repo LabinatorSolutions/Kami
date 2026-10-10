@@ -224,7 +224,7 @@ python3 scripts/mermaid_normalize.py raw.svg -o clean.svg
 - Landing or documentation-site work follows `references/design.md` Section 11 «Landing
   Page (screen-first)»: its «Documentation site» subsection for the doc shell (sidebar
   rail, on-this-page TOC, borderless prev/next pager), then the «Responsive
-  screenshot verification» subsection that closes Section 12 (breakpoint, tablet, and baseline screenshots
+  screenshot verification» subsection that closes the section (breakpoint, tablet, and baseline screenshots
   per locale, objective line-widow scan) before shipping.
 - Content changes should avoid CSS churn unless layout behavior is part of the task.
 - Public copy states the product function before design terminology. Write each locale
@@ -342,7 +342,7 @@ dependency.
 
 - `check.yml` has two jobs. `lint-and-test` runs dependency-light lint, metadata,
   and package gates. `verify-render` installs `weasyprint` / `pypdf` / `PyMuPDF` /
-  `Pygments`, sets up Node 22 and runs `bash scripts/ensure_mathjax.sh`, then
+  `Pygments` / `python-pptx`, sets up Node 22 and runs `bash scripts/ensure_mathjax.sh`, then
   installs the checkout with `npx skills add` under a throwaway `HOME` and asserts
   the bare install is the kami skill alone (`SKILL.md` and `scripts/build.py`
   present, no `index.html`, no `site/`, no `TsangerJinKai02-W04.ttf`, unpacked tree
@@ -353,6 +353,9 @@ dependency.
   TOC counters. Tests that need an optional render dependency use the suite's
   explicit `SKIP:` counter and fail when a CI-required dependency is unavailable;
   never turn a skip into `OK:`.
+- CI installs its Python dependencies and the skills CLI unpinned on purpose: users
+  install the same unpinned way, so an upstream release that breaks Kami should turn
+  CI red before it reaches them.
 - Validate workflow edits with the CI run for the exact pushed commit on the authorized
   branch; do not create a feature branch solely for validation. A local pass does not
   prove CI font or dependency availability: check cache manifests, Ubuntu fallback
