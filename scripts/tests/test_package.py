@@ -1,7 +1,7 @@
 """Distribution, metadata, update, and release contract tests."""
 from __future__ import annotations
 
-from support import REPO_ROOT, SKILL_ROOT, check
+from support import REPO_ROOT, SKILL_ROOT, check, skip
 
 import hashlib
 import json
@@ -289,7 +289,7 @@ def test_check_update_script() -> None:
     if not script.exists():
         return
     if shutil.which("bash") is None or shutil.which("curl") is None:
-        check("check-update.sh behavior (skipped: bash/curl unavailable)", True)
+        skip("check-update.sh behavior", "bash/curl unavailable", ci_required=True)
         return
     local_ver = (SKILL_ROOT / "VERSION").read_text(encoding="utf-8").strip()
 
@@ -380,7 +380,7 @@ def test_check_update_uses_codex_plugin_update_command() -> None:
     if not script.exists():
         return
     if shutil.which("bash") is None or shutil.which("curl") is None:
-        check("check-update Codex command (skipped: bash/curl unavailable)", True)
+        skip("check-update Codex command", "bash/curl unavailable", ci_required=True)
         return
 
     with tempfile.TemporaryDirectory() as d:
@@ -419,7 +419,7 @@ def test_check_update_uses_claude_plugin_update_command() -> None:
     if not script.exists():
         return
     if shutil.which("bash") is None or shutil.which("curl") is None:
-        check("check-update Claude command (skipped: bash/curl unavailable)", True)
+        skip("check-update Claude command", "bash/curl unavailable", ci_required=True)
         return
 
     with tempfile.TemporaryDirectory() as d:
@@ -588,3 +588,58 @@ def test_release_note_help_matches_placeholder_flow() -> None:
           and "V<prev>..HEAD" in release_doc
           and "let CI create the placeholder" in release_doc,
           "draft-release-notes.py and docs/release.md disagree")
+
+
+def test_release_note_scaffold_matches_published_shape() -> None:
+    """The scaffold keeps the fixed subtitle, current tagline, and a Thanks slot."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "draft_release_notes", REPO_ROOT / "scripts" / "draft-release-notes.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    args = module.parse_args(["draft", "V1.0.0..HEAD"])
+    out = module.render(
+        version="V9.9.9", title="Test", subtitle_en=args.subtitle_en,
+        rev_range="V1.0.0..HEAD", commits=[("abc1234", "fix: sample")])
+    check("release-note scaffold uses the fixed subtitle",
+          "<em>Good content deserves good paper.</em>" in out, out[:400])
+    check("release-note scaffold closes with Thanks then the current tagline",
+          "### Thanks" in out
+          and out.index("### Thanks") < out.index("> Kami helps AI agents create clear, consistent professional documents.")
+          and "quiet design system" not in out,
+          out[-400:])
+
+
+def test_plugin_mirror_follows_tracked_files() -> None:
+    """Like package-skill.sh, the plugin mirror skips untracked files in a checkout."""
+    from build_metadata import skill_source_files
+
+    if shutil.which("git") is None:
+        skip("plugin mirror follows git ls-files", "git unavailable", ci_required=True)
+        return
+    with tempfile.TemporaryDirectory() as d:
+        skill = Path(d) / "skills" / "kami"
+        skill.mkdir(parents=True)
+        (skill / "SKILL.md").write_text("x\n", encoding="utf-8")
+        (skill / "scratch.txt").write_text("x\n", encoding="utf-8")
+        outside = {p.name for p in skill_source_files(skill)}
+        subprocess.run(["git", "init", "-q", d], check=True)
+        subprocess.run(["git", "-C", d, "add", "skills/kami/SKILL.md"], check=True)
+        inside = {p.name for p in skill_source_files(skill)}
+    check("plugin mirror walks the disk outside git",
+          outside == {"SKILL.md", "scratch.txt"}, str(sorted(outside)))
+    check("plugin mirror drops untracked files inside git",
+          inside == {"SKILL.md"}, str(sorted(inside)))
+
+
+def test_mcp_server_card_install_path_matches_developer_docs() -> None:
+    from build_metadata import build_mcp_server_card
+
+    card = build_mcp_server_card("0.0.0", "2025-06-18", [])
+    install = card["packages"][0]["install"]
+    developers = (REPO_ROOT / "site" / "developers.md").read_text(encoding="utf-8")
+    check("MCP server card install path matches developers.md",
+          "<checkout>/skills/kami/scripts/mcp_server.py" in install
+          and "<checkout>/skills/kami/scripts/mcp_server.py" in developers,
+          install)

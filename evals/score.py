@@ -29,14 +29,15 @@ from checks import check_density, check_markdown_residue, check_placeholders, ch
 from lint import check_style  # noqa: E402
 from verify import check_fonts  # noqa: E402
 
-# case -> (min pages, max pages or 0 for none, atomic facts that must appear in the PDF text)
-CONTRACTS: dict[str, tuple[int, int, list[str]]] = {
-    "resume-cn": (2, 2, ["林予安", "140", "900", "3.8", "1.6", "11%", "0.9%", "0.2%", "Sail UI", "1.8k"]),
-    "one-pager-en": (1, 1, ["$1.2M", "$310K", "38", "214", "14%", "6%", "$6M", "Leeds"]),
-    "equity-report-cn": (1, 3, ["18.4", "26.9", "35.2", "42.6", "21.3%", "增持", "128"]),
-    "slides-en": (7, 12, ["400", "37", "41%", "88%", "23", "11 months"]),
-    "letter-ko": (1, 1, ["박서연", "김도윤", "90초", "Kafka", "Flink", "18"]),
-    "long-doc-cn": (3, 0, ["350", "18.5", "4.2", "12.1", "2.3", "94%", "81%", "97%"]),
+# case -> (pinned output stem from prompt.md, min pages, max pages or 0 for none,
+# atomic facts that must appear in the PDF text)
+CONTRACTS: dict[str, tuple[str, int, int, list[str]]] = {
+    "resume-cn": ("resume", 2, 2, ["林予安", "140", "900", "3.8", "1.6", "11%", "0.9%", "0.2%", "Sail UI", "1.8k"]),
+    "one-pager-en": ("tidewell", 1, 1, ["$1.2M", "$310K", "38", "214", "14%", "6%", "$6M", "Leeds"]),
+    "equity-report-cn": ("report", 1, 3, ["18.4", "26.9", "35.2", "42.6", "21.3%", "增持", "128"]),
+    "slides-en": ("deck", 7, 12, ["400", "37", "41%", "88%", "23", "11 months"]),
+    "letter-ko": ("letter", 1, 1, ["박서연", "김도윤", "90초", "Kafka", "Flink", "18"]),
+    "long-doc-cn": ("whitepaper", 3, 0, ["350", "18.5", "4.2", "12.1", "2.3", "94%", "81%", "97%"]),
 }
 
 
@@ -61,16 +62,10 @@ def _workspace(trace_path: str) -> Path | None:
     return cwd if cwd.exists() else None
 
 
-def _deliverable(ws: Path) -> tuple[Path | None, Path | None]:
-    pdfs = [p for p in ws.rglob("*.pdf") if not any(part.endswith("-visual") for part in p.parts)]
-    if not pdfs:
-        return None, None
-    pdf = max(pdfs, key=lambda p: p.stat().st_mtime)
-    html = pdf.with_suffix(".html")
-    if not html.exists():
-        htmls = list(ws.rglob("*.html"))
-        html = max(htmls, key=lambda p: p.stat().st_mtime) if htmls else None
-    return pdf, html
+def _deliverable(ws: Path, stem: str) -> tuple[Path | None, Path | None]:
+    """Open the file names the prompt pinned, never a scratch or re-rendered copy."""
+    pdf, html = ws / f"{stem}.pdf", ws / f"{stem}.html"
+    return (pdf if pdf.is_file() else None), (html if html.is_file() else None)
 
 
 def _pdf_text(pdf: Path) -> tuple[int, str]:
@@ -93,11 +88,11 @@ def score_run(case: str, run: dict) -> dict:
     if ws is None:
         row["note"] = "workspace not kept (run with --keep-temp)"
         return row
-    pdf, html = _deliverable(ws)
+    stem, lo, hi, facts = CONTRACTS[case]
+    pdf, html = _deliverable(ws, stem)
     if pdf is None:
-        row["note"] = "no PDF delivered"
+        row["note"] = f"no PDF delivered (expected {stem}.pdf)"
         return row
-    lo, hi, facts = CONTRACTS[case]
     pages, text = _pdf_text(pdf)
     flat = re.sub(r"\s+", "", text)
     found = [f for f in facts if re.sub(r"\s+", "", f) in flat]
@@ -122,7 +117,7 @@ def score_run(case: str, run: dict) -> dict:
 def gate_score(row: dict) -> float | None:
     """Share of deterministic gates passed, facts weighted as one gate."""
     if "pages" not in row:
-        return 0.0 if row.get("note") == "no PDF delivered" else None
+        return 0.0 if str(row.get("note", "")).startswith("no PDF delivered") else None
     gates = [row["contract"], row["fonts"], row["density"], row["residue"]]
     gates += [row[k] for k in ("balance", "placeholders", "style") if k in row]
     got, total = (int(x) for x in row["facts"].split("/"))
@@ -134,7 +129,9 @@ def main(argv: list[str]) -> int:
     if len(argv) > 1:
         target = Path(argv[1])
     else:
-        dirs = sorted(p for p in results.iterdir() if (p / "aggregate-result.json").exists())
+        dirs = sorted(
+            p for p in results.iterdir() if (p / "aggregate-result.json").exists()
+        ) if results.is_dir() else []
         if not dirs:
             print("ERROR: no results found; run claude plugin eval . --keep-temp first")
             return 2

@@ -11,9 +11,7 @@ Usage:
     python3 scripts/draft-release-notes.py V1.4.0..HEAD
     python3 scripts/draft-release-notes.py \\
         --version V1.5.0 \\
-        --title "Steadier Hand" \\
-        --subtitle-en "Plugin install fix and audit cleanup." \\
-        --subtitle-cn "插件安装修复，审计清理沉淀。"
+        --title "Steadier Hand"
 
 The default rev range is `<latest tag>..HEAD`. Output goes to stdout; pipe
 it to a file, then pass that file to `gh release edit --notes-file` after the
@@ -26,6 +24,8 @@ import subprocess
 import sys
 from textwrap import dedent
 
+FIXED_SUBTITLE = "Good content deserves good paper."
+
 _HEADER = dedent("""\
     <div align="center">
       <img src="https://raw.githubusercontent.com/tw93/Kami/main/skills/kami/assets/images/logo.svg" alt="Kami Logo" width="120" />
@@ -35,7 +35,7 @@ _HEADER = dedent("""\
 """)
 
 _FOOTER = dedent("""\
-    > Kami is a quiet design system for professional documents, one constraint set that any agent can trust. https://github.com/tw93/Kami
+    > Kami helps AI agents create clear, consistent professional documents. https://github.com/tw93/Kami
 """)
 
 # Conventional-commit prefix to a short product label, used as a hint when
@@ -93,7 +93,6 @@ def render(
     version: str,
     title: str,
     subtitle_en: str,
-    subtitle_cn: str,
     rev_range: str,
     commits: list[tuple[str, str]],
 ) -> str:
@@ -110,11 +109,14 @@ def render(
     out.append("")
     out.append("### 更新日志")
     out.append("")
-    out.append(f"<!-- 副标题: {subtitle_cn} -->")
     out.append("<!-- 翻译并对齐到上面英文条目，保持一一对应 -->")
     out.append("")
     for i in range(1, len(commits) + 1):
         out.append(f"{i}. **TODO**：（对应英文第 {i} 条）")
+    out.append("")
+    out.append("### Thanks")
+    out.append("")
+    out.append("<!-- name this cycle's issue reporters and PR contributors; drop the section when there are none -->")
     out.append("")
     out.append(_FOOTER)
     return "\n".join(out)
@@ -135,13 +137,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--title", default="<title>", help="Release title, e.g. 'Steadier Hand'")
     parser.add_argument(
         "--subtitle-en",
-        default="<one-line subtitle>",
-        help="Short English subtitle for the centered hero block",
-    )
-    parser.add_argument(
-        "--subtitle-cn",
-        default="<一句话中文副标题>",
-        help="Short Chinese subtitle, kept as a comment hint for translators",
+        default=FIXED_SUBTITLE,
+        help="Hero subtitle; the product's fixed line, override only if it changes",
     )
     return parser.parse_args(argv[1:])
 
@@ -172,7 +169,6 @@ def main(argv: list[str]) -> int:
         version=args.version,
         title=args.title,
         subtitle_en=args.subtitle_en,
-        subtitle_cn=args.subtitle_cn,
         rev_range=rev_range,
         commits=commits,
     )

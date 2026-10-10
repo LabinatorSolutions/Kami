@@ -38,6 +38,7 @@ import difflib
 import hashlib
 import json
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -100,7 +101,7 @@ def read_version(root: Path) -> str:
     version_file = root / "VERSION"
     if not version_file.exists():
         raise SystemExit(f"ERROR: missing VERSION file at {version_file}")
-    version = version_file.read_text().strip()
+    version = version_file.read_text(encoding="utf-8").strip()
     if not version:
         raise SystemExit("ERROR: VERSION file is empty")
     return version
@@ -405,7 +406,7 @@ def build_mcp_server_card(version: str, protocol: str, tools: list[dict]) -> dic
                 "version": version,
                 "transport": {"type": "stdio"},
                 "runtimeHint": "python3",
-                "install": f"claude mcp add {PLUGIN_NAME} -- python3 <checkout>/scripts/mcp_server.py",
+                "install": f"claude mcp add {PLUGIN_NAME} -- python3 <checkout>/skills/kami/scripts/mcp_server.py",
             }
         ],
         "tools": tools,
@@ -518,6 +519,28 @@ def should_include_skill_mirror_file(path: Path) -> bool:
     return True
 
 
+def skill_source_files(skill_root: Path) -> list[Path]:
+    """List the skill's files the way package-skill.sh does.
+
+    Inside a git checkout the mirror follows `git ls-files`, so an untracked
+    scratch file never reaches plugins/kami while the release zip leaves it
+    out. Outside git (an exported tree) it falls back to walking the disk.
+    """
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(skill_root), "ls-files", "-z", "--", "."],
+            capture_output=True,
+            check=False,
+        )
+    except OSError:
+        result = None
+    if result is not None and result.returncode == 0:
+        rels = [rel for rel in result.stdout.decode("utf-8").split("\0") if rel]
+        if "SKILL.md" in rels:
+            return sorted(skill_root / rel for rel in rels)
+    return sorted(skill_root.rglob("*"))
+
+
 def collect_plugin_tree(root: Path, codex_manifest_rendered: str, claude_manifest_rendered: str) -> dict[str, bytes]:
     """Build the generated file set for the shared plugin directory.
 
@@ -533,7 +556,7 @@ def collect_plugin_tree(root: Path, codex_manifest_rendered: str, claude_manifes
     skill_root = root / "skills" / "kami"
     if not (skill_root / "SKILL.md").exists():
         raise SystemExit(f"ERROR: missing skill source at {skill_root}")
-    for path in sorted(skill_root.rglob("*")):
+    for path in skill_source_files(skill_root):
         if not path.is_file():
             continue
         source_rel = path.relative_to(skill_root)
@@ -566,7 +589,7 @@ def check_generated(root: Path, generated_files: list[tuple[Path, str]], plugin_
     drift = False
 
     for generated_path, expected in generated_files:
-        actual = generated_path.read_text() if generated_path.exists() else ""
+        actual = generated_path.read_text(encoding="utf-8") if generated_path.exists() else ""
         if actual != expected:
             rel = generated_path.relative_to(root).as_posix()
             print(
@@ -617,7 +640,7 @@ def check_generated(root: Path, generated_files: list[tuple[Path, str]], plugin_
 def write_generated(root: Path, generated_files: list[tuple[Path, str]], plugin_tree: dict[str, bytes]) -> int:
     for generated_path, expected in generated_files:
         generated_path.parent.mkdir(parents=True, exist_ok=True)
-        generated_path.write_text(expected)
+        generated_path.write_text(expected, encoding="utf-8")
         print(f"OK: wrote {generated_path.relative_to(root)} ({len(expected)} bytes)")
 
     codex_plugin_root = root / "plugins" / "kami"

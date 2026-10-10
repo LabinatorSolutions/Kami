@@ -3,7 +3,7 @@
   "title": "Kami",
   "description": "Render and verify Kami documents locally: list templates and content schemas, render filled HTML to PDF, run the deterministic checks, and rasterize pages for a perceptual review pass.",
   "version": "1.17.0",
-  "protocolVersion": "2025-06-18",
+  "protocolVersion": "2025-11-25",
   "license": "MIT",
   "homepage": "https://kami.tw93.fun",
   "repository": "https://github.com/tw93/kami",
@@ -21,7 +21,7 @@
         "type": "stdio"
       },
       "runtimeHint": "python3",
-      "install": "claude mcp add kami -- python3 <checkout>/scripts/mcp_server.py"
+      "install": "claude mcp add kami -- python3 <checkout>/skills/kami/scripts/mcp_server.py"
     }
   ],
   "tools": [

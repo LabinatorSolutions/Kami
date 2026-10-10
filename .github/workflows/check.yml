@@ -11,10 +11,10 @@ jobs:
     name: lint and test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
@@ -35,10 +35,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint-and-test
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
@@ -47,7 +47,7 @@ jobs:
         # runtime; fonts-noto-cjk provides a serif CJK fallback so the Chinese
         # templates render with embedded glyphs even though TsangerJinKai02 is
         # commercial and not shipped in CI. The verify step accepts Noto as a
-        # recognized fallback (see scripts/build.py fallback_present).
+        # recognized fallback (see skills/kami/scripts/verify.py fallback_present).
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
@@ -61,7 +61,7 @@ jobs:
         run: python3 -m pip install weasyprint pypdf pymupdf Pygments python-pptx
 
       - name: Set up Node.js for strict mathematics
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: npm
