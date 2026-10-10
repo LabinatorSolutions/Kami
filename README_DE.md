@@ -130,15 +130,13 @@ Die Datei enthält ein YAML-Frontmatter für strukturierte Felder (Name, Rolle, 
 
 Standardmäßig verwendet Kami einen warmen Pergamenthintergrund (`#f5f4ed`), tintenblaue Akzente (`#1B365D`) und Serifenschriften. Hierarchien entstehen durch Schriftgröße und Weißraum. Alle Vorgaben lassen sich an das eigene Markendesign anpassen.
 
-- **Vorlagen.** Acht Dokumentvorlagen: One-Pager, Ausführliches Dokument, Brief, Portfolio, Lebenslauf, Präsentationsfolien, Finanzbericht und Changelog, plus ein Landing-Page-System, jeweils auf Chinesisch, Englisch und Koreanisch.
+- **Vorlagen.** Acht Dokumentvorlagen: One-Pager, Ausführliches Dokument, Brief, Portfolio, Lebenslauf, Präsentationsfolien, Finanzbericht und Changelog, plus ein Landing-Page-System, jeweils auf Chinesisch, Englisch und Koreanisch. Kami wählt die passende Variante anhand der Sprache, in der Sie schreiben.
 - **Diagramme.** 18 Inline-SVG-Typen, inklusive architektonischer Übersichtskarten. Sequenz-, Klassen- und ER-Diagramme können aus Mermaid-Syntax generiert werden: [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) rendert das SVG, und `skills/kami/scripts/mermaid_normalize.py` passt es an die Kami-Farbpalette an.
 - **Präsentationen.** Drei Rendering-Pfade: Standardmäßig WeasyPrint HTML zu PDF, python-pptx für bearbeitbare PPTX-Dateien auf Anfrage und eine Marp-Variante in `skills/kami/assets/templates/marp/` für Markdown-Folien.
 - **Quellcode.** Pygments-Syntax-Highlighting bei installierter Bibliothek; ohne Pygments bleiben Codeblöcke monochrom und sauber lesbar.
 - **Prüfschritte.** Content-Schemas validieren die Dokumentstruktur vor dem Rendern; Abdeckungsprüfungen stellen sicher, dass alle Fakten auf der Seite landen.
 - **MCP-Server.** Ein schlanker Server (`skills/kami/scripts/mcp_server.py`) stellt Werkzeuge für Diagnose, Rendering und Screenshots bereit, sodass jeder MCP-fähige Agent Kami direkt ansteuern kann. Rendern Sie nur vertrauenswürdiges lokales HTML: referenzierte Dateien sowie HTTP- und HTTPS-Ressourcen werden mit den Rechten des MCP-Prozesses geladen.
 - **Druckversion.** Eine optionale Weißpapier-Variante stellt den Hintergrund für Heim- und Bürodrucker auf reines Weiß um, während Tabellen und Karten ihre sanften Töne behalten.
-
-Kami wählt die passende Variante anhand der Sprache, in der Sie schreiben.
 
 Die passende Schriftart wird automatisch anhand der Sprache ausgewählt: Chinesisch (TsangerJinKai02), Japanisch (YuMincho), Koreanisch (Source Han Serif K), Englisch/Deutsch (Charter).
 

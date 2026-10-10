@@ -131,15 +131,13 @@ Kami 每天最多检查一次新版本，有新版就在对话里提一句。检
 
 默认采用温暖的浅米色底（`#f5f4ed`）、油墨蓝强调色（`#1B365D`）和衬线字体。模板依靠字号层级与留白节奏区分标题、正文与标注，这些默认值都可以按你的品牌调整。
 
-- **模板体系**：8 种文档模板（一页纸、长文档、信件、作品集、简历、幻灯片、研报、更新日志）加一套落地页，都有中、英、韩三个版本。
-- **专业图表**：18 种行内原生 SVG 图表，包括一种报告尺寸的系统架构图。时序图、类图与实体关系图可直接写 Mermaid 源码：由 [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) 渲染为 SVG，并通过 `skills/kami/scripts/mermaid_normalize.py` 自动重着色为 Kami 配色并适配 WeasyPrint，无需本地安装 Node 环境。
+- **模板体系**：8 种文档模板（一页纸、长文档、信件、作品集、简历、幻灯片、研报、更新日志）加一套落地页，都有中、英、韩三个版本，Kami 会按你写作的语言选对应版本。
+- **专业图表**：18 种行内原生 SVG 图表，包括单独成页的系统全景架构图。时序图、类图与实体关系图可直接写 Mermaid 源码：由 [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) 渲染为 SVG，并通过 `skills/kami/scripts/mermaid_normalize.py` 自动重着色为 Kami 配色并适配 WeasyPrint，无需本地安装 Node 环境。
 - **幻灯片**：支持 3 条交付路径：默认 WeasyPrint HTML 转 PDF；按需通过 python-pptx 导出可二次编辑的 PPTX；以及位于 `skills/kami/assets/templates/marp/` 的 Markdown 优先 Marp 方案。
 - **代码高亮**：安装 Pygments 后自动支持语法着色；未安装时依然可正常生成纯黑灰代码块，不中断流程。
 - **检查**：JSON Schema 先行校验输入数据完整性；覆盖率检测防止关键内容在排版时遗漏；交付前通过页面图片逐页校验节奏、孤行与排版平衡。
-- **本地 MCP 服务**：内置零外部依赖的 MCP 服务器（`skills/kami/scripts/mcp_server.py`），提供环境自检、渲染、结构化检查与截图工具，任何兼容 MCP 的 Agent 均可直接调用。只渲染可信的本地 HTML，页面引用的本地文件和 HTTP、HTTPS 资源会以 MCP 进程的权限加载。
+- **本地 MCP 服务**：内置零外部依赖的 MCP 服务器（`skills/kami/scripts/mcp_server.py`），提供环境自检、渲染、结构化检查与截图工具，任何兼容 MCP 的 Agent 均可直接调用。只拿它渲染你信任的本地 HTML，页面引用的本地文件和 HTTP、HTTPS 资源会以 MCP 进程的权限加载。
 - **白底打印**：默认是浅米色底，也可以选用白底打印版，适合家里和办公室的打印机，卡片和表格仍保留暖色底。[Kami 介绍一页纸](site/assets/demos/demo-kami-print.pdf)就是用这个版本渲染的，完整配方见 [production.md](skills/kami/references/production.md)。
-
-Kami 会按你写作的语言选对应版本。
 
 **字体约定**：每份文档全页仅使用单一衬线字体。中文：仓耳今楷（TsangerJinKai02）；日文：游明朝（YuMincho）；韩文：思源宋体（Source Han Serif K）；英文：Charter。详见 [授权条款](#授权条款)。
 

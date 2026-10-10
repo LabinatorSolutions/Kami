@@ -128,15 +128,13 @@ Créez `~/.config/kami/brand.md` pour conserver votre identité, vos couleurs et
 
 Les valeurs par défaut associent un fond parchemin chaleureux (`#f5f4ed`), des touches bleu encre (`#1B365D`) et des polices avec empattement (serif). La hiérarchie visuelle repose sur la taille des caractères et les espaces blancs. Vous pouvez adapter ces valeurs par défaut à votre marque.
 
-- **Modèles.** Huit modèles de documents : Fiche synthétique (One-Pager), Document long, Lettre, Portfolio, CV, Diapositives, Rapport d'analyse et Journal des modifications (Changelog), ainsi qu'un système de landing page, chacun en chinois, anglais et coréen.
+- **Modèles.** Huit modèles de documents : Fiche synthétique (One-Pager), Document long, Lettre, Portfolio, CV, Diapositives, Rapport d'analyse et Journal des modifications (Changelog), ainsi qu'un système de landing page, chacun en chinois, anglais et coréen. Kami choisit la variante adaptée à la langue dans laquelle vous écrivez.
 - **Schémas.** 18 types de diagrammes vectoriels SVG intégrés. Les diagrammes de séquence, de classes et entité-association peuvent être rédigés en syntaxe Mermaid : [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) génère le SVG et `skills/kami/scripts/mermaid_normalize.py` l'harmonise avec la palette de Kami.
 - **Diapositives.** Trois moteurs de rendu : WeasyPrint HTML vers PDF par défaut, python-pptx pour des fichiers PowerPoint modifiables sur demande, et une variante Marp dans `skills/kami/assets/templates/marp/`.
 - **Code source.** Coloration syntaxique via Pygments si la bibliothèque est installée ; sinon, le code s'affiche en monochrome clair et lisible.
 - **Validation.** Des schémas de contenu valident la structure avant mise en page ; un contrôle de couverture s'assure qu'aucun point clé n'a été oublié.
-- **Serveur MCP.** Un serveur léger (`skills/kami/scripts/mcp_server.py`) expose des outils de diagnostic, de rendu et de capture d'écran pour tout agent compatible MCP. N'effectuez le rendu que de HTML local de confiance : les fichiers et les ressources HTTP et HTTPS référencés sont chargés avec les droits du processus MCP.
+- **Serveur MCP.** Un serveur léger (`skills/kami/scripts/mcp_server.py`) expose des outils de diagnostic, de rendu et de capture d'écran pour tout agent compatible MCP. Ne rendez que du HTML local de confiance : les fichiers et les ressources HTTP et HTTPS référencés sont chargés avec les droits du processus MCP.
 - **Impression.** Une variante papier blanc permet d'adapter n'importe quel document aux imprimantes de bureau sans fond parchemin, tout en conservant les teintes douces des encadrés.
-
-Kami choisit la variante adaptée à la langue dans laquelle vous écrivez.
 
 Police par défaut selon la langue : chinois (TsangerJinKai02), japonais (YuMincho), coréen (Source Han Serif K), anglais/français (Charter).
 

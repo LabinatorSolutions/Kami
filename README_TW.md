@@ -46,7 +46,7 @@ Kami（紙，かみ）在日文中意為「紙」。它包含 8 種文件範本�
 </tr>
 <tr>
   <td align="center" width="25%">
-    <a href="site/assets/demos/demo-mole.pdf"><img src="site/assets/demos/demo-mole.png" alt="Mole 產品簡報"></a>
+    <a href="site/assets/demos/demo-mole.pdf"><img src="site/assets/demos/demo-mole.png" alt="Mole 產品簡介"></a>
     <br><b>一頁紙</b> · 英文
     <br><sub>Mole 產品簡介，1 頁</sub>
   </td>
@@ -131,15 +131,13 @@ Kami 每天最多檢查一次新版本，有新版就在對話裡提一句。檢
 
 預設採用溫暖的米色底（`#f5f4ed`）、油墨藍強調色（`#1B365D`）與襯線字型。範本依靠字級階層與留白節奏區分標題、內文與標註，這些預設值都可以依你的品牌調整。
 
-- **範本體系**：8 種文件範本（一頁紙、長文件、信件、作品集、履歷、簡報、研究報告、更新日誌）加一套落地頁，都有中、英、韓三個版本。
-- **專業圖表**：18 種行內原生 SVG 圖表，包含一種報告尺寸的系統架構圖。循序圖、類別圖與實體關係圖可直接寫 Mermaid 原始碼：由 [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) 渲染為 SVG，並透過 `skills/kami/scripts/mermaid_normalize.py` 自動調整為 Kami 配色並適配 WeasyPrint，無需本機安裝 Node 環境。
+- **範本體系**：8 種文件範本（一頁紙、長文件、信件、作品集、履歷、簡報、研究報告、更新日誌）加一套落地頁，都有中、英、韓三個版本，Kami 會依你書寫的語言選擇對應版本。
+- **專業圖表**：18 種行內原生 SVG 圖表，包含單獨成頁的系統全景架構圖。循序圖、類別圖與實體關係圖可直接寫 Mermaid 原始碼：由 [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) 渲染為 SVG，並透過 `skills/kami/scripts/mermaid_normalize.py` 自動調整為 Kami 配色並適配 WeasyPrint，無需本機安裝 Node 環境。
 - **簡報**：支援 3 條交付路徑：預設 WeasyPrint HTML 轉 PDF；按需透過 python-pptx 匯出可二次編輯的 PPTX；以及位於 `skills/kami/assets/templates/marp/` 的 Markdown 優先 Marp 方案。
 - **程式碼高亮**：安裝 Pygments 後自動支援語法著色；未安裝時依然可正常產生純黑灰程式碼區塊。
 - **檢查**：JSON Schema 先行校驗輸入資料完整性；覆蓋率檢測防止關鍵內容在排版時遺漏；交付前透過頁面圖片逐頁檢驗節奏、孤行與排版平衡。
-- **本機 MCP 服務**：內建零外部依賴的 MCP 伺服器（`skills/kami/scripts/mcp_server.py`），提供環境自檢、渲染、結構化檢查與截圖工具，任何相容 MCP 的 Agent 均可直接呼叫。只渲染可信的本機 HTML，頁面引用的本機檔案和 HTTP、HTTPS 資源會以 MCP 伺服器行程的權限載入。
+- **本機 MCP 服務**：內建零外部依賴的 MCP 伺服器（`skills/kami/scripts/mcp_server.py`），提供環境自檢、渲染、結構化檢查與截圖工具，任何相容 MCP 的 Agent 均可直接呼叫。只拿它渲染你信任的本機 HTML，頁面引用的本機檔案和 HTTP、HTTPS 資源會以 MCP 伺服器行程的權限載入。
 - **白底列印**：預設是淺米色底，也可以選用白底列印版，適合家裡和辦公室的印表機，卡片和表格仍保留暖色底。[Kami 介紹一頁紙](site/assets/demos/demo-kami-print.pdf)就是用這個版本渲染的，完整配方見 [production.md](skills/kami/references/production.md)。
-
-Kami 會依你書寫的語言選擇對應版本。
 
 **字型約定**：每份文件全頁僅使用單一襯線字型。中文：倉耳今楷（TsangerJinKai02）；日文：游明朝（YuMincho）；韓文：思源宋體（Source Han Serif K）；英文：Charter。詳見 [授權條款](#授權條款)。
 
