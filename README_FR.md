@@ -11,7 +11,7 @@
 
 ## Pourquoi Kami
 
-Kami apporte aux documents et pages web une typographie soignée et chaleureuse inspirée du papier. Créez des PDF élégants, des images haute résolution ou exportez vos présentations en diapositives PowerPoint modifiables.
+Kami fournit aux agents d'IA des modèles et des règles de mise en page pour les documents et les landing pages. Créez des PDF et des PNG, ou exportez les diapositives en fichiers PowerPoint modifiables.
 
 Kami (紙, かみ) signifie « papier » en japonais. Il intègre huit modèles de documents, un système de landing pages et des règles de contrôle de contenu et de mise en page.
 
@@ -30,12 +30,12 @@ Exemples de PDF en plusieurs formats et langues. Cliquez sur un aperçu pour l'o
   </td>
   <td align="center" width="25%">
     <a href="site/assets/demos/demo-kami-print.pdf"><img src="site/assets/demos/demo-kami-print.png" alt="Synthèse imprimable Kami"></a>
-    <br><b>One-Pager</b> · 中文
+    <br><b>One-Pager</b> · Chinois
     <br><sub>Présentation Kami · Version imprimable</sub>
   </td>
   <td align="center" width="25%">
     <a href="site/assets/demos/demo-tesla.pdf"><img src="site/assets/demos/demo-tesla.png" alt="Rapport d'analyse Tesla"></a>
-    <br><b>Rapport financier</b> · 中文
+    <br><b>Rapport financier</b> · Chinois
     <br><sub>Analyse des résultats Tesla T1 2026</sub>
   </td>
   <td align="center" width="25%">
@@ -47,12 +47,12 @@ Exemples de PDF en plusieurs formats et langues. Cliquez sur un aperçu pour l'o
 <tr>
   <td align="center" width="25%">
     <a href="site/assets/demos/demo-mole.pdf"><img src="site/assets/demos/demo-mole.png" alt="Présentation produit Mole"></a>
-    <br><b>Fiche produit</b> · Anglais
+    <br><b>One-Pager</b> · Anglais
     <br><sub>Présentation de Mole, 1 page</sub>
   </td>
   <td align="center" width="25%">
     <a href="site/assets/demos/demo-letter.pdf"><img src="site/assets/demos/demo-letter.png" alt="Lettre de recommandation"></a>
-    <br><b>Lettre</b> · 中文
+    <br><b>Lettre</b> · Chinois
     <br><sub>Lettre de recommandation, 1 page</sub>
   </td>
   <td align="center" width="25%">
@@ -62,7 +62,7 @@ Exemples de PDF en plusieurs formats et langues. Cliquez sur un aperçu pour l'o
   </td>
   <td align="center" width="25%">
     <a href="site/assets/demos/demo-kaku.pdf"><img src="site/assets/demos/demo-kaku.png" alt="Portfolio Kaku"></a>
-    <br><b>Portfolio</b> · 日本語
+    <br><b>Portfolio</b> · Japonais
     <br><sub>Portfolio du terminal Kaku, 7 pages</sub>
   </td>
 </tr>
@@ -76,10 +76,10 @@ Exemples de PDF en plusieurs formats et langues. Cliquez sur un aperçu pour l'o
 npx skills add tw93/kami -a claude-code codex cursor -g -y
 ```
 
+Une copie est installée dans `~/.agents/skills`, le répertoire partagé des skills. Claude Code y est relié par lien symbolique ; Codex, Cursor et les autres agents accèdent à Kami via `/kami`. Mise à jour avec `npx skills update -g -y`.
+
 Ou demandez directement à votre agent :
 > Installe Kami en lisant https://kami.tw93.fun/llms.txt
-
-Une copie est installée dans `~/.agents/skills`, le répertoire partagé des skills. Claude Code y est relié par lien symbolique ; Codex, Cursor et les autres agents accèdent à Kami via `/kami`. Mise à jour avec `npx skills update -g -y`.
 
 **Plugin hôte**, si vous préférez la commande de mise à jour native (espace de noms `/kami:kami` ; Claude Code v2.1.142 ou plus récent) :
 
@@ -93,7 +93,7 @@ codex plugin marketplace add tw93/kami
 codex plugin add kami@kami
 ```
 
-**Claude Desktop** : téléchargez l'archive officielle [kami.zip](https://github.com/tw93/kami/releases/latest/download/kami.zip) (et non le ZIP du code source GitHub), ouvrez Paramètres > Skills > « + » > Create skill et déposez l'archive. Pour mettre à jour, cliquez sur « ... » sur la carte du skill et choisissez Remplacer.
+**Claude Desktop** : téléchargez l'archive officielle [kami.zip](https://github.com/tw93/kami/releases/latest/download/kami.zip) (et non le ZIP du code source GitHub), ouvrez Customize > Skills > « + » > Create skill et déposez l'archive. Pour mettre à jour, cliquez sur « ... » sur la carte du skill, choisissez Replace et déposez la dernière archive ZIP.
 
 Les polices CJK volumineuses ne sont pas incluses dans le paquet : `skills/kami/scripts/ensure-fonts.sh` télécharge les polices chinoises ou coréennes manquantes dans le répertoire des polices de l'utilisateur.
 
@@ -126,15 +126,17 @@ Créez `~/.config/kami/brand.md` pour conserver votre identité, vos couleurs et
 
 ## Principes de conception
 
-Les valeurs par défaut associent un fond parchemin chaleureux (`#f5f4ed`), des touches bleu encre (`#1B365D`) et des polices avec empattement (serif). La hiérarchie visuelle repose sur la taille des caractères et les espaces blancs.
+Les valeurs par défaut associent un fond parchemin chaleureux (`#f5f4ed`), des touches bleu encre (`#1B365D`) et des polices avec empattement (serif). La hiérarchie visuelle repose sur la taille des caractères et les espaces blancs. Vous pouvez adapter ces valeurs par défaut à votre marque.
 
-- **Modèles.** Huit modèles de documents : Fiche synthétique (One-Pager), Document long, Lettre, Portfolio, CV, Diapositives, Rapport d'analyse et Journal des modifications (Changelog), ainsi qu'un système de landing page.
+- **Modèles.** Huit modèles de documents : Fiche synthétique (One-Pager), Document long, Lettre, Portfolio, CV, Diapositives, Rapport d'analyse et Journal des modifications (Changelog), ainsi qu'un système de landing page, chacun en chinois, anglais et coréen.
 - **Schémas.** 18 types de diagrammes vectoriels SVG intégrés. Les diagrammes de séquence, de classes et entité-association peuvent être rédigés en syntaxe Mermaid : [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) génère le SVG et `skills/kami/scripts/mermaid_normalize.py` l'harmonise avec la palette de Kami.
 - **Diapositives.** Trois moteurs de rendu : WeasyPrint HTML vers PDF par défaut, python-pptx pour des fichiers PowerPoint modifiables sur demande, et une variante Marp dans `skills/kami/assets/templates/marp/`.
 - **Code source.** Coloration syntaxique via Pygments si la bibliothèque est installée ; sinon, le code s'affiche en monochrome clair et lisible.
 - **Validation.** Des schémas de contenu valident la structure avant mise en page ; un contrôle de couverture s'assure qu'aucun point clé n'a été oublié.
-- **Serveur MCP.** Un serveur léger (`skills/kami/scripts/mcp_server.py`) expose des outils de diagnostic, de rendu et de capture d'écran pour tout agent compatible MCP.
+- **Serveur MCP.** Un serveur léger (`skills/kami/scripts/mcp_server.py`) expose des outils de diagnostic, de rendu et de capture d'écran pour tout agent compatible MCP. N'effectuez le rendu que de HTML local de confiance : les fichiers et les ressources HTTP et HTTPS référencés sont chargés avec les droits du processus MCP.
 - **Impression.** Une variante papier blanc permet d'adapter n'importe quel document aux imprimantes de bureau sans fond parchemin, tout en conservant les teintes douces des encadrés.
+
+Kami choisit la variante adaptée à la langue dans laquelle vous écrivez.
 
 Police par défaut selon la langue : chinois (TsangerJinKai02), japonais (YuMincho), coréen (Source Han Serif K), anglais/français (Charter).
 
@@ -163,19 +165,21 @@ Les mêmes principes s'appliquent aux pages d'accueil de produits et aux prompts
   </td>
   <td align="center" width="25%" valign="top">
     <img src="site/assets/illustrations/travel-tesla-optimus.png" alt="Brevet Tesla Optimus" height="150">
-    <br><b>Schéma brevet</b> · 中文
+    <br><b>Schéma brevet</b> · Chinois
     <br><sub>Schéma du brevet Tesla Optimus</sub>
   </td>
 </tr>
 </table>
 
-Les landing pages sont livrées prêtes à déployer en versions multilingues.
+Les landing pages sont livrées prêtes à déployer en versions multilingues. Les illustrations utilisent la génération d'images de l'hôte quand elle est disponible ; sinon, Kami fournit le même brief complet à utiliser dans un modèle d'image.
 
 Exemple de prompt pour modèles d'images :
 
 ```text
 Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), never pure white. One accent only, ink blue (#1B365D); everything else in warm gray with a yellow-brown undertone, no other colors. Thin single-line geometric strokes and simple flat icons. No gradients, no drop shadows, no 3D. Labels in a serif typeface. Generous whitespace, calm and composed, like a figure in a well-typeset report.
 ```
+
+<sub>Généré par ChatGPT Images en une seule passe, sans retouche manuelle. Kami formule la demande, le moteur de rendu dessine.</sub>
 
 ## Genèse
 
@@ -199,4 +203,4 @@ Plus tard, devant préparer une présentation sur les agents d'IA, je disposais 
 
 Licence MIT pour le code et les modèles de Kami.
 
-**Polices** : TsangerJinKai02 est gratuite pour un usage personnel uniquement ; un usage commercial requiert une licence auprès de [tsanger.cn](https://tsanger.cn). Charter, YuMincho, Source Han Serif K (OFL) et les polices de secours CJK sont intégrées au système ou sous licence libre.
+**Polices** : TsangerJinKai02 est gratuite pour un usage personnel uniquement ; un usage commercial requiert une licence auprès de [tsanger.cn](https://tsanger.cn). Source Han Serif K est sous licence OFL. Charter et YuMincho proviennent du système d'exploitation et ne sont pas distribuées avec Kami ; les polices de secours CJK sont intégrées au système ou sous licence libre.

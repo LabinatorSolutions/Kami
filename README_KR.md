@@ -11,11 +11,11 @@
 
 ## 소개
 
-Kami는 AI Agent에게 종이와 같은 질감의 편집 지침과 문서 템플릿을 제공하는 디자인 시스템입니다. 미려한 PDF, 고해상도 이미지, 또는 편집 가능한 PowerPoint(PPTX) 슬라이드를 만들 수 있습니다.
+Kami는 AI Agent에게 문서와 랜딩 페이지를 위한 템플릿과 레이아웃 규칙을 제공합니다. PDF와 PNG를 만들 수 있고, 슬라이드는 편집 가능한 PowerPoint 파일로도 내보낼 수 있습니다.
 
-Kami(紙, 카미)는 일본어로 '종이'를 뜻합니다. 8종의 출판급 문서 템플릿, 다국어 랜딩 페이지 시스템, 그리고 내용과 레이아웃에 대한 철저한 검증 게이트를 갖추고 있습니다.
+Kami(紙, 카미)는 일본어로 '종이'를 뜻합니다. 8종의 문서 템플릿, 랜딩 페이지 시스템, 그리고 내용과 레이아웃 검사를 갖추고 있습니다.
 
-3부작 중 하나: [Kaku](https://github.com/tw93/Kaku)(書く)는 코드를 작성하고, [Waza](https://github.com/tw93/Waza)(技)는 개발자 습관을 연마하며, [Kami](https://github.com/tw93/Kami)(紙)는 완성도 높은 문서를 전달합니다.
+3부작 중 하나: [Kaku](https://github.com/tw93/Kaku)(書く)는 코드를 작성하고, [Waza](https://github.com/tw93/Waza)(技)는 개발자 습관을 연마하며, [Kami](https://github.com/tw93/Kami)(紙)는 문서를 전달합니다.
 
 ## 출력 샘플
 
@@ -30,7 +30,7 @@ Kami(紙, 카미)는 일본어로 '종이'를 뜻합니다. 8종의 출판급 �
   </td>
   <td align="center" width="25%">
     <a href="site/assets/demos/demo-kami-print.pdf"><img src="site/assets/demos/demo-kami-print.png" alt="인쇄용 한 장 소개서"></a>
-    <br><b>한 장 소개서</b> · 중국어
+    <br><b>원페이저</b> · 중국어
     <br><sub>Kami 소개, 흰색 인쇄용, 1페이지</sub>
   </td>
   <td align="center" width="25%">
@@ -47,7 +47,7 @@ Kami(紙, 카미)는 일본어로 '종이'를 뜻합니다. 8종의 출판급 �
 <tr>
   <td align="center" width="25%">
     <a href="site/assets/demos/demo-mole.pdf"><img src="site/assets/demos/demo-mole.png" alt="Mole 제품 소개서"></a>
-    <br><b>One-Pager</b> · 영어
+    <br><b>원페이저</b> · 영어
     <br><sub>Mole 제품 소개서, 1페이지</sub>
   </td>
   <td align="center" width="25%">
@@ -57,7 +57,7 @@ Kami(紙, 카미)는 일본어로 '종이'를 뜻합니다. 8종의 출판급 �
   </td>
   <td align="center" width="25%">
     <a href="site/assets/demos/demo-changelog.pdf"><img src="site/assets/demos/demo-changelog.png" alt="릴리스 노트"></a>
-    <br><b>Changelog</b> · 영어
+    <br><b>릴리스 노트</b> · 영어
     <br><sub>Mole v1.7.1 릴리스 노트</sub>
   </td>
   <td align="center" width="25%">
@@ -76,10 +76,10 @@ Kami(紙, 카미)는 일본어로 '종이'를 뜻합니다. 8종의 출판급 �
 npx skills add tw93/kami -a claude-code codex cursor -g -y
 ```
 
+스킬은 공용 디렉터리인 `~/.agents/skills`에 설치됩니다. Claude Code에는 심볼릭 링크가 생성되며, Codex와 Cursor 등 규격을 지원하는 에이전트는 `/kami`로 인식합니다. 업데이트는 `npx skills update -g -y`로 진행할 수 있습니다.
+
 또는 에이전트에게 직접 설치를 요청하세요:
 > https://kami.tw93.fun/llms.txt 를 읽고 Kami를 설치해 줘
-
-스킬은 공용 디렉터리인 `~/.agents/skills`에 설치됩니다. Claude Code에는 심볼릭 링크가 생성되며, Codex와 Cursor 등 규격을 지원하는 에이전트는 `/kami`로 인식합니다. 업데이트는 `npx skills update -g -y`로 진행할 수 있습니다.
 
 **호스트 플러그인 설치** (플러그인 명령을 선호할 경우, 네임스페이스는 `/kami:kami`; Claude Code v2.1.142 이상):
 
@@ -93,11 +93,11 @@ codex plugin marketplace add tw93/kami
 codex plugin add kami@kami
 ```
 
-**Claude Desktop**: GitHub Releases에서 정식 릴리스된 [kami.zip](https://github.com/tw93/kami/releases/latest/download/kami.zip)을 다운로드한 후, 설정 > Skills > "+" > Create skill에서 업로드하세요.
+**Claude Desktop**: GitHub Releases에서 정식 릴리스된 [kami.zip](https://github.com/tw93/kami/releases/latest/download/kami.zip)을 다운로드한 후, Customize > Skills > "+" > Create skill에서 업로드하세요. GitHub 소스 ZIP이 아니라 이 릴리스 에셋을 사용해야 합니다. 업데이트할 때는 스킬 카드의 "..."에서 Replace를 선택하고 최신 ZIP을 업로드하세요.
 
 용량이 큰 CJK 글꼴은 릴리스 패키지에 포함되지 않습니다: `skills/kami/scripts/ensure-fonts.sh`가 로컬에 없는 글꼴을 자동으로 감지하여 사용자 폰트 디렉터리에 설치합니다.
 
-Kami는 하루에 최대 한 번 조용히 버전 확인을 실행합니다. 로컬 XDG 캐시 마커와 GitHub 공개 릴리스 정보만 확인하며, 사용자의 문서나 대화 내용은 일절 전송하지 않습니다.
+Kami는 하루에 최대 한 번 조용히 버전을 확인하고, 새 릴리스가 있으면 대화에서 알려 줍니다. 로컬 XDG 캐시 디렉터리에 마커를 기록한 뒤 GitHub의 최신 공개 릴리스를 확인하며, 문서나 대화 내용은 전송하지 않습니다. 오프라인이거나 캐시 디렉터리를 쓸 수 없으면 조용히 건너뜁니다.
 
 ## 사용법
 
@@ -127,15 +127,17 @@ Kami는 하루에 최대 한 번 조용히 버전 확인을 실행합니다. 로
 
 ## 디자인 원칙
 
-기본 스타일은 따뜻한 양피지 배경색(`#f5f4ed`), 잉크 블루(`#1B365D`) 강조색, 그리고 세리프 글꼴입니다. 글꼴 크기와 여백의 리듬으로 제목, 본문, 주석을 구분합니다.
+기본 스타일은 따뜻한 양피지 배경색(`#f5f4ed`), 잉크 블루(`#1B365D`) 강조색, 그리고 세리프 글꼴입니다. 글꼴 크기와 여백의 리듬으로 제목, 본문, 주석을 구분합니다. 브랜드에 맞게 기본값을 조정할 수 있습니다.
 
-- **템플릿 모음**: 원페이저, 장문 보고서, 서한, 포트폴리오, 이력서, 슬라이드, 기업 분석 보고서, 릴리스 노트 등 8종과 다국어 랜딩 페이지 시스템.
+- **템플릿 모음**: 원페이저, 장문 보고서, 서한, 포트폴리오, 이력서, 슬라이드, 기업 분석 보고서, 릴리스 노트 등 8종과 랜딩 페이지 시스템. 모두 중국어, 영어, 한국어 버전이 있습니다.
 - **다이어그램**: 18종의 인라인 SVG 다이어그램. Mermaid 텍스트는 [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid)와 `skills/kami/scripts/mermaid_normalize.py`를 거쳐 Kami 전용 팔레트의 깨끗한 벡터 그래픽으로 변환됩니다.
-- **슬라이드**: WeasyPrint를 통한 고품질 PDF, python-pptx를 통한 편집 가능 PPTX, Markdown 우선의 Marp 템플릿을 지원합니다.
+- **슬라이드**: WeasyPrint를 통한 PDF, python-pptx를 통한 편집 가능 PPTX, Markdown 우선의 Marp 템플릿을 지원합니다.
 - **코드 하이라이팅**: Pygments가 설치되어 있으면 구문 강조를 지원합니다.
 - **품질 검증**: JSON Schema 입력 검증, 내용 누락을 방지하는 커버리지 검증, 시각적 검수를 실행합니다.
-- **로컬 MCP 서버**: 의존성 없는 MCP 서버(`skills/kami/scripts/mcp_server.py`)가 내장되어 있어 지원 에이전트가 바로 호출할 수 있습니다.
+- **로컬 MCP 서버**: 의존성 없는 MCP 서버(`skills/kami/scripts/mcp_server.py`)가 내장되어 있어 지원 에이전트가 바로 호출할 수 있습니다. 신뢰할 수 있는 로컬 HTML만 렌더링하세요. 참조된 파일과 HTTP, HTTPS 리소스는 MCP 프로세스의 권한으로 로드됩니다.
 - **인쇄용 흰색 모드**: 기본 양피지 배경 외에 프린터 인쇄에 적합한 흰색 배경 전환 옵션을 지원합니다.
+
+작성하는 언어에 맞춰 Kami가 해당 버전을 고릅니다.
 
 **글꼴 규약**: 문서 한 장당 단일 세리프 글꼴을 사용합니다. 영어: Charter, 중국어: TsangerJinKai02, 일본어: YuMincho, 한국어: Source Han Serif K. 상세 라이선스는 [라이선스](#라이선스)를 참조하세요.
 
@@ -170,7 +172,15 @@ Kami는 하루에 최대 한 번 조용히 버전 확인을 실행합니다. 로
 </tr>
 </table>
 
-## 디자인 배경
+랜딩 페이지는 다국어 사이트로 바로 배포할 수 있습니다. 호스트에 이미지 생성 기능이 있으면 그 기능으로 삽화를 그리고, 없으면 Kami가 같은 내용의 완전한 브리프를 출력해 이미지 모델에서 쓸 수 있게 합니다.
+
+```text
+Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), never pure white. One accent only, ink blue (#1B365D); everything else in warm gray with a yellow-brown undertone, no other colors. Thin single-line geometric strokes and simple flat icons. No gradients, no drop shadows, no 3D. Labels in a serif typeface. Generous whitespace, calm and composed, like a figure in a well-typeset report.
+```
+
+<sub>ChatGPT Images로 한 번에 생성했으며 수작업 보정은 하지 않았습니다. Kami가 지시하고, 그리기는 렌더러가 맡습니다.</sub>
+
+## 배경
 
 저는 미국 주식에 투자하며 항상 Claude에게 리서치 리포트를 작성해 달라고 합니다. 매번 출력물은 같은 기본 문서 모양이었습니다: 회색이고, 평면적이며, 세션마다 레이아웃이 달랐습니다. 구조를 파악하기 어렵고, 서식은 구식이었으며, 페이지의 어떤 것도 계속 읽고 싶게 만들지 못했습니다. 그래서 타이포그래피, 팔레트, 간격을 하나의 규칙씩 고쳐나가기 시작했고, 결국 리포트는 제가 실제로 즐길 수 있는 페이지가 되었습니다.
 
@@ -192,4 +202,4 @@ Kami는 하루에 최대 한 번 조용히 버전 확인을 실행합니다. 로
 
 Kami 코드와 템플릿은 MIT 라이선스를 따릅니다.
 
-**글꼴 라이선스**: TsangerJinKai02는 개인 비상업적 무료이며 상업적 이용은 [tsanger.cn](https://tsanger.cn) 라이선스가 필요합니다. Charter, YuMincho, Source Han Serif K는 OFL 등 오픈 라이선스이며, CJK 대체 글꼴은 시스템 번들 또는 오픈소스입니다.
+**글꼴 라이선스**: TsangerJinKai02는 개인 비상업적 무료이며 상업적 이용은 [tsanger.cn](https://tsanger.cn) 라이선스가 필요합니다. Source Han Serif K는 OFL이며, Charter와 YuMincho는 운영체제에 포함된 글꼴로 Kami와 함께 배포되지 않습니다. CJK 대체 글꼴은 시스템 번들 또는 오픈소스입니다.

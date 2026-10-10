@@ -11,7 +11,7 @@
 
 ## Warum Kami
 
-Kami bringt ruhige, papierinspirierte Typografie in Dokumente und Webseiten. Erstellen Sie ansprechende PDFs, hochauflösende Bilder oder exportieren Sie Präsentationen als bearbeitbare PowerPoint-Dateien.
+Kami gibt KI-Agenten Vorlagen und Layoutregeln für Dokumente und Landing Pages. Erstellen Sie PDFs und PNGs oder exportieren Sie Folien als bearbeitbare PowerPoint-Dateien.
 
 Kami (紙, かみ) bedeutet auf Japanisch Papier. Es enthält acht Dokumentvorlagen, ein Landing-Page-System sowie Qualitätsprüfungen für Inhalte und Layout.
 
@@ -29,13 +29,13 @@ Beispiel-PDFs in verschiedenen Formaten und Sprachen. Klicken Sie auf eine Vorsc
     <br><sub>Gründer-Lebenslauf, 2 Seiten</sub>
   </td>
   <td align="center" width="25%">
-    <a href="site/assets/demos/demo-kami-print.pdf"><img src="site/assets/demos/demo-kami-print.png" alt="Kami Druck-Kurzübersicht"></a>
-    <br><b>Kurzübersicht</b> · 中文
+    <a href="site/assets/demos/demo-kami-print.pdf"><img src="site/assets/demos/demo-kami-print.png" alt="Kami-One-Pager, Druckversion"></a>
+    <br><b>One-Pager</b> · Chinesisch
     <br><sub>Kami-Vorstellung · Druckversion</sub>
   </td>
   <td align="center" width="25%">
     <a href="site/assets/demos/demo-tesla.pdf"><img src="site/assets/demos/demo-tesla.png" alt="Tesla-Analysebericht"></a>
-    <br><b>Finanzbericht</b> · 中文
+    <br><b>Finanzbericht</b> · Chinesisch
     <br><sub>Tesla Q1 2026 Quartalsanalyse</sub>
   </td>
   <td align="center" width="25%">
@@ -52,7 +52,7 @@ Beispiel-PDFs in verschiedenen Formaten und Sprachen. Klicken Sie auf eine Vorsc
   </td>
   <td align="center" width="25%">
     <a href="site/assets/demos/demo-letter.pdf"><img src="site/assets/demos/demo-letter.png" alt="Empfehlungsschreiben"></a>
-    <br><b>Brief</b> · 中文
+    <br><b>Brief</b> · Chinesisch
     <br><sub>Empfehlungsschreiben, 1 Seite</sub>
   </td>
   <td align="center" width="25%">
@@ -62,7 +62,7 @@ Beispiel-PDFs in verschiedenen Formaten und Sprachen. Klicken Sie auf eine Vorsc
   </td>
   <td align="center" width="25%">
     <a href="site/assets/demos/demo-kaku.pdf"><img src="site/assets/demos/demo-kaku.png" alt="Kaku-Portfolio"></a>
-    <br><b>Portfolio</b> · 日本語
+    <br><b>Portfolio</b> · Japanisch
     <br><sub>Kaku Terminal-Portfolio, 7 Seiten</sub>
   </td>
 </tr>
@@ -76,10 +76,10 @@ Beispiel-PDFs in verschiedenen Formaten und Sprachen. Klicken Sie auf eine Vorsc
 npx skills add tw93/kami -a claude-code codex cursor -g -y
 ```
 
+Eine Kopie wird im gemeinsamen Verzeichnis `~/.agents/skills` abgelegt. Claude Code wird per Symlink verknüpft; Codex, Cursor und andere Agenten erkennen Kami als `/kami`. Aktualisierung per `npx skills update -g -y`.
+
 Oder weisen Sie Ihren Agenten direkt an:
 > Installiere Kami für mich anhand von https://kami.tw93.fun/llms.txt
-
-Eine Kopie wird im gemeinsamen Verzeichnis `~/.agents/skills` abgelegt. Claude Code wird per Symlink verknüpft; Codex, Cursor und andere Agenten erkennen Kami als `/kami`. Aktualisierung per `npx skills update -g -y`.
 
 **Host-Plugin**, falls Sie die Update-Befehle des jeweiligen Hosts bevorzugen (Namespace `/kami:kami`; Claude Code v2.1.142 oder neuer):
 
@@ -93,7 +93,7 @@ codex plugin marketplace add tw93/kami
 codex plugin add kami@kami
 ```
 
-**Claude Desktop**: Laden Sie das Release-Asset [kami.zip](https://github.com/tw93/kami/releases/latest/download/kami.zip) herunter (nicht die ZIP-Datei des GitHub-Quellcodes), öffnen Sie Einstellungen > Skills > "+" > Create skill und laden Sie die Datei hoch. Zum Aktualisieren klicken Sie auf "..." auf der Skill-Karte und wählen Ersetzen.
+**Claude Desktop**: Laden Sie das Release-Asset [kami.zip](https://github.com/tw93/kami/releases/latest/download/kami.zip) herunter (nicht die ZIP-Datei des GitHub-Quellcodes), öffnen Sie Customize > Skills > "+" > Create skill und laden Sie die Datei hoch. Zum Aktualisieren klicken Sie auf "..." auf der Skill-Karte, wählen Replace und laden die neueste ZIP-Datei hoch.
 
 Große ostasiatische Schriftarten werden nicht im Paket mitgeliefert: `skills/kami/scripts/ensure-fonts.sh` lädt fehlende chinesische oder koreanische Schriftarten in das Benutzer-Font-Verzeichnis herunter. Bei einem Repository-Checkout werden die Schriften lokal eingebunden, bevor auf das jsDelivr-CDN zurückgegriffen wird.
 
@@ -130,13 +130,15 @@ Die Datei enthält ein YAML-Frontmatter für strukturierte Felder (Name, Rolle, 
 
 Standardmäßig verwendet Kami einen warmen Pergamenthintergrund (`#f5f4ed`), tintenblaue Akzente (`#1B365D`) und Serifenschriften. Hierarchien entstehen durch Schriftgröße und Weißraum. Alle Vorgaben lassen sich an das eigene Markendesign anpassen.
 
-- **Vorlagen.** Acht Dokumentvorlagen: One-Pager, Ausführliches Dokument, Brief, Portfolio, Lebenslauf, Präsentationsfolien, Finanzbericht und Changelog, plus ein Landing-Page-System.
+- **Vorlagen.** Acht Dokumentvorlagen: One-Pager, Ausführliches Dokument, Brief, Portfolio, Lebenslauf, Präsentationsfolien, Finanzbericht und Changelog, plus ein Landing-Page-System, jeweils auf Chinesisch, Englisch und Koreanisch.
 - **Diagramme.** 18 Inline-SVG-Typen, inklusive architektonischer Übersichtskarten. Sequenz-, Klassen- und ER-Diagramme können aus Mermaid-Syntax generiert werden: [beautiful-mermaid](https://github.com/lukilabs/beautiful-mermaid) rendert das SVG, und `skills/kami/scripts/mermaid_normalize.py` passt es an die Kami-Farbpalette an.
 - **Präsentationen.** Drei Rendering-Pfade: Standardmäßig WeasyPrint HTML zu PDF, python-pptx für bearbeitbare PPTX-Dateien auf Anfrage und eine Marp-Variante in `skills/kami/assets/templates/marp/` für Markdown-Folien.
 - **Quellcode.** Pygments-Syntax-Highlighting bei installierter Bibliothek; ohne Pygments bleiben Codeblöcke monochrom und sauber lesbar.
 - **Prüfschritte.** Content-Schemas validieren die Dokumentstruktur vor dem Rendern; Abdeckungsprüfungen stellen sicher, dass alle Fakten auf der Seite landen.
-- **MCP-Server.** Ein schlanker Server (`skills/kami/scripts/mcp_server.py`) stellt Werkzeuge für Diagnose, Rendering und Screenshots bereit, sodass jeder MCP-fähige Agent Kami direkt ansteuern kann.
+- **MCP-Server.** Ein schlanker Server (`skills/kami/scripts/mcp_server.py`) stellt Werkzeuge für Diagnose, Rendering und Screenshots bereit, sodass jeder MCP-fähige Agent Kami direkt ansteuern kann. Rendern Sie nur vertrauenswürdiges lokales HTML: referenzierte Dateien sowie HTTP- und HTTPS-Ressourcen werden mit den Rechten des MCP-Prozesses geladen.
 - **Druckversion.** Eine optionale Weißpapier-Variante stellt den Hintergrund für Heim- und Bürodrucker auf reines Weiß um, während Tabellen und Karten ihre sanften Töne behalten.
+
+Kami wählt die passende Variante anhand der Sprache, in der Sie schreiben.
 
 Die passende Schriftart wird automatisch anhand der Sprache ausgewählt: Chinesisch (TsangerJinKai02), Japanisch (YuMincho), Koreanisch (Source Han Serif K), Englisch/Deutsch (Charter).
 
@@ -165,19 +167,21 @@ Die gleichen Layoutregeln gelten für Produkt-Websites und Prompts für Bildgene
   </td>
   <td align="center" width="25%" valign="top">
     <img src="site/assets/illustrations/travel-tesla-optimus.png" alt="Tesla Optimus Patentübersicht" height="150">
-    <br><b>Patent-Layout</b> · 中文
+    <br><b>Patent-Layout</b> · Chinesisch
     <br><sub>Tesla Optimus Patentzeichnung</sub>
   </td>
 </tr>
 </table>
 
-Landing Pages lassen sich als eigenständige mehrsprachige Websites bereitstellen.
+Landing Pages lassen sich als eigenständige mehrsprachige Websites bereitstellen. Illustrationen nutzen die Bildgenerierung des Hosts, wenn diese verfügbar ist; andernfalls gibt Kami dasselbe vollständige Briefing für ein Bildmodell aus.
 
 Prompt-Beispiel für Bildmodelle:
 
 ```text
 Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), never pure white. One accent only, ink blue (#1B365D); everything else in warm gray with a yellow-brown undertone, no other colors. Thin single-line geometric strokes and simple flat icons. No gradients, no drop shadows, no 3D. Labels in a serif typeface. Generous whitespace, calm and composed, like a figure in a well-typeset report.
 ```
+
+<sub>Mit ChatGPT Images in einem Durchgang erzeugt, ohne manuelle Nachbearbeitung. Kami gibt die Vorgaben, der Renderer zeichnet.</sub>
 
 ## Entstehungsgeschichte
 
@@ -201,4 +205,4 @@ Später stand ein Vortrag über KI-Agenten an. Das Dokument war fertig, aber ich
 
 MIT-Lizenz für Kami-Code und Vorlagen.
 
-**Schriftarten**: TsangerJinKai02 ist für den persönlichen Gebrauch kostenlos; für die kommerzielle Nutzung ist eine Lizenz von [tsanger.cn](https://tsanger.cn) erforderlich. Charter, YuMincho, Source Han Serif K (OFL) und ostasiatische Fallback-Schriften sind im System integriert oder offen lizenziert.
+**Schriftarten**: TsangerJinKai02 ist für den persönlichen Gebrauch kostenlos; für die kommerzielle Nutzung ist eine Lizenz von [tsanger.cn](https://tsanger.cn) erforderlich. Source Han Serif K steht unter der OFL. Charter und YuMincho stammen vom Betriebssystem und werden nicht mit Kami ausgeliefert; ostasiatische Fallback-Schriften sind im System integriert oder offen lizenziert.

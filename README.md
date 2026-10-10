@@ -11,7 +11,7 @@
 
 ## Why
 
-Kami brings warm, paper-inspired typography to documents and clean pages. Create beautiful PDFs, images, or export slides as editable PowerPoint files.
+Kami gives AI agents templates and layout rules for documents and landing pages. Create PDFs and PNGs, or export slides as editable PowerPoint files.
 
 Kami (紙, かみ) means paper in Japanese. It includes eight document templates, a landing-page system, and checks for content and layout.
 
@@ -76,10 +76,10 @@ Sample PDFs in several formats and languages. Click any preview to open it.
 npx skills add tw93/kami -a claude-code codex cursor -g -y
 ```
 
-Or tell your agent to install:
-> Install Kami for me by reading https://kami.tw93.fun/llms.txt
-
 One copy lands in `~/.agents/skills`, the shared skills directory. Claude Code is symlinked in; Codex, Cursor, and every other agent that reads that directory picks Kami up as `/kami`. Update with `npx skills update -g -y`.
+
+Or ask your agent:
+> Install Kami for me by reading https://kami.tw93.fun/llms.txt
 
 **Host plugin**, if you prefer the host's own update command (namespaced as `/kami:kami`; Claude Code v2.1.142 or newer)
 
@@ -204,4 +204,4 @@ Later I needed to present "The Agent You Don't Know: Principles, Architecture an
 
 MIT License for kami code and templates. Feel free to use and contribute.
 
-**Fonts**: TsangerJinKai02 is free for personal use only; commercial use requires a license from [tsanger.cn](https://tsanger.cn). Charter, YuMincho, Source Han Serif K under OFL, and CJK fallbacks are system-bundled or open-licensed.
+**Fonts**: TsangerJinKai02 is free for personal use only; commercial use requires a license from [tsanger.cn](https://tsanger.cn). Source Han Serif K is under the OFL. Charter and YuMincho come from the operating system and are not shipped with Kami; CJK fallbacks are system-bundled or open-licensed.
