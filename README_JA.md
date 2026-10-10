@@ -11,11 +11,9 @@
 
 ## 概要
 
-Kami は、AI Agent に文書とランディングページのテンプレートと組版ルールを提供します。PDF と PNG を出力でき、スライドは編集可能な PowerPoint としても書き出せます。
+Kami（紙、かみ）は日本語の「紙」に由来します。AI Agent に組版ルールとテンプレートを提供し、PDF、PNG、編集可能な PowerPoint を出力でき、8 種類の文書テンプレートと公式サイト用ランディングページを内蔵しています。
 
-Kami（紙、かみ）は日本語の「紙」に由来します。8 種類の文書テンプレート、ランディングページシステム、内容とレイアウトのチェックを備えています。
-
-三部作のひとつ：[Kaku](https://github.com/tw93/Kaku)（書く）がコードを書き、[Waza](https://github.com/tw93/Waza)（技）がエンジニア習慣を鍛え、[Kami](https://github.com/tw93/Kami)（紙）がドキュメントを納品します。
+三部作の納品を担う最後のワンピースとして、コードを書く [Kaku](https://github.com/tw93/Kaku)（書く）、エンジニア習慣を鍛える [Waza](https://github.com/tw93/Waza)（技）と連携し、技術的な成果物を論理的かつ美しく仕上げます。
 
 ## 出力サンプル
 
@@ -198,6 +196,6 @@ Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), 
 
 ## ライセンス
 
-Kami のコードとテンプレートは MIT ライセンスです。
+MIT License for kami code and templates. Please feel free to use and contribute to the development.
 
 **フォント規約**：TsangerJinKai02 は個人非商用利用のみ無料、商用利用は [tsanger.cn](https://tsanger.cn) のライセンスが必要です。Source Han Serif K と JetBrains Mono は OFL です。Charter と YuMincho は OS 付属のフォントで、Kami には同梱していません。CJK 代替フォントはシステム同梱またはオープンソースです。

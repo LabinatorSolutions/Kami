@@ -11,11 +11,9 @@
 
 ## Pourquoi Kami
 
-Kami fournit aux agents d'IA des modèles et des règles de mise en page pour les documents et les landing pages. Créez des PDF et des PNG, ou exportez les diapositives en fichiers PowerPoint modifiables.
+Kami (紙, かみ) signifie « papier » en japonais. Il offre aux agents IA des règles de mise en page et des modèles pour générer des fichiers PDF, PNG et PowerPoint modifiables, avec huit modèles de documents intégrés et une page d'accueil de produit.
 
-Kami (紙, かみ) signifie « papier » en japonais. Il intègre huit modèles de documents, un système de landing pages et des règles de contrôle de contenu et de mise en page.
-
-Fait partie d'une trilogie : [Kaku](https://github.com/tw93/Kaku) (書く) écrit le code, [Waza](https://github.com/tw93/Waza) (技) forge les habitudes, [Kami](https://github.com/tw93/Kami) (紙) livre les documents.
+En tant que dernière étape de livraison de la trilogie, Kami s'associe à [Kaku](https://github.com/tw93/Kaku) (書く) dédié au code et à [Waza](https://github.com/tw93/Waza) (技) dédié aux bonnes pratiques pour transformer les réalisations techniques en documents aussi rigoureux qu'élégants.
 
 ## Exemples
 
@@ -199,6 +197,6 @@ Plus tard, devant préparer une présentation sur les agents d'IA, je disposais 
 
 ## Licence
 
-Licence MIT pour le code et les modèles de Kami.
+MIT License for kami code and templates. Please feel free to use and contribute to the development.
 
 **Polices** : TsangerJinKai02 est gratuite pour un usage personnel uniquement ; un usage commercial requiert une licence auprès de [tsanger.cn](https://tsanger.cn). Source Han Serif K et JetBrains Mono sont sous licence OFL. Charter et YuMincho proviennent du système d'exploitation et ne sont pas distribuées avec Kami ; les polices de secours CJK sont intégrées au système ou sous licence libre.

@@ -11,11 +11,9 @@
 
 ## 简介
 
-Kami 为 AI Agent 提供文档和落地页的模板与排版规则，可输出 PDF 和 PNG，幻灯片还能导出为可编辑的 PowerPoint。
+Kami（紙，かみ）在日文中意为“纸”，为 AI Agent 提供排版规则与模板，可输出 PDF、PNG 以及可编辑的 PowerPoint，内置 8 种文档模板以及一套官网落地页。
 
-Kami（紙，かみ）在日文中意为“纸”。它包含 8 种文档模板、一套落地页系统，以及内容和版式检查。
-
-三部曲之一：[Kaku](https://github.com/tw93/Kaku) (書く) 编写代码，[Waza](https://github.com/tw93/Waza) (技) 磨炼习惯，[Kami](https://github.com/tw93/Kami) (紙) 交付文档。
+作为三部曲中负责交付的最后一环，Kami 与专注写代码的 [Kaku](https://github.com/tw93/Kaku) (書く)、规范工程习惯的 [Waza](https://github.com/tw93/Waza) (技) 相互配合，让技术成果不仅逻辑严谨，也有赏心悦目的呈现。
 
 ## 样例展示
 
@@ -200,6 +198,6 @@ Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), 
 
 ## 授权条款
 
-Kami 核心代码与模板遵循 MIT 协议开源，欢迎自由使用与贡献。
+MIT License for kami code and templates. Please feel free to use and contribute to the development.
 
 **字体许可**：仓耳今楷（TsangerJinKai02）个人非商用免费，商用授权请前往 [tsanger.cn](https://tsanger.cn)；思源宋体（Source Han Serif K）和 JetBrains Mono 采用 OFL 开源许可，Charter 和游明朝（YuMincho）来自操作系统，不随 Kami 分发，其余 CJK 回退字体为系统自带或开源授权。

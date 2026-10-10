@@ -11,11 +11,9 @@
 
 ## Why
 
-Kami gives AI agents templates and layout rules for documents and landing pages. Create PDFs and PNGs, or export slides as editable PowerPoint files.
+Kami (紙, かみ) means "paper" in Japanese. It provides AI agents with layout rules and templates, outputting PDF, PNG, and editable PowerPoint files, with eight built-in document templates and a product landing page.
 
-Kami (紙, かみ) means paper in Japanese. It includes eight document templates, a landing-page system, and checks for content and layout.
-
-Part of a trilogy: [Kaku](https://github.com/tw93/Kaku) (書く) writes code, [Waza](https://github.com/tw93/Waza) (技) drills habits, [Kami](https://github.com/tw93/Kami) (紙) delivers documents.
+As the final delivery piece of the trilogy, Kami works alongside code-focused [Kaku](https://github.com/tw93/Kaku) (書く) and engineering habit-driven [Waza](https://github.com/tw93/Waza) (技) to ensure technical work is not only logically rigorous, but visually compelling.
 
 ## Showcase
 
@@ -200,6 +198,6 @@ Later I needed to present "The Agent You Don't Know: Principles, Architecture an
 
 ## License
 
-MIT License for kami code and templates. Feel free to use and contribute.
+MIT License for kami code and templates. Please feel free to use and contribute to the development.
 
 **Fonts**: TsangerJinKai02 is free for personal use only; commercial use requires a license from [tsanger.cn](https://tsanger.cn). Source Han Serif K and JetBrains Mono are under the OFL. Charter and YuMincho come from the operating system and are not shipped with Kami; CJK fallbacks are system-bundled or open-licensed.

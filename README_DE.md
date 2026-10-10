@@ -11,11 +11,9 @@
 
 ## Warum Kami
 
-Kami gibt KI-Agenten Vorlagen und Layoutregeln für Dokumente und Landing Pages. Erstellen Sie PDFs und PNGs oder exportieren Sie Folien als bearbeitbare PowerPoint-Dateien.
+Kami (紙, かみ) bedeutet auf Japanisch „Papier“. Es bietet KI-Agenten Layoutregeln und Vorlagen zur Erstellung von PDFs, PNGs und bearbeitbaren PowerPoint-Dateien, inklusive acht Dokumentvorlagen und einer Produkt-Landing-Page.
 
-Kami (紙, かみ) bedeutet auf Japanisch Papier. Es enthält acht Dokumentvorlagen, ein Landing-Page-System sowie Qualitätsprüfungen für Inhalte und Layout.
-
-Teil einer Trilogie: [Kaku](https://github.com/tw93/Kaku) (書く) schreibt Code, [Waza](https://github.com/tw93/Waza) (技) schärft Gewohnheiten, [Kami](https://github.com/tw93/Kami) (紙) liefert Dokumente.
+Als abschließender Teil der Trilogie für die Dokumentenbereitstellung ergänzt Kami das auf Code fokussierte [Kaku](https://github.com/tw93/Kaku) (書く) und das auf Engineering-Gewohnheiten ausgerichtete [Waza](https://github.com/tw93/Waza) (技), damit technische Ergebnisse nicht nur präzise, sondern auch visuell überzeugend sind.
 
 ## Beispiele
 
@@ -201,6 +199,6 @@ Später stand ein Vortrag über KI-Agenten an. Das Dokument war fertig, aber ich
 
 ## Lizenz
 
-MIT-Lizenz für Kami-Code und Vorlagen.
+MIT License for kami code and templates. Please feel free to use and contribute to the development.
 
 **Schriftarten**: TsangerJinKai02 ist für den persönlichen Gebrauch kostenlos; für die kommerzielle Nutzung ist eine Lizenz von [tsanger.cn](https://tsanger.cn) erforderlich. Source Han Serif K und JetBrains Mono stehen unter der OFL. Charter und YuMincho stammen vom Betriebssystem und werden nicht mit Kami ausgeliefert; ostasiatische Fallback-Schriften sind im System integriert oder offen lizenziert.

@@ -11,11 +11,9 @@
 
 ## 소개
 
-Kami는 AI Agent에게 문서와 랜딩 페이지를 위한 템플릿과 레이아웃 규칙을 제공합니다. PDF와 PNG를 만들 수 있고, 슬라이드는 편집 가능한 PowerPoint 파일로도 내보낼 수 있습니다.
+Kami(紙, 카미)는 일본어로 '종이'를 뜻합니다. AI Agent에게 조판 규칙과 템플릿을 제공하여 PDF, PNG 및 편집 가능한 PowerPoint를 출력하며, 8종의 문서 템플릿과 공식 웹사이트용 랜딩 페이지를 내장하고 있습니다.
 
-Kami(紙, 카미)는 일본어로 '종이'를 뜻합니다. 8종의 문서 템플릿, 랜딩 페이지 시스템, 그리고 내용과 레이아웃 검사를 갖추고 있습니다.
-
-3부작 중 하나: [Kaku](https://github.com/tw93/Kaku)(書く)는 코드를 작성하고, [Waza](https://github.com/tw93/Waza)(技)는 개발자 습관을 연마하며, [Kami](https://github.com/tw93/Kami)(紙)는 문서를 전달합니다.
+3부작 중 최종 전달을 담당하는 마지막 조각으로서, 코드를 작성하는 [Kaku](https://github.com/tw93/Kaku)(書く), 엔지니어링 습관을 다듬는 [Waza](https://github.com/tw93/Waza)(技)와 함께 호흡을 맞춰 기술적 결과물을 논리적이면서도 아름답게 완성합니다.
 
 ## 출력 샘플
 
@@ -198,6 +196,6 @@ Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), 
 
 ## 라이선스
 
-Kami 코드와 템플릿은 MIT 라이선스를 따릅니다.
+MIT License for kami code and templates. Please feel free to use and contribute to the development.
 
 **글꼴 라이선스**: TsangerJinKai02는 개인 비상업적 무료이며 상업적 이용은 [tsanger.cn](https://tsanger.cn) 라이선스가 필요합니다. Source Han Serif K와 JetBrains Mono는 OFL이며, Charter와 YuMincho는 운영체제에 포함된 글꼴로 Kami와 함께 배포되지 않습니다. CJK 대체 글꼴은 시스템 번들 또는 오픈소스입니다.
