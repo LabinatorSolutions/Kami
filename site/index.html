@@ -4,12 +4,15 @@
   <meta charset="utf-8">
   <script>
   (function(){
-    if(localStorage.getItem('kami-lang'))return;
+    var pages={zh:'./index-zh.html',tw:'./index-tw.html',ja:'./index-ja.html',ko:'./index-ko.html'};
+    var saved=null;
+    try{saved=localStorage.getItem('kami-lang');}catch(e){}
+    if(saved){if(pages[saved])location.replace(pages[saved]);return;}
     var l=(navigator.language||'').toLowerCase();
-    if(/^zh.*(hant|tw|hk|mo)/.test(l))location.replace('./index-tw.html');
-    else if(l.indexOf('zh')===0)location.replace('./index-zh.html');
-    else if(l.indexOf('ja')===0)location.replace('./index-ja.html');
-    else if(l.indexOf('ko')===0)location.replace('./index-ko.html');
+    if(/^zh.*(hant|tw|hk|mo)/.test(l))location.replace(pages.tw);
+    else if(l.indexOf('zh')===0)location.replace(pages.zh);
+    else if(l.indexOf('ja')===0)location.replace(pages.ja);
+    else if(l.indexOf('ko')===0)location.replace(pages.ko);
   })();
   </script>
   <title>Kami: Document Design System for AI Agents</title>
@@ -193,7 +196,7 @@
         <nav class="lang-switch" aria-label="Language" data-lang-switch>
           <button class="lang-trigger" type="button" aria-expanded="false" data-lang-trigger>English</button>
           <div class="lang-menu" data-lang-menu>
-            <a href="./index.html" class="active" data-lang="en">English</a>
+            <a href="./" class="active" data-lang="en">English</a>
             <a href="./index-zh.html" data-lang="zh">简体中文</a>
             <a href="./index-tw.html" data-lang="tw">繁體中文</a>
             <a href="./index-ja.html" data-lang="ja">日本語</a>

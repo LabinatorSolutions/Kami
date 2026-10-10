@@ -585,7 +585,6 @@
     align-items: center;
   }
   .family.serif .glyph { font-family: var(--serif); }
-  .family.sans .glyph { font-family: var(--sans); }
   .family.mono .glyph { font-family: var(--mono); font-weight: 500; font-size: 64px; }
   .family .role {
     font-family: var(--serif);
