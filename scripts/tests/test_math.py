@@ -367,6 +367,30 @@ def test_mathjax_probe_and_install_ignore_polluted_node_options() -> None:
           f"probe={polluted_probe} install={(installed.stdout + installed.stderr)[:300]}")
 
 
+def test_mathjax_renderer_stays_commonjs_under_module_parent_package() -> None:
+    node = shutil.which("node")
+    if node is None:
+        skip("MathJax renderer CommonJS scope", "node not installed")
+        return
+    with tempfile.TemporaryDirectory() as d:
+        parent = Path(d)
+        (parent / "package.json").write_text('{"type": "module"}\n', encoding="utf-8")
+        scripts = parent / "scripts"
+        scripts.mkdir()
+        for name in ("mathjax_svg.js", "package.json"):
+            shutil.copy2(SKILL_ROOT / "scripts" / name, scripts / name)
+        result = subprocess.run(
+            [node, str(scripts / "mathjax_svg.js"), "--probe"],
+            cwd=parent,
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    check("MathJax renderer stays CommonJS under a type:module parent package.json",
+          "require is not defined" not in result.stderr,
+          result.stderr[:300])
+
+
 def test_mathjax_runtime_rejects_unsupported_node_21() -> None:
     import math_render as math_mod
 

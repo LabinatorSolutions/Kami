@@ -81,6 +81,7 @@ PACKAGE_REQUIRED_ENTRIES = {
     "scripts/ensure_mathjax.sh",
     "scripts/math_render.py",
     "scripts/mathjax_svg.js",
+    "scripts/package.json",
     "scripts/mathjax-runtime/package.json",
     "scripts/mathjax-runtime/package-lock.json",
     "scripts/site_facts.py",
