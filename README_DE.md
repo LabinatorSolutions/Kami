@@ -203,4 +203,4 @@ Später stand ein Vortrag über KI-Agenten an. Das Dokument war fertig, aber ich
 
 MIT-Lizenz für Kami-Code und Vorlagen.
 
-**Schriftarten**: TsangerJinKai02 ist für den persönlichen Gebrauch kostenlos; für die kommerzielle Nutzung ist eine Lizenz von [tsanger.cn](https://tsanger.cn) erforderlich. Source Han Serif K steht unter der OFL. Charter und YuMincho stammen vom Betriebssystem und werden nicht mit Kami ausgeliefert; ostasiatische Fallback-Schriften sind im System integriert oder offen lizenziert.
+**Schriftarten**: TsangerJinKai02 ist für den persönlichen Gebrauch kostenlos; für die kommerzielle Nutzung ist eine Lizenz von [tsanger.cn](https://tsanger.cn) erforderlich. Source Han Serif K und JetBrains Mono stehen unter der OFL. Charter und YuMincho stammen vom Betriebssystem und werden nicht mit Kami ausgeliefert; ostasiatische Fallback-Schriften sind im System integriert oder offen lizenziert.

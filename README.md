@@ -202,4 +202,4 @@ Later I needed to present "The Agent You Don't Know: Principles, Architecture an
 
 MIT License for kami code and templates. Feel free to use and contribute.
 
-**Fonts**: TsangerJinKai02 is free for personal use only; commercial use requires a license from [tsanger.cn](https://tsanger.cn). Source Han Serif K is under the OFL. Charter and YuMincho come from the operating system and are not shipped with Kami; CJK fallbacks are system-bundled or open-licensed.
+**Fonts**: TsangerJinKai02 is free for personal use only; commercial use requires a license from [tsanger.cn](https://tsanger.cn). Source Han Serif K and JetBrains Mono are under the OFL. Charter and YuMincho come from the operating system and are not shipped with Kami; CJK fallbacks are system-bundled or open-licensed.

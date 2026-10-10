@@ -200,4 +200,4 @@ Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), 
 
 Kami のコードとテンプレートは MIT ライセンスです。
 
-**フォント規約**：TsangerJinKai02 は個人非商用利用のみ無料、商用利用は [tsanger.cn](https://tsanger.cn) のライセンスが必要です。Source Han Serif K は OFL です。Charter と YuMincho は OS 付属のフォントで、Kami には同梱していません。CJK 代替フォントはシステム同梱またはオープンソースです。
+**フォント規約**：TsangerJinKai02 は個人非商用利用のみ無料、商用利用は [tsanger.cn](https://tsanger.cn) のライセンスが必要です。Source Han Serif K と JetBrains Mono は OFL です。Charter と YuMincho は OS 付属のフォントで、Kami には同梱していません。CJK 代替フォントはシステム同梱またはオープンソースです。

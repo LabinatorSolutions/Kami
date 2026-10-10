@@ -202,4 +202,4 @@ Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), 
 
 Kami 核心程式碼與範本遵循 MIT 授權條款開源，歡迎自由使用與貢獻。
 
-**字型授權**：倉耳今楷（TsangerJinKai02）個人非商用免費，商用授權請洽 [tsanger.cn](https://tsanger.cn)；思源宋體（Source Han Serif K）採用 OFL 開源授權，Charter 和游明朝（YuMincho）來自作業系統，不隨 Kami 散布，其餘 CJK 回退字型為系統內建或開源授權。
+**字型授權**：倉耳今楷（TsangerJinKai02）個人非商用免費，商用授權請洽 [tsanger.cn](https://tsanger.cn)；思源宋體（Source Han Serif K）和 JetBrains Mono 採用 OFL 開源授權，Charter 和游明朝（YuMincho）來自作業系統，不隨 Kami 散布，其餘 CJK 回退字型為系統內建或開源授權。

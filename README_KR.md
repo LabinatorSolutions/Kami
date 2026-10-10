@@ -200,4 +200,4 @@ Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), 
 
 Kami 코드와 템플릿은 MIT 라이선스를 따릅니다.
 
-**글꼴 라이선스**: TsangerJinKai02는 개인 비상업적 무료이며 상업적 이용은 [tsanger.cn](https://tsanger.cn) 라이선스가 필요합니다. Source Han Serif K는 OFL이며, Charter와 YuMincho는 운영체제에 포함된 글꼴로 Kami와 함께 배포되지 않습니다. CJK 대체 글꼴은 시스템 번들 또는 오픈소스입니다.
+**글꼴 라이선스**: TsangerJinKai02는 개인 비상업적 무료이며 상업적 이용은 [tsanger.cn](https://tsanger.cn) 라이선스가 필요합니다. Source Han Serif K와 JetBrains Mono는 OFL이며, Charter와 YuMincho는 운영체제에 포함된 글꼴로 Kami와 함께 배포되지 않습니다. CJK 대체 글꼴은 시스템 번들 또는 오픈소스입니다.
