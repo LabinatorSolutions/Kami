@@ -28,7 +28,7 @@ from textwrap import dedent
 
 _HEADER = dedent("""\
     <div align="center">
-      <img src="https://gw.alipayobjects.com/zos/k/vl/logo.svg" alt="Kami Logo" width="120" />
+      <img src="https://raw.githubusercontent.com/tw93/Kami/main/skills/kami/assets/images/logo.svg" alt="Kami Logo" width="120" />
       <h1 style="margin: 12px 0 6px;">Kami {version}</h1>
       <p><em>{subtitle_en}</em></p>
     </div>
