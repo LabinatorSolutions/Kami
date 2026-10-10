@@ -46,7 +46,7 @@ How an agent should call Kami: install the skill, fill the matching content sche
 - Claude Code, Codex, Cursor, and other agents: `npx skills add tw93/kami -a claude-code codex cursor -g -y`
 - Claude Code plugin (v2.1.142+): `/plugin marketplace add tw93/kami && /plugin install kami@kami`
 - Codex plugin: `codex plugin marketplace add tw93/kami && codex plugin add kami@kami`
-- Claude Desktop: download the release asset `kami.zip` from GitHub Releases (not the source-code ZIP) and upload it in Skills settings
+- Claude Desktop: download the release asset `kami.zip` from GitHub Releases (not the source-code ZIP) and upload it via Customize > Skills > "+" > Create skill
 - MCP client: `claude mcp add kami -- python3 <checkout>/skills/kami/scripts/mcp_server.py`
 
 ## Templates
