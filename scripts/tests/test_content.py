@@ -701,6 +701,32 @@ def test_coverage_rejects_substrings_and_hidden_text() -> None:
           f"ambiguous={self_closing_svg_ambiguous}")
 
 
+def test_visibility_reads_at_rules_and_svg_container_fill() -> None:
+    from html_visibility import visible_html_evidence
+
+    keyframes = visible_html_evidence(
+        "<style>.hero{animation:rise .4s}"
+        "@keyframes rise{0%{opacity:0}100%{opacity:1}}</style>"
+        "<h1 class=hero>Kami</h1><p>62% faster</p>",
+        fail_closed=True,
+    )
+    check("keyframe steps do not hide or blur the document",
+          keyframes == ("Kami\n62% faster", False), str(keyframes))
+    media = visible_html_evidence(
+        "<style>@media screen{p{display:none}}</style><p>a</p>",
+        fail_closed=True,
+    )
+    check("a hide inside @media is ambiguous, not definitely hidden",
+          media[1] is True, str(media))
+    group_fill = visible_html_evidence(
+        '<p>a</p><svg viewBox="0 0 100 100"><g fill="none" stroke="#000"><path/>'
+        '<text x="10" y="10" fill="#141413">Label</text></g></svg>',
+        fail_closed=True,
+    )
+    check("fill=none on an SVG group leaves its labels ambiguous, not hidden",
+          group_fill[1] is True, str(group_fill))
+
+
 def test_coverage_checks_asset_attributes() -> None:
     from html_visibility import visible_html_text
     from content import (
@@ -782,6 +808,13 @@ def test_coverage_checks_asset_attributes() -> None:
     check("self-closing SVG graphics preserve following resource evidence",
           svg_then_asset == {"required.svg"} and not svg_then_asset_ambiguous,
           f"attrs={svg_then_asset} ambiguous={svg_then_asset_ambiguous}")
+    xlink_attrs, xlink_ambiguous = html_resource_evidence(
+        '<svg viewBox="0 0 10 10"><image xlink:href="a.png" width="5" height="5"/></svg>'
+        '<img src="b.png">'
+    )
+    check("SVG image xlink:href counts as resource evidence",
+          xlink_attrs == {"a.png", "b.png"} and not xlink_ambiguous,
+          f"attrs={xlink_attrs} ambiguous={xlink_ambiguous}")
     check("coverage rejects omitted image assets",
           len(missing) == 1 and "missing-shot.png" in missing[0], str(missing))
     hidden, _, _ = coverage_issues(

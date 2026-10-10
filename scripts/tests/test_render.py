@@ -207,6 +207,81 @@ def test_density_scans_the_only_page_of_a_single_page_pdf() -> None:
           f"scan: {explicit_scan} (fixture leaves ~64% of the page empty)")
 
 
+def test_verify_and_build_report_unexpected_render_errors() -> None:
+    """A WeasyPrint / pypdf / OS error from one target must become an ERROR row,
+    not a traceback that stops the sweep before the summary table prints. A
+    three-page resume template also carries the resume--dense recovery hint,
+    which used to sit in an unreachable branch."""
+    import build as build_mod
+    from unittest.mock import patch
+
+    def boom(*_args, **_kwargs):
+        raise OSError("disk full")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        with patch.object(verify_mod, "EXAMPLES", Path(tmp)), \
+                patch.object(verify_mod, "render_pdf", boom):
+            issues = silently(verify_mod.verify_target, "resume", "resume.html", 2, TEMPLATES)
+        with patch.object(build_mod, "EXAMPLES", Path(tmp)), \
+                patch.object(build_mod, "render_pdf", boom):
+            buffer = io.StringIO()
+            with contextlib.redirect_stdout(buffer):
+                built = build_mod.build_html("resume", "resume.html", 2)
+        with patch.object(verify_mod, "EXAMPLES", Path(tmp)), \
+                patch.object(verify_mod, "render_pdf", lambda *_a, **_k: 3), \
+                patch.object(verify_mod, "_pdf_font_names", lambda _p: set()):
+            overflow = silently(verify_mod.verify_target, "resume", "resume.html", 2, TEMPLATES)
+    check("verify_target reports an unexpected render error as an issue",
+          issues == ["render failed: disk full"], str(issues))
+    check("build_html reports an unexpected render error and returns False",
+          built is False and "ERROR: resume: render failed: disk full" in buffer.getvalue(),
+          buffer.getvalue().strip())
+    check("a three-page resume template gets the resume--dense hint",
+          any("3 pages (expected 2)" in i and "resume--dense" in i for i in overflow),
+          str(overflow))
+
+
+def test_pdf_checks_resolve_skill_relative_inputs() -> None:
+    """--check-orphans / --check-density / --check-resume-balance used Path(raw),
+    so a skill-relative PDF argument passed the sibling checks and was reported
+    missing (exit 2) by these three when run from another directory."""
+    import os
+    import shared
+    from checks import check_density, check_orphans, check_resume_balance
+    from unittest.mock import patch
+
+    try:
+        fitz = require_pymupdf()
+    except MissingDepError as exc:
+        skip("PDF checks resolve skill-relative inputs", str(exc), ci_required=True)
+        return
+
+    previous = Path.cwd()
+    with tempfile.TemporaryDirectory() as skill, tempfile.TemporaryDirectory() as caller:
+        pdf = Path(skill) / "assets" / "doc.pdf"
+        pdf.parent.mkdir()
+        doc = fitz.open()
+        for _ in range(2):
+            doc.new_page(width=595, height=842)
+        doc.save(str(pdf))
+        doc.close()
+        outputs = {}
+        os.chdir(caller)
+        try:
+            with patch.object(shared, "ROOT", Path(skill)):
+                for name, fn in (("orphans", check_orphans), ("density", check_density),
+                                 ("resume balance", check_resume_balance)):
+                    buffer = io.StringIO()
+                    with contextlib.redirect_stdout(buffer):
+                        fn(["assets/doc.pdf"])
+                    outputs[name] = buffer.getvalue()
+        finally:
+            os.chdir(previous)
+    for name, out in outputs.items():
+        check(f"--check-{name.replace(' ', '-')} resolves a skill-relative PDF",
+              "not found" not in out and "no PDFs scanned" not in out, out.strip())
+
+
 def test_density_judges_the_last_page_against_the_closing_ceiling() -> None:
     """A document may close on a short last page; a short middle page is a defect."""
     try:
@@ -565,6 +640,20 @@ def test_highlight_accepts_valid_class_attribute_variants() -> None:
     check("highlight accepts quotes, attribute order, multiple classes, and tag case",
           all("<span" in output and "style=" in output for output in outputs),
           str(outputs))
+
+
+def test_highlight_leaves_marked_up_blocks_alone() -> None:
+    if importlib.util.find_spec("pygments") is None:
+        skip("highlight leaves marked-up blocks alone", "Pygments unavailable", ci_required=True)
+        return
+
+    marked = '<pre><code class="language-python">x = 1  <span class="hl">#</span> &lt;tag&gt;</code></pre>'
+    check("highlight leaves blocks with inline markup unchanged",
+          highlight_code_blocks(marked) == marked, highlight_code_blocks(marked))
+    plain = '<pre><code class="language-python">x = 1</code></pre>'
+    once = highlight_code_blocks(plain)
+    check("highlight is idempotent and adds no trailing newline",
+          highlight_code_blocks(once) == once and once.endswith("</span></code></pre>"), once)
 
 
 def test_highlight_without_pygments_dependency() -> None:

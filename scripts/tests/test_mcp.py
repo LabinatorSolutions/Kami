@@ -69,6 +69,21 @@ def test_mcp_server_stdio_protocol() -> None:
           "error" in replies.get(5, {}), json.dumps(replies.get(5, {}))[:200])
     check("mcp explicit null id remains a request",
           replies.get(None, {}).get("result") == {}, str(replies.get(None)))
+    negotiation = [
+        {"jsonrpc": "2.0", "id": 1, "method": "initialize",
+         "params": {"protocolVersion": "2025-11-25"}},
+        {"jsonrpc": "2.0", "id": 2, "method": "initialize",
+         "params": {"protocolVersion": "2099-01-01"}},
+    ]
+    neg = subprocess.run(
+        [sys.executable, str(script)],
+        input="".join(json.dumps(m) + "\n" for m in negotiation),
+        capture_output=True, text=True, cwd=REPO_ROOT, timeout=60,
+    )
+    agreed = {m.get("id"): m.get("result", {}).get("protocolVersion")
+              for m in map(json.loads, neg.stdout.strip().splitlines())}
+    check("mcp initialize accepts 2025-11-25 and falls back to it for unknown versions",
+          agreed == {1: "2025-11-25", 2: "2025-11-25"}, str(agreed))
     check("mcp notifications produced no reply", len(replies) == 6, str(sorted(
         ("null" if key is None else str(key)) for key in replies
     )))
@@ -192,6 +207,34 @@ def test_mcp_server_rejects_bad_frames_without_exiting() -> None:
           by_id.get(1, {}).get("error", {}).get("code") == -32602
           and by_id.get(2, {}).get("error", {}).get("code") == -32602,
           result.stdout[:400])
+
+
+def test_mcp_stdio_is_utf8_under_non_utf8_locale() -> None:
+    """CJK tool results and paths survive a host whose pipe encoding is not UTF-8."""
+    import os
+    script = SKILL_ROOT / "scripts" / "mcp_server.py"
+    with tempfile.TemporaryDirectory() as tmp:
+        doc = Path(tmp) / "文档.html"
+        doc.write_text("<html><body><p>{{作者}}</p></body></html>", encoding="utf-8")
+        msg = {"jsonrpc": "2.0", "id": 1, "method": "tools/call",
+               "params": {"name": "kami_check", "arguments": {"path": str(doc)}}}
+        result = subprocess.run(
+            [sys.executable, str(script)],
+            input=(json.dumps(msg, ensure_ascii=False) + "\n").encode("utf-8"),
+            capture_output=True, cwd=REPO_ROOT, timeout=60,
+            env={**os.environ, "PYTHONIOENCODING": "cp1252", "PYTHONUTF8": "0"},
+        )
+    try:
+        reply = json.loads(result.stdout.decode("utf-8").strip().splitlines()[0])
+        text = reply["result"]["content"][0]["text"]
+    except (IndexError, KeyError, ValueError) as exc:
+        check("mcp stdio stays UTF-8 under a cp1252 locale", False,
+              f"{exc}: {result.stdout[:300]!r} {result.stderr[:300]!r}")
+        return
+    check("mcp stdio stays UTF-8 under a cp1252 locale",
+          "UnicodeEncodeError" not in text and "FileNotFoundError" not in text
+          and "作者" in text,
+          text[:400])
 
 
 def test_mcp_all_tools_succeed_over_stdio() -> None:

@@ -551,3 +551,36 @@ def test_mathjax_cache_survives_weasyprint_runtime_configuration() -> None:
     check("WeasyPrint initialization does not redirect the MathJax cache",
           result.returncode == 0 and configured.get("status") == "available",
           (result.stdout + result.stderr)[:500])
+
+
+def test_node_version_guards_match_package_engines() -> None:
+    """The three hand-copied Node gates accept exactly what package.json engines allows."""
+    scripts = SKILL_ROOT / "scripts"
+    engines = json.loads(
+        (scripts / "mathjax-runtime" / "package.json").read_text(encoding="utf-8")
+    )["engines"]["node"]
+
+    def engines_allow(major: int) -> bool:
+        for alt in (a.strip() for a in engines.split("||")):
+            if alt.startswith(">=") and major >= int(alt[2:]):
+                return True
+            if alt.isdigit() and major == int(alt):
+                return True
+        return False
+
+    guards = {
+        "math_render.py": r"major < (\d+) or major == (\d+)",
+        "ensure_mathjax.sh": r"NODE_MAJOR < (\d+) \|\| NODE_MAJOR == (\d+)",
+        "mathjax_svg.js": r"nodeMajor < (\d+) \|\| nodeMajor === (\d+)",
+    }
+    expected = [m for m in range(14, 40) if engines_allow(m)]
+    for name, pattern in guards.items():
+        match = re.search(pattern, (scripts / name).read_text(encoding="utf-8"))
+        if not match:
+            check(f"{name} Node guard matches package.json engines", False,
+                  f"guard pattern not found: {pattern}")
+            continue
+        floor, excluded = int(match.group(1)), int(match.group(2))
+        allowed = [m for m in range(14, 40) if not (m < floor or m == excluded)]
+        check(f"{name} Node guard matches package.json engines ({engines})",
+              allowed == expected, f"guard allows {allowed[:6]}..., engines {expected[:6]}...")

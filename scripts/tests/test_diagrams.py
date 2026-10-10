@@ -75,6 +75,28 @@ def test_mermaid_normalize_defaults_match_theme() -> None:
     check("mermaid normalizer fallback font mirrors mermaid-theme.json",
           mermaid_mod._DEFAULT_FONT_STACK == theme["cssFontStack"],
           f"default={mermaid_mod._DEFAULT_FONT_STACK}, theme={theme['cssFontStack']}")
+    first = theme["cssFontStack"].split(",")[0].strip().strip('"\'')
+    check("mermaid font stack leads with a CJK family (production.md pitfall 4.1)",
+          first in {"TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC"},
+          f"first family: {first}")
+
+
+def test_mermaid_normalize_font_family_stays_inside_attributes() -> None:
+    from mermaid_normalize import normalize
+    raw = (
+        '<svg xmlns="http://www.w3.org/2000/svg" '
+        'style="--bg:#ffffff;--fg:#000000;font-family:Inter">'
+        '<style>text { font-family: "Inter", sans-serif; }</style>'
+        '<text style="font-family:Inter;font-size:12px">x</text></svg>'
+    )
+    out = normalize(raw)
+    check("normalize keeps the <style> tag after a root style font-family",
+          "<style>" in out and "</style>" in out, out)
+    attrs = re.findall(r'\sstyle="([^"]*)"', out)
+    check("normalize rewrites inline style font-family without breaking the attribute",
+          any("font-size:12px" in a and "TsangerJinKai02" in a for a in attrs), out)
+    check("normalize leaves no unescaped double quote inside a style attribute",
+          '="font-family: "' not in out and "'TsangerJinKai02'" in out, out)
 
 
 def test_mermaid_color_mix_srgb_single_pct() -> None:
@@ -259,6 +281,9 @@ def test_architecture_geometry_contract() -> None:
     crossing = base.replace('</svg>', '<rect data-label-for="other" x="70" y="18" width="20" height="8"/></svg>')
     check("edges cannot cross another label mask", any("crosses label mask" in m for _, m in scan_geometry(crossing)))
     check("independent SVGs may reuse semantic IDs", not scan_geometry(base + base))
+    unclosed = '<svg viewBox="0 0 10 10"><g transform="scale(2)"><circle r="1"/></svg>'
+    check("an unclosed group does not leak into a later SVG",
+          not scan_geometry(unclosed + base), str(scan_geometry(unclosed + base)))
     check("unmarked diagrams and comments are not interpreted as topology", not scan_geometry('<svg><!--'+base+'--></svg>'))
     polyline = base.replace('<line data-edge="ab" data-from="a" data-to="b" x1="44" y1="20" x2="116" y2="20"/>',
                             '<polyline data-edge="ab" data-from="a" data-to="b" points="44,20 60,20 116,20"/>')
