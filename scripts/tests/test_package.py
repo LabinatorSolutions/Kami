@@ -71,6 +71,7 @@ PACKAGE_REQUIRED_ENTRIES = {
     "LICENSE",
     "assets/images/logo.svg",
     "assets/fonts/JetBrainsMono.woff2",
+    "assets/fonts/LICENSE-JetBrainsMono.txt",
     "assets/templates/resume.html",
     "assets/templates/landing-page.html",
     "assets/diagrams/sequence.html",

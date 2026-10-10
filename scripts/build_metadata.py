@@ -77,6 +77,7 @@ CLAUDE_PLUGIN_DESCRIPTION = (
 SKILL_MIRROR_ROOT = Path("plugins/kami/skills/kami")
 SKILL_MIRROR_ALLOWED_FONT_FILES = {
     "JetBrainsMono.woff2",
+    "LICENSE-JetBrainsMono.txt",
     "LICENSE-SourceHanSerifK.txt",
 }
 SKILL_MIRROR_IGNORED_DIRS = {
