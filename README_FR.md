@@ -114,6 +114,8 @@ Le skill se déclenche automatiquement à partir de requêtes formulées en lang
 
 - Anglais : `make a one-pager for my startup` / `turn this research into a long doc` / `write a formal letter` / `make a portfolio of my projects` / `build me a resume` / `design a slide deck for my talk` / `make this talk as a Marp deck` / `build a landing page for my app`
 - Chinois : `帮我做一份一页纸` / `帮我排版一份长文档` / `帮我写一封正式信件` / `帮我做一份作品集` / `帮我做一份简历` / `帮我做一套演讲幻灯片` / `帮我做一份 Markdown 风格的演示稿` / `帮我做一个产品落地页`
+- Japonais : `スタートアップ向けの一枚資料を作って` / `この調査を長文レポートに整えて` / `正式な依頼文を作って` / `プロジェクト作品集を作って` / `履歴書を作って` / `登壇用スライドを作って` / `Marp で登壇スライドを作って` / `アプリのランディングページを作って`
+- Coréen : `스타트업 원페이저를 만들어줘` / `이 리서치를 장문 문서로 정리해줘` / `정식 레터를 작성해줘` / `프로젝트 포트폴리오를 만들어줘` / `이력서를 만들어줘` / `발표용 슬라이드를 만들어줘` / `Marp 슬라이드로 만들어줘` / `앱 랜딩 페이지를 만들어줘`
 - Français : `Crée une fiche de synthèse pour mon projet` / `Mets en page cette recherche en document complet` / `Rédige une lettre officielle` / `Conçois un portfolio de mes projets` / `Crée un CV pour moi` / `Prépare des diapositives de présentation` / `Fais ces diapositives en Marp` / `Crée une landing page pour mon application`
 
 **Profil de marque** (optionnel)
@@ -189,6 +191,6 @@ Plus tard, devant préparer une présentation sur les agents d'IA, je disposais 
 
 ## Licence
 
-MIT License for kami code and templates. Please feel free to use and contribute to the development.
+MIT License for Kami code and templates. Please feel free to use and contribute to the development.
 
 **Polices** : TsangerJinKai02 est gratuite pour un usage personnel uniquement ; un usage commercial requiert une licence auprès de [tsanger.cn](https://tsanger.cn). Source Han Serif K et JetBrains Mono sont sous licence OFL. Charter et YuMincho proviennent du système d'exploitation et ne sont pas distribuées avec Kami ; les polices de secours CJK sont intégrées au système ou sous licence libre.
