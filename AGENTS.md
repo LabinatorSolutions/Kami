@@ -462,8 +462,9 @@ suite run is 9 cases, 18 document builds at `--runs 2`, at roughly $1-3 each.
 - Mathematics is not covered: the sandbox cannot install the MathJax runtime.
 - resume-cn deliberately supplies thin notes (three employers, eight bullets). The
   expected behavior is two honest pages with `[DATA NEEDED]` gaps and a reported
-  balance shortfall (`references/resume-writing.md` «Thin source»), so a balance FAIL
-  there with that report is the intended outcome, not a regression.
+  balance shortfall (`references/resume-writing.md` «Thin source»). `--deliver` and
+  `score.py` both read that through `checks.resume_thin_source` and treat it as a
+  reported gap rather than a balance failure.
 
 ## Verification
 

@@ -32,7 +32,9 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "skills" / "kami" / "scripts"))
 
-from checks import check_density, check_markdown_residue, check_placeholders, check_resume_balance  # noqa: E402
+from checks import (  # noqa: E402
+    check_density, check_markdown_residue, check_placeholders, check_resume_balance, resume_thin_source,
+)
 from lint import check_style  # noqa: E402
 from verify import check_fonts  # noqa: E402
 
@@ -158,7 +160,10 @@ def score_run(case: str, run: dict) -> dict:
         "residue": _quiet(check_markdown_residue, [str(pdf)])[0] == 0,
     })
     if case == "resume-cn":
-        row["balance"] = _quiet(check_resume_balance, [str(pdf)])[0] == 0
+        # Same verdict as --deliver: a shortfall the source cannot fill is a
+        # reported data gap, not a layout failure.
+        row["balance"] = (_quiet(check_resume_balance, [str(pdf)])[0] == 0
+                          or bool(resume_thin_source(pdf)))
     if html is not None:
         _html_gates(row, case, html, screen=None)
     elif case in MIN_CHARTS:

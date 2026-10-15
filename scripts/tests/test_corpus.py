@@ -82,3 +82,29 @@ def test_gate_corpus_verdicts_match_labels() -> None:
                       f"rc={rc}")
             print(f"CORPUS: {gate}: flag fixtures {counts['flag'][0]}/{counts['flag'][1]} flagged, "
                   f"pass fixtures {counts['pass'][0]}/{counts['pass'][1]} flagged")
+
+
+def test_resume_thin_source_is_told_apart_from_layout() -> None:
+    """Only a two-page shortfall that no layout can close is softened to a data gap."""
+    try:
+        from render import render_pdf
+        from checks import resume_thin_source
+        import weasyprint  # noqa: F401
+        import fitz  # noqa: F401
+    except ImportError as exc:
+        skip("resume thin-source classification", f"render dependencies unavailable: {exc}", ci_required=True)
+        return
+    expected = {
+        "thin-continuation-60-65": True,   # 125% of ink in total: short of material
+        "p1-97": False,                    # an overfull page is a layout problem
+        "one-page": False,                 # one page breaks the contract outright
+        "p2-81": False,                    # enough ink, page 2 just short: fix the layout
+    }
+    with tempfile.TemporaryDirectory() as tmp:
+        for name, thin in expected.items():
+            html = CORPUS / "resume_balance" / "flag" / f"{name}.html"
+            pdf = Path(tmp) / f"{name}.pdf"
+            render_pdf(html, pdf)
+            verdict = resume_thin_source(pdf)
+            check(f"resume {name} is {'thin source' if thin else 'a layout failure'}",
+                  bool(verdict) == thin, str(verdict))
