@@ -103,3 +103,18 @@ def test_tokens_dtcg_export() -> None:
           and group["parchment"] == {"$type": "color", "$value": "#f5f4ed"}
           and all(set(v) == {"$type", "$value"} and v["$type"] == "color" for v in group.values()),
           f"got {list(group)[:4]}")
+
+
+def test_brand_extract_ignores_inline_noise_and_reads_font_vars() -> None:
+    html = ('<html><head><style>:root{--font-size-1:13px;'
+            '--font-sans:"Inter Variable",sans-serif;--color-accent:#5e6ad2}'
+            'a{color:#5e6ad2}</style></head><body>'
+            + '<span style="--accent:#e4f222">x</span>' * 6 + '</body></html>')
+    result = brand_extract.extract(html, [], "https://acme.example/")
+    check("stylesheet brand var beats repeated inline style colors",
+          result["colors"][:1] and result["colors"][0][0] == "#5e6ad2", f"got {result['colors']}")
+    check("font custom properties count, size vars do not",
+          [f for f, _ in result["fonts"]] == ["Inter Variable"], f"got {result['fonts']}")
+    check("stylesheets on a subdomain count as the same site, other domains do not",
+          brand_extract._same_site("https://linear.app", "https://static.linear.app/a.css")
+          and not brand_extract._same_site("https://stripe.com", "https://b.stripecdn.com/a.css"))

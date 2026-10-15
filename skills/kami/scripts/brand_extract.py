@@ -4,10 +4,10 @@
 Usage:
     python3 scripts/brand_extract.py https://example.com [-o brand.md]
 
-Fetches only the given page plus up to five same-origin stylesheets, ranks
-color, font, logo, and name candidates, maps them onto Kami (one accent,
-darkened until it reads on parchment), and prints a draft profile in the
-format of references/brand.example.md. It never writes to ~/.config: review
+Fetches only the given page plus up to five stylesheets from the same site
+(its host or a subdomain), ranks color, font, logo, and name candidates,
+maps them onto Kami (one accent, darkened until it reads on parchment),
+and prints a draft profile in the format of references/brand.example.md. It never writes to ~/.config: review
 the draft, then copy it there yourself. Stdlib only.
 """
 from __future__ import annotations
@@ -140,7 +140,7 @@ def _is_brand_candidate(color: str) -> bool:
     """Drop near-white, near-black, and greys: a brand accent has hue."""
     r, g, b = (c / 255 for c in _hex_to_rgb(color))
     _, lightness, sat = colorsys.rgb_to_hls(r, g, b)
-    return sat >= 0.25 and 0.12 <= lightness <= 0.9
+    return sat >= 0.25 and 0.12 <= lightness <= 0.85
 
 
 def _colors_in(text: str) -> list[str]:
@@ -227,7 +227,7 @@ def _site_name(parser: _PageParser, host: str) -> str:
             return parser.meta[key]
     title = re.sub(r"\s+", " ", parser.title).strip()
     if title:
-        parts = [p.strip() for p in re.split(r"\s[|–—\-·:]\s", title) if p.strip()]
+        parts = [p.strip() for p in re.split(r"\s[|\u2013\u2014\-\u00b7:]\s", title) if p.strip()]
         return parts[0] if parts else title
     return host
 
@@ -237,10 +237,15 @@ def _rank_fonts(css: str) -> list[tuple[str, int]]:
     for block in FONT_FACE.findall(css):
         for m in FONT_FAMILY.finditer(block):
             counts[_clean_font(m.group(1).split(",")[0])] += 2
-    for m in FONT_FAMILY.finditer(FONT_FACE.sub("", css)):
-        for family in m.group(1).split(","):
+    declarations = [m.group(1) for m in FONT_FAMILY.finditer(FONT_FACE.sub("", css))]
+    declarations += [
+        v for n, v in CUSTOM_PROP.findall(css)
+        if re.search(r"font|family", n, re.I) and ("," in v or '"' in v or "'" in v)
+    ]
+    for declaration in declarations:
+        for family in declaration.split(","):
             name = _clean_font(family)
-            if name and not name.startswith("var("):
+            if re.match(r"[A-Za-z][\w .-]*$", name or ""):
                 counts[name] += 1
                 break
     return [(f, n) for f, n in counts.most_common() if f and f.lower() not in GENERIC_FONTS]
@@ -258,9 +263,13 @@ def extract(html: str, css_texts: list[str], base_url: str = "") -> dict:
     css = "\n".join([*parser.styles, *css_texts])
 
     scores: Counter[str] = Counter()
-    for color in _colors_in(css) + _colors_in(";".join(parser.inline_styles)):
+    for color in _colors_in(css):
         scores[color] += 1
-    for name, value in CUSTOM_PROP.findall(css + ";" + ";".join(parser.inline_styles)):
+    # Inline style attributes mostly paint demo content (labels, charts) in the
+    # page body, so they only break ties and never earn the brand-name bonus.
+    for color in _colors_in(";".join(parser.inline_styles)):
+        scores[color] += 0.25
+    for name, value in CUSTOM_PROP.findall(css):
         if BRAND_VAR.search(name):
             for color in _colors_in(value):
                 scores[color] += 5
@@ -301,8 +310,22 @@ def _fetch(url: str, cap: int) -> str:
     return body.decode(charset or "utf-8", errors="replace")
 
 
+def _same_site(page: str, href: str) -> bool:
+    """Same scheme, and the stylesheet host is the page host or one of its subdomains.
+
+    Sites often serve CSS from a static subdomain (static.example.com); a CDN on
+    another domain is skipped so the scan stays on the site the user named.
+    """
+    a, b = urllib.parse.urlparse(page), urllib.parse.urlparse(href)
+    if a.scheme != b.scheme:
+        return False
+    host, other = (a.hostname or ""), (b.hostname or "")
+    root = host.removeprefix("www.")
+    return other == host or other == root or other.endswith("." + root)
+
+
 def fetch_site(url: str) -> tuple[dict, int, int]:
-    """Fetch the page and up to MAX_STYLESHEETS same-origin stylesheets.
+    """Fetch the page and up to MAX_STYLESHEETS same-site stylesheets.
 
     Returns (extract result, stylesheets read, stylesheets skipped).
     """
@@ -312,10 +335,9 @@ def fetch_site(url: str) -> tuple[dict, int, int]:
         reason = getattr(exc, "reason", None) or exc
         raise BrandFetchError(f"could not fetch {url}: {reason}") from exc
     first = extract(html, [], url)
-    origin = urllib.parse.urlparse(url)[:2]
-    same_origin = [h for h in first["stylesheets"] if urllib.parse.urlparse(h)[:2] == origin]
+    same_site = [h for h in first["stylesheets"] if _same_site(url, h)]
     css_texts: list[str] = []
-    for href in same_origin[:MAX_STYLESHEETS]:
+    for href in same_site[:MAX_STYLESHEETS]:
         try:
             css_texts.append(_fetch(href, CSS_BYTES))
         except (urllib.error.URLError, OSError, ValueError):
@@ -370,6 +392,11 @@ def build_profile(result: dict, url: str) -> str:
             notes.append(
                 f"Brand color: {accent.upper()} taken from the site as is, "
                 f"{ratio:.2f}:1 on Kami parchment {PARCHMENT}."
+            )
+        if result["colors"][0][1] < 1:
+            notes.append(
+                "Low confidence: no saturated color was found in the stylesheets read, "
+                "so this pick comes from inline styles in the page body."
             )
         others = ", ".join(c.upper() for c, _ in result["colors"][1:5])
         if others:
