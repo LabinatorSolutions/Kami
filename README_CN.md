@@ -95,6 +95,8 @@ codex plugin add kami@kami
 
 大型中日韩字体不打进发布包，`skills/kami/scripts/ensure-fonts.sh` 会把缺失的中文或韩文字体补到用户字体目录（`~/.local/share/fonts/kami`），在本地仓库开发时，脚本还会把仓库里的字体复制进技能目录，模板优先读取本地字体，读不到时才回退到 jsDelivr CDN。
 
+Windows 上推荐在 WSL（Ubuntu）里使用，辅助脚本都是 Bash，原生 Windows 跑 WeasyPrint 还要另装 GTK/Pango 运行库。
+
 Kami 每天最多检查一次新版本，有新版就在对话里提一句，检查时会在本地 XDG 缓存目录写一个标记，再查 GitHub 最新的公开 Release，不上传任何文档和对话内容，离线或没有缓存目录时直接跳过。
 
 ## 使用

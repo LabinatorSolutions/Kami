@@ -95,6 +95,8 @@ codex plugin add kami@kami
 
 Large CJK fonts stay out of every package: `skills/kami/scripts/ensure-fonts.sh` recovers missing Chinese or Korean fonts into the user font directory, and in a repository checkout it copies the tracked fonts into the skill so templates load them locally before falling back to the jsDelivr CDN.
 
+On Windows, run Kami inside WSL (Ubuntu): the helper scripts are Bash, and WeasyPrint on native Windows also needs the GTK/Pango runtime installed separately.
+
 Kami also runs a quiet version check at most once a day and tells you in chat when a newer published release is out. It writes a marker in the local XDG cache directory, then resolves GitHub's latest public release; it uploads no user document or task content and fails silently when offline or when no cache home is available.
 
 ## Use

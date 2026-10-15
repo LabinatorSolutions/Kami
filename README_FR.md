@@ -95,6 +95,8 @@ codex plugin add kami@kami
 
 Les polices CJK volumineuses ne sont pas incluses dans le paquet : `skills/kami/scripts/ensure-fonts.sh` télécharge les polices chinoises ou coréennes manquantes dans le répertoire des polices de l'utilisateur ; dans un dépôt cloné, il copie les polices du dépôt dans le skill pour que les modèles les chargent localement avant de se rabattre sur le CDN jsDelivr.
 
+Sous Windows, utilisez Kami dans WSL (Ubuntu) : les scripts d'aide sont en Bash, et WeasyPrint sous Windows natif nécessite en plus le runtime GTK/Pango.
+
 Kami vérifie discrètement la disponibilité d'une nouvelle version au plus une fois par jour et vous prévient dans la conversation lorsqu'une version plus récente est publiée. Il écrit un marqueur dans le répertoire de cache XDG local puis interroge la dernière release publique sur GitHub ; aucune donnée personnelle ou contenu de document n'est envoyé, et en mode hors ligne ou sans accès au cache local, la vérification est ignorée en silence.
 
 ## Utilisation

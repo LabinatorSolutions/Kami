@@ -95,6 +95,8 @@ codex plugin add kami@kami
 
 Große ostasiatische Schriftarten werden nicht im Paket mitgeliefert: `skills/kami/scripts/ensure-fonts.sh` lädt fehlende chinesische oder koreanische Schriftarten in das Benutzer-Font-Verzeichnis herunter. Bei einem Repository-Checkout werden die Schriften lokal eingebunden, bevor auf das jsDelivr-CDN zurückgegriffen wird.
 
+Unter Windows empfiehlt sich WSL (Ubuntu): Die Hilfsskripte sind Bash-Skripte, und WeasyPrint braucht unter nativem Windows zusätzlich die GTK/Pango-Laufzeit.
+
 Kami prüft höchstens einmal täglich im Hintergrund auf neue Versionen und informiert im Chat, wenn ein Update verfügbar ist. Dazu legt Kami eine Markierung im lokalen XDG-Cache-Verzeichnis ab und fragt das neueste öffentliche GitHub-Release ab; es werden keinerlei Dokument- oder Aufgabendaten übertragen, und offline oder ohne Schreibrechte im Cache-Verzeichnis wird die Prüfung still übersprungen.
 
 ## Verwendung
