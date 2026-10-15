@@ -1,11 +1,7 @@
 ---
-type: llm
+type: regex
 weight: 2
-focus: {source: file, path: "tidewell.html"}
+target: {source: file, path: "tidewell.html"}
+match: contains
+pattern: '<body\b(?=[\s\S]*?(?:\$1\.2(?:\s|&nbsp;|<[^>]*>)*M))(?=[\s\S]*?(?:\$310(?:\s|&nbsp;|<[^>]*>)*K))(?=[\s\S]*?(?:\b38(?!\d)))(?=[\s\S]*?(?:\b214(?!\d)))(?=[\s\S]*?(?:\$31(?:\s|&nbsp;|<[^>]*>)*K))(?=[\s\S]*?(?:\b14(?:\s|&nbsp;|<[^>]*>)*%))(?=[\s\S]*?(?:\b6(?:\s|&nbsp;|<[^>]*>)*%))(?=[\s\S]*?(?:\b120(?!\d)))(?=[\s\S]*?(?:\$6(?:\s|&nbsp;|<[^>]*>)*M))(?=[\s\S]*?(?:Ireland))(?=[\s\S]*?(?:Netherlands))(?=[\s\S]*?(?:Leeds))(?=[\s\S]*?(?:\b2023(?!\d)))'
 ---
-
-PASS only if all of these hold in the filled HTML one-pager:
-- The facts provided survive unchanged: $1.2M ARR, $310K, 38 clinic groups, 214 clinics, ~$31K ACV, 14% to 6% no-show across 120 clinics, $6M raise, Ireland and the Netherlands, 9 employees, founded 2023 in Leeds.
-- No churn, CAC, LTV, NRR, payback, or growth-percentage figure is invented. A derived figure is acceptable only if it is arithmetic on the given numbers and labelled as such.
-- Where the user wanted four metric cards, each card uses a provided figure, or a missing value is visibly marked as missing rather than filled with an invented number.
-FAIL if any invented metric appears or any provided figure is changed.

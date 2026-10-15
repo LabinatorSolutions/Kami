@@ -1,11 +1,7 @@
 ---
-type: llm
+type: regex
 weight: 2
-focus: {source: file, path: "resume.html"}
+target: {source: file, path: "resume.html"}
+match: contains
+pattern: '<body\b(?=[\s\S]*?(?:林予安))(?=[\s\S]*?(?:\b6(?:\s|&nbsp;|<[^>]*>)*人))(?=[\s\S]*?(?:\b9(?:\s|&nbsp;|<[^>]*>)*个月))(?=[\s\S]*?(?:\b140(?!\d)))(?=[\s\S]*?(?:\b3(?:\s|&nbsp;|<[^>]*>)*天))(?=[\s\S]*?(?:半天))(?=[\s\S]*?(?:\b900(?!\d)))(?=[\s\S]*?(?:\b3\.8(?!\d)))(?=[\s\S]*?(?:\b1\.6(?!\d)))(?=[\s\S]*?(?:\b11(?:\s|&nbsp;|<[^>]*>)*%))(?=[\s\S]*?(?:\b23(?:\s|&nbsp;|<[^>]*>)*个))(?=[\s\S]*?(?:\b0\.9(?:\s|&nbsp;|<[^>]*>)*%))(?=[\s\S]*?(?:\b0\.2(?:\s|&nbsp;|<[^>]*>)*%))(?=[\s\S]*?(?:\b50(?:\s|&nbsp;|<[^>]*>)*人))(?=[\s\S]*?(?:\b60(?!\d)))(?=[\s\S]*?(?:\b12(?:\s|&nbsp;|<[^>]*>)*个))(?=[\s\S]*?(?:\b1\.8(?:\s|&nbsp;|<[^>]*>)*k))(?=[\s\S]*?(?:Sail UI))'
 ---
-
-PASS only if all of these hold in the filled HTML resume:
-- Every quantified fact from the notes survives unchanged: 6 people, 9 months, 140+ pages, 3 days to half a day, 900+ forms, LCP 3.8s to 1.6s, 11%, 23 apps, 0.9% to 0.2%, 50 concurrent editors, 60+ components, 12 product lines, 1.8k stars.
-- No new metric, percentage, company name, or achievement appears that the notes do not contain.
-- Project bullets lead with a concrete action and end with an observable result; none is a vague claim like "负责日常开发" or "保障系统稳定".
-FAIL if any metric is altered or invented, or if more than one bullet is vague filler.

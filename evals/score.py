@@ -1,18 +1,25 @@
 #!/usr/bin/env python3
 """Deterministic scoring for a `claude plugin eval` run of the Kami suite.
 
-The eval harness grades what it can see (skill fired, files created, an LLM
-read of the HTML). It cannot run Kami's own gates on the rendered PDF, so this
-script walks each kept run workspace and applies them: page contract, atomic
-fact survival in the PDF text, font family, density, Markdown residue, and
-template style drift.
+The eval harness grades what it can see (skill fired, files created, regex
+and LLM reads of the HTML). It cannot run Kami's own gates on the rendered PDF,
+so this script walks each kept run workspace and applies them: page contract,
+atomic fact survival in the PDF text, font family, density, Markdown residue,
+template style drift, and the chart count for chart cases. HTML-only cases
+(landing pages) skip every PDF gate and read facts from the HTML text.
 
 Run the suite with --keep-temp, then:
-    python3 evals/score.py                     # newest results dir
-    python3 evals/score.py evals/results/<ts>  # a specific run
+    python3 evals/score.py                       # newest results dir
+    python3 evals/score.py evals/results/<ts>    # a specific run
+    python3 evals/score.py --write               # also save gate-scores.json
+
+Scoring is read-only by default. The harness deletes kept workspaces with the
+rest of /tmp, so --write saves the rows to <results>/gate-scores.json, and a
+later run reads a row back from there when its workspace is gone.
 """
 from __future__ import annotations
 
+import argparse
 import contextlib
 import io
 import json
@@ -38,7 +45,17 @@ CONTRACTS: dict[str, tuple[str, int, int, list[str]]] = {
     "slides-en": ("deck", 7, 12, ["400", "37", "41%", "88%", "23", "11 months"]),
     "letter-ko": ("letter", 1, 1, ["박서연", "김도윤", "90초", "Kafka", "Flink", "18"]),
     "long-doc-cn": ("whitepaper", 3, 0, ["350", "18.5", "4.2", "12.1", "2.3", "94%", "81%", "97%"]),
+    "equity-report-charts-en": ("report", 1, 3, ["$412M", "$538M", "$701M", "61%", "27%", "12%", "$46", "Overweight"]),
+    "portfolio-cn": ("portfolio", 1, 0, ["沈知行", "潮声", "37%", "2.4", "织页", "120", "归途", "4.6"]),
+    "landing-page-en": ("index", 0, 0, ["Ledgerly", "$12", "14-day", "1,800", "40%", "CSV"]),
 }
+# Screen templates: HTML only, no PDF, so no page contract or PDF gates.
+HTML_ONLY = {"landing-page-en"}
+# Cases whose prompt asks for charts: minimum <svg data-kami-chart> count.
+MIN_CHARTS = {"equity-report-charts-en": 2}
+CHART_SVG = re.compile(r"<svg\b[^>]*\bdata-kami-chart\b", re.I)
+# Boolean gate columns; a row carries only the ones that applied to it.
+GATES = ("contract", "fonts", "density", "residue", "balance", "placeholders", "style", "charts")
 
 
 def _quiet(fn, argv: list[str]) -> tuple[int, str]:
@@ -75,6 +92,31 @@ def _pdf_text(pdf: Path) -> tuple[int, str]:
         return len(doc), "".join(page.get_text() for page in doc)
 
 
+def _html_text(html: Path) -> str:
+    raw = html.read_text(encoding="utf-8", errors="replace")
+    raw = re.sub(r"(?is)<(style|script)\b.*?</\1>|<!--.*?-->", " ", raw)
+    import html as htmlmod
+
+    return htmlmod.unescape(re.sub(r"<[^>]+>", " ", raw))
+
+
+def _facts(row: dict, text: str, facts: list[str]) -> None:
+    flat = re.sub(r"\s+", "", text)
+    found = [f for f in facts if re.sub(r"\s+", "", f) in flat]
+    row["facts"] = f"{len(found)}/{len(facts)}"
+    row["missing"] = [f for f in facts if f not in found]
+
+
+def _html_gates(row: dict, case: str, html: Path, screen: bool | None) -> None:
+    row["placeholders"] = _quiet(check_placeholders, [str(html)])[0] == 0
+    row["style"] = _quiet(lambda argv: check_style(argv, screen=screen), [str(html)])[0] == 0
+    count = len(CHART_SVG.findall(html.read_text(encoding="utf-8", errors="replace")))
+    if count or case in MIN_CHARTS:
+        row["chart_count"] = count
+    if case in MIN_CHARTS:
+        row["charts"] = count >= MIN_CHARTS[case]
+
+
 def score_run(case: str, run: dict) -> dict:
     row: dict = {
         "case": case,
@@ -83,6 +125,7 @@ def score_run(case: str, run: dict) -> dict:
         "secs": run.get("durationSeconds"),
         "harness": run.get("score"),
         "error": run.get("error"),
+        "trace": run.get("tracePath"),
     }
     ws = _workspace(run.get("tracePath") or "")
     if ws is None:
@@ -90,18 +133,26 @@ def score_run(case: str, run: dict) -> dict:
         return row
     stem, lo, hi, facts = CONTRACTS[case]
     pdf, html = _deliverable(ws, stem)
+    if case in HTML_ONLY:
+        if html is None:
+            row["note"] = f"no HTML delivered (expected {stem}.html)"
+            return row
+        row["html"] = str(html.relative_to(ws))
+        _facts(row, _html_text(html), facts)
+        row["residue"] = _quiet(check_markdown_residue, [str(html)])[0] == 0
+        _html_gates(row, case, html, screen=True)
+        return row
     if pdf is None:
         row["note"] = f"no PDF delivered (expected {stem}.pdf)"
         return row
     pages, text = _pdf_text(pdf)
-    flat = re.sub(r"\s+", "", text)
-    found = [f for f in facts if re.sub(r"\s+", "", f) in flat]
     row.update({
         "pdf": str(pdf.relative_to(ws)),
         "pages": pages,
         "contract": lo <= pages and (hi == 0 or pages <= hi),
-        "facts": f"{len(found)}/{len(facts)}",
-        "missing": [f for f in facts if f not in found],
+    })
+    _facts(row, text, facts)
+    row.update({
         "fonts": _quiet(check_fonts, [str(pdf)])[0] == 0,
         "density": _quiet(check_density, [str(pdf)])[0] == 0,
         "residue": _quiet(check_markdown_residue, [str(pdf)])[0] == 0,
@@ -109,25 +160,53 @@ def score_run(case: str, run: dict) -> dict:
     if case == "resume-cn":
         row["balance"] = _quiet(check_resume_balance, [str(pdf)])[0] == 0
     if html is not None:
-        row["placeholders"] = _quiet(check_placeholders, [str(html)])[0] == 0
-        row["style"] = _quiet(check_style, [str(html)])[0] == 0
+        _html_gates(row, case, html, screen=None)
+    elif case in MIN_CHARTS:
+        row["charts"] = False  # charts are counted in the HTML source
     return row
 
 
 def gate_score(row: dict) -> float | None:
     """Share of deterministic gates passed, facts weighted as one gate."""
-    if "pages" not in row:
-        return 0.0 if str(row.get("note", "")).startswith("no PDF delivered") else None
-    gates = [row["contract"], row["fonts"], row["density"], row["residue"]]
-    gates += [row[k] for k in ("balance", "placeholders", "style") if k in row]
+    if "facts" not in row:
+        return 0.0 if str(row.get("note", "")).startswith(("no PDF delivered", "no HTML delivered")) else None
+    gates = [row[k] for k in GATES if k in row]
     got, total = (int(x) for x in row["facts"].split("/"))
     return (sum(gates) + got / total) / (len(gates) + 1)
 
 
+def _cached_rows(target: Path) -> tuple[dict, dict]:
+    """Rows saved by an earlier --write, by trace path and by (case, run index)."""
+    path = target / "gate-scores.json"
+    try:
+        rows = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return {}, {}
+    by_trace, by_pos, seen = {}, {}, {}
+    for row in rows:
+        if not isinstance(row, dict) or "case" not in row:
+            continue
+        index = seen.get(row["case"], 0)
+        seen[row["case"]] = index + 1
+        by_pos[(row["case"], index)] = row
+        if row.get("trace"):
+            by_trace[row["trace"]] = row
+    return by_trace, by_pos
+
+
 def main(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(
+        prog="score.py",
+        description="Apply Kami's deterministic gates to a kept `claude plugin eval` run.",
+    )
+    parser.add_argument("results", nargs="?", type=Path,
+                        help="results dir holding aggregate-result.json (default: newest under evals/results)")
+    parser.add_argument("--write", action="store_true",
+                        help="save the rows to <results>/gate-scores.json")
+    args = parser.parse_args(argv[1:])
     results = HERE / "results"
-    if len(argv) > 1:
-        target = Path(argv[1])
+    if args.results is not None:
+        target = args.results
     else:
         dirs = sorted(
             p for p in results.iterdir() if (p / "aggregate-result.json").exists()
@@ -136,17 +215,26 @@ def main(argv: list[str]) -> int:
             print("ERROR: no results found; run claude plugin eval . --keep-temp first")
             return 2
         target = dirs[-1]
+    if not (target / "aggregate-result.json").is_file():
+        print(f"ERROR: {target}: no aggregate-result.json")
+        return 2
     data = json.loads((target / "aggregate-result.json").read_text())
-    rows = []
+    by_trace, by_pos = _cached_rows(target)
+    rows, cached = [], 0
     for case in data["cases"]:
         name = case["name"]
         if name not in CONTRACTS:
             continue
-        for run in case["arms"].get("with", []):
-            rows.append(score_run(name, run))
+        for index, run in enumerate(case["arms"].get("with", [])):
+            row = score_run(name, run)
+            if "note" in row and row["note"].startswith("workspace not kept"):
+                old = by_trace.get(row["trace"]) or by_pos.get((name, index))
+                if old is not None and old.get("case") == name:
+                    row, cached = dict(old), cached + 1
+            rows.append(row)
 
     cols = ["case", "harness", "gates", "pages", "contract", "facts", "fonts", "density",
-            "residue", "style", "placeholders", "balance", "turns", "secs", "cost"]
+            "residue", "style", "placeholders", "balance", "charts", "turns", "secs", "cost"]
     print("\t".join(cols))
     total_cost = 0.0
     for row in rows:
@@ -169,7 +257,12 @@ def main(argv: list[str]) -> int:
     scored = [r["gates"] for r in rows if r["gates"] is not None]
     if scored:
         print(f"mean gate score {sum(scored) / len(scored):.2f} over {len(scored)} run(s); agent cost ${total_cost:.2f}")
-    (target / "gate-scores.json").write_text(json.dumps(rows, ensure_ascii=False, indent=2))
+    if cached:
+        print(f"{cached} run(s) read from {target / 'gate-scores.json'}; their workspaces are gone")
+    if args.write:
+        out = target / "gate-scores.json"
+        out.write_text(json.dumps(rows, ensure_ascii=False, indent=2))
+        print(f"wrote {out}")
     return 0
 
 
