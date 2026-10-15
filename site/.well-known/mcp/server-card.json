@@ -39,7 +39,11 @@
     },
     {
       "name": "kami_check",
-      "description": "Run Kami's deterministic checks for a file. HTML: placeholders + strict mathematics + markdown residue (+ content coverage when a content IR JSON is given). PDF: markdown residue + orphans + density. JSON: content IR schema validation. Returns the legacy report plus stable rule IDs, findings, coverage status, and explicit degraded checks."
+      "description": "Run Kami's deterministic checks on one existing file without rendering. HTML: placeholders + strict mathematics + markdown residue + data charts + template style (+ content coverage when a content IR JSON is given). PDF: markdown residue + CJK fonts + orphans + density. JSON: content IR schema validation. Returns the legacy report plus stable rule IDs, findings, coverage status, and explicit degraded checks. To finish a document use kami_deliver, which also renders and enforces the page contract."
+    },
+    {
+      "name": "kami_deliver",
+      "description": "Finish a filled Kami document in one call, the same gate as `build.py --deliver`: HTML checks, strict mathematics rendered in place, data charts, template style, content coverage, then the PDF render, page contract, resume balance, CJK fonts, residue, density, orphans, and page images. Writes the PDF and page PNGs next to the HTML. Returns ready, the verdict, every check with its findings, data gaps to report, and the review checklist; view every page image against it before shipping."
     },
     {
       "name": "kami_screenshot",
