@@ -12,7 +12,6 @@ Allow: /
 
 # Sitemap
 Sitemap: https://kami.tw93.fun/sitemap.xml
-schemamap: https://kami.tw93.fun/schemamap.xml
 
 # Search Engines
 User-agent: Googlebot
