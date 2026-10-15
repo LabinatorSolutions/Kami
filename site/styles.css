@@ -294,14 +294,6 @@
   /* ---------- Section ---------- */
   section { margin-bottom: 72px; }
   .section-head { margin-bottom: 24px; }
-  .section-num {
-    font-family: var(--serif);
-    font-weight: 500;
-    font-size: 14px;
-    color: var(--brand);
-    letter-spacing: 0.4px;
-    margin: 0 0 6px;
-  }
   .section-title {
     font-family: var(--serif);
     font-weight: 500;
