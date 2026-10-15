@@ -460,6 +460,12 @@ suite run is 9 cases, 18 document builds at `--runs 2`, at roughly $1-3 each.
 - Kept workspaces live under `/private/tmp/e-*/sealed/home/cwd` with mode 000;
   `score.py` opens them itself. Results stay in the ignored `evals/results/`.
 - Mathematics is not covered: the sandbox cannot install the MathJax runtime.
+- LLM fidelity rubrics carry the case's full brief, because a judge that sees only a
+  partial fact list fails supplied facts as invented. On artifacts over about 15k
+  characters the harness judge is unreliable: before treating its FAIL as real,
+  re-judge the stored `evidence` HTML with the same rubric (`claude -p --model sonnet`)
+  and read the stated reason. In the 2026-10-15 baseline that split four failing cases
+  into two noisy votes and two real unlabelled derived figures.
 - resume-cn deliberately supplies thin notes (three employers, eight bullets). The
   expected behavior is two honest pages with `[DATA NEEDED]` gaps and a reported
   balance shortfall (`references/resume-writing.md` «Thin source»). `--deliver` and
