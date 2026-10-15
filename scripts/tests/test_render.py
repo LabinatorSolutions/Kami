@@ -931,6 +931,7 @@ def test_document_checks_reject_empty_pdf() -> None:
         from pypdf import PdfWriter
         from checks import check_density, check_orphans
         from mcp_server import tool_check
+        from verify import check_fonts
     except ImportError:
         skip("empty-PDF document checks", "render dependencies unavailable", ci_required=True)
         return
@@ -942,10 +943,11 @@ def test_document_checks_reject_empty_pdf() -> None:
             silently(check_markdown_residue, [str(pdf)]),
             silently(check_orphans, [str(pdf)]),
             silently(check_density, [str(pdf)]),
+            silently(check_fonts, [str(pdf)]),
         ]
         mcp_result = tool_check({"path": str(pdf)})
         check("PDF checks reject zero-page artifacts",
-              results == [2, 2, 2], str(results))
+              results == [2, 2, 2, 2], str(results))
         check("MCP check rejects zero-page artifacts",
               not mcp_result["ok"]
               and all(rule["status"] == "degraded" for rule in mcp_result["coverage"]),

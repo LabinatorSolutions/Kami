@@ -102,6 +102,7 @@ claude mcp add kami -- python3 &lt;checkout&gt;/skills/kami/scripts/mcp_server.p
       <li><code>kami_doctor</code> - report installed PDF render, visual-check, editable-PPTX, and font capabilities without treating an unavailable engine as a clean result.</li>
       <li><code>kami_render</code> - render trusted local Kami HTML to PDF through WeasyPrint, with build-time code highlighting. Returns the PDF path and page count.</li>
       <li><code>kami_check</code> - run the deterministic checks for a file. Returns the readable report plus stable rule IDs, findings, engine coverage, and explicit degraded checks.</li>
+      <li><code>kami_deliver</code> - finish a filled document in one call, the same gate as <code>build.py --deliver</code>: every check in order, the PDF render, page contract, and page images. Returns ready, the verdict, each check with its findings, and the data gaps to report.</li>
       <li><code>kami_screenshot</code> - rasterize every PDF page to PNG and return the paths, deterministic CJK font verdict, and a <code>review_pending</code> checklist contract for the perceptual pass.</li>
     </ul>
     <p>The server speaks newline-delimited JSON-RPC 2.0 on stdin and stdout and has no third-party dependency for the protocol itself. Tools that need WeasyPrint, pypdf, or PyMuPDF surface the install hint as a tool error instead of crashing. Its card, including the protocol version and the tool list, is published at <a href="./.well-known/mcp/server-card.json">/.well-known/mcp/server-card.json</a>.</p>

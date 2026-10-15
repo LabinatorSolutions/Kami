@@ -56,7 +56,7 @@ How an agent should call Kami: install the skill, fill the matching content sche
 ## Agent Interfaces
 - Content contracts: `references/schemas/<type>.json` carries the per-type structure and quality bar; new `content.json` files also carry an artifact `brief` with target, preserve boundary, evidence, and acceptance checks; validate before layout and check coverage after filling with `python3 scripts/build.py --check-content content.json [filled.html]`
 - Deterministic checks: placeholders, markdown residue, page density, orphan lines, slide rhythm, and a perceptual pass that exports page images with a fixed review checklist (`--check-visual`)
-- MCP server: `python3 scripts/mcp_server.py` speaks MCP over stdio with tools kami_templates / kami_doctor / kami_render / kami_check / kami_screenshot, so agents can diagnose, render, and verify without loading the skill prompt
+- MCP server: `python3 scripts/mcp_server.py` speaks MCP over stdio with tools kami_templates / kami_doctor / kami_render / kami_check / kami_deliver / kami_screenshot, so agents can diagnose, render, and verify without loading the skill prompt
 
 ## Machine-Readable Files
 - MCP server card: https://kami.tw93.fun/.well-known/mcp/server-card.json

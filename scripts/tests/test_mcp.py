@@ -45,8 +45,9 @@ def test_mcp_server_stdio_protocol() -> None:
           and init.get("serverInfo", {}).get("name") == "kami",
           json.dumps(init)[:200])
     tools = [t["name"] for t in replies.get(2, {}).get("result", {}).get("tools", [])]
-    check("mcp tools/list exposes the five kami tools",
-          tools == ["kami_templates", "kami_doctor", "kami_render", "kami_check", "kami_screenshot"],
+    check("mcp tools/list exposes the six kami tools",
+          tools == ["kami_templates", "kami_doctor", "kami_render", "kami_check", "kami_deliver",
+                    "kami_screenshot"],
           str(tools))
     body = replies.get(3, {}).get("result", {}).get("content", [{}])[0].get("text", "{}")
     payload = json.loads(body)
@@ -136,7 +137,7 @@ def test_mcp_check_returns_stable_findings_and_coverage() -> None:
         })
 
     check("MCP check registry carries unique stable rule IDs",
-          CHECK_REGISTRY and clean_result["ruleset_version"] == 3
+          CHECK_REGISTRY and clean_result["ruleset_version"] == 4
           and len(CHECK_REGISTRY) == len(set(CHECK_REGISTRY))
           and all({"scope", "severity", "required_engine", "explanation"} <= set(rule)
                   for rule in CHECK_REGISTRY.values()),
@@ -146,7 +147,7 @@ def test_mcp_check_returns_stable_findings_and_coverage() -> None:
           and clean_result["degraded"] is False
           and clean_result["findings"] == []
           and [item["id"] for item in clean_result["coverage"]]
-          == ["html.placeholders", "html.math", "html.markdown-residue"]
+          == ["html.placeholders", "html.math", "html.markdown-residue", "html.charts", "html.style"]
           and clean_result["report"],
           json.dumps(clean_result)[:500])
     check("MCP failed check returns a stable finding and legacy report",
@@ -269,6 +270,8 @@ def test_mcp_all_tools_succeed_over_stdio() -> None:
              "params": {"name": "kami_check", "arguments": {"path": str(html)}}},
             {"jsonrpc": "2.0", "id": 4, "method": "tools/call",
              "params": {"name": "kami_screenshot", "arguments": {"pdf": str(pdf)}}},
+            {"jsonrpc": "2.0", "id": 5, "method": "tools/call",
+             "params": {"name": "kami_deliver", "arguments": {"html": str(html)}}},
         ]
         result = subprocess.run(
             [sys.executable, str(script)],
@@ -281,7 +284,7 @@ def test_mcp_all_tools_succeed_over_stdio() -> None:
                 reply_id: json.loads(
                     replies[reply_id]["result"]["content"][0]["text"]
                 )
-                for reply_id in (2, 3, 4)
+                for reply_id in (2, 3, 4, 5)
             }
         except (KeyError, json.JSONDecodeError) as exc:
             check("MCP all-tools success path returns JSON results", False,
@@ -291,6 +294,7 @@ def test_mcp_all_tools_succeed_over_stdio() -> None:
         render_result = payloads[2]
         check_result = payloads[3]
         screenshot_result = payloads[4]
+        deliver_result = payloads[5]
         check("MCP render succeeds over stdio",
               result.returncode == 0 and render_result.get("pages") == 1 and pdf.is_file(),
               json.dumps(render_result)[:300])
@@ -305,6 +309,31 @@ def test_mcp_all_tools_succeed_over_stdio() -> None:
               and screenshot_result.get("font_check", {}).get("ok") is True
               and len(page_paths) == 1 and all(path.is_file() for path in page_paths),
               json.dumps(screenshot_result)[:500])
+        statuses = {item["check"]: item["status"] for item in deliver_result.get("checks", [])}
+        check("MCP deliver returns the --deliver verdict as data",
+              isinstance(deliver_result.get("ready"), bool)
+              and deliver_result.get("verdict", "").startswith(("READY", "NOT READY"))
+              and statuses.get("render") == "OK"
+              and Path(deliver_result.get("pdf", "")).resolve() == html.with_suffix(".pdf").resolve()
+              and deliver_result.get("page_images")
+              and deliver_result.get("review_checklist"),
+              json.dumps(deliver_result)[:600])
+
+
+def test_mcp_covers_every_deliver_gate() -> None:
+    """A gate added to --deliver must be mapped to a kami_check rule or declared deliver-only."""
+    import re
+    from mcp_server import CHECK_REGISTRY, DELIVER_GATE_RULES, DELIVER_ONLY_GATES
+
+    source = (SKILL_ROOT / "scripts" / "deliver.py").read_text(encoding="utf-8")
+    labels = set(re.findall(r'report\.check\(\s*"([^"]+)"', source))
+    labels |= set(re.findall(r'report\.line\(\s*(?:"[A-Z]+"|[^,]+),\s*"([^"]+)"', source))
+    unmapped = sorted(labels - set(DELIVER_GATE_RULES) - DELIVER_ONLY_GATES)
+    check("every --deliver gate is mapped for the MCP surface", labels and not unmapped,
+          f"unmapped: {unmapped}")
+    check("deliver gate map points at registered kami_check rules",
+          set(DELIVER_GATE_RULES.values()) <= set(CHECK_REGISTRY),
+          str(set(DELIVER_GATE_RULES.values()) - set(CHECK_REGISTRY)))
 
 
 def test_mcp_render_guards_source_and_output_types() -> None:

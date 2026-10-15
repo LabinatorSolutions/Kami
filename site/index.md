@@ -46,7 +46,7 @@ Nine content schemas under `references/schemas/`: changelog, equity-report, land
 
 - **Content contracts**: `references/schemas/<type>.json` carries the per-type structure, while `content.json.brief` records the artifact target, preserve boundary, evidence, and acceptance checks. Validate before layout and check coverage after filling: `python3 scripts/build.py --check-content content.json filled.html`.
 - **Deterministic checks**: placeholders, markdown residue, page density, orphan lines, and slide rhythm, plus a perceptual pass that exports page images with a fixed review checklist (`--check-visual`).
-- **MCP server**: `python3 scripts/mcp_server.py` speaks MCP over stdio with `kami_templates`, `kami_doctor`, `kami_render`, `kami_check`, and `kami_screenshot`, so an agent can diagnose, render, and verify without loading the skill prompt.
+- **MCP server**: `python3 scripts/mcp_server.py` speaks MCP over stdio with `kami_templates`, `kami_doctor`, `kami_render`, `kami_check`, `kami_deliver`, and `kami_screenshot`, so an agent can diagnose, render, and verify without loading the skill prompt.
 - **Machine-readable site surfaces**: [/llms.txt](https://kami.tw93.fun/llms.txt), [/developers.md](https://kami.tw93.fun/developers.md), [/.well-known/mcp/server-card.json](https://kami.tw93.fun/.well-known/mcp/server-card.json), [/.well-known/agent-skills/index.json](https://kami.tw93.fun/.well-known/agent-skills/index.json), and the catalog feeds in [/schemamap.xml](https://kami.tw93.fun/schemamap.xml).
 
 ## Pages

@@ -40,6 +40,7 @@ The server speaks newline-delimited JSON-RPC 2.0 over stdio and has no third-par
 | `kami_doctor` | Report installed PDF render, visual-check, editable-PPTX, and font capabilities without treating an unavailable engine as a clean result. |
 | `kami_render` | Render trusted local Kami HTML to PDF through WeasyPrint, with build-time code highlighting. Returns the PDF path and page count. |
 | `kami_check` | Run the deterministic checks for a file. Returns the readable report plus stable rule IDs, findings, engine coverage, and explicit degraded checks. |
+| `kami_deliver` | Finish a filled document in one call, the same gate as `build.py --deliver`: every check in order, the PDF render, page contract, and page images. Returns ready, the verdict, each check with its findings, and the data gaps to report. |
 | `kami_screenshot` | Rasterize every PDF page to PNG and return the paths, deterministic CJK font verdict, and a `review_pending` checklist contract for the perceptual pass. |
 
 The server card, including protocol version and tool list, is published at </.well-known/mcp/server-card.json>.

@@ -12,7 +12,7 @@ Reach for Kami when a user wants a finished document whose appearance matters: r
 - Start: `python3 scripts/mcp_server.py` (stdio, newline-delimited JSON-RPC 2.0)
 - Register: `claude mcp add kami -- python3 <checkout>/skills/kami/scripts/mcp_server.py`
 - Card: https://kami.tw93.fun/.well-known/mcp/server-card.json
-- Tools: `kami_templates` (templates, diagrams, schema types), `kami_doctor` (installed capabilities), `kami_render` (HTML to PDF), `kami_check` (stable findings + coverage), `kami_screenshot` (page PNGs + CJK font verdict + `review_pending` checklist)
+- Tools: `kami_templates` (templates, diagrams, schema types), `kami_doctor` (installed capabilities), `kami_render` (HTML to PDF), `kami_check` (stable findings + coverage), `kami_deliver` (every gate plus render, one READY verdict), `kami_screenshot` (page PNGs + CJK font verdict + `review_pending` checklist)
 
 ## Content contracts
 - Schemas: `references/schemas/<type>.json` for changelog, equity-report, landing-page, letter, long-doc, one-pager, portfolio, resume, slides
