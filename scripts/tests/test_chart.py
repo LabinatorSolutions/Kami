@@ -62,6 +62,15 @@ def test_chart_nice_scale() -> None:
     check("nice scale keeps negatives on the axis", lo <= -40 and hi >= 170, f"{lo}..{hi}")
 
 
+def test_chart_axis_ticks_follow_step_precision() -> None:
+    svg = render_chart({"type": "bar", "categories": ["a", "b"], "series": [{"values": [18.5, 2.3]}]})
+    ticks = re.findall(r'text-anchor="end">([^<]+)<', svg)
+    check("decimal data on a whole-number step keeps integer ticks", ticks == ["0", "5", "10", "15", "20"], str(ticks))
+    svg = render_chart({"type": "line", "categories": ["a", "b"], "series": [{"values": [0.3, 1.2]}]})
+    ticks = re.findall(r'text-anchor="end">([^<]+)<', svg)
+    check("a fractional step keeps its decimal", ticks[:2] == ["0.0", "0.2"], str(ticks))
+
+
 def test_chart_donut_shares_sum_to_100() -> None:
     check("largest remainder keeps three thirds at 100", sum(_shares([1, 1, 1], 0)) == 100)
     check("largest remainder at one decimal", round(sum(_shares([1, 1, 1], 1)), 1) == 100.0)
