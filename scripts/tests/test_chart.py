@@ -51,8 +51,8 @@ def test_chart_types_render() -> None:
 def test_chart_bar_geometry() -> None:
     svg = render_chart(BAR)
     heights = [float(h) for h in re.findall(r'<rect x="[^"]+" y="[^"]+" width="[^"]+" height="([^"]+)" fill="#1B365D"', svg)]
-    # Axis 0-100 over a 280px plot: 50 -> 140px, 100 -> 280px.
-    check("bar heights are value / axis max x plot height", heights == [140.0, 280.0], str(heights))
+    # Axis 0-100 over the 200-unit plot: 50 -> 100, 100 -> 200.
+    check("bar heights are value / axis max x plot height", heights == [100.0, 200.0], str(heights))
 
 
 def test_chart_nice_scale() -> None:
@@ -60,6 +60,22 @@ def test_chart_nice_scale() -> None:
     check("nice scale 116-158 rounds to 110-160 step 10", nice_scale(116, 158, include_zero=False) == (110, 160, 10))
     lo, hi, _ = nice_scale(-40, 170, include_zero=True)
     check("nice scale keeps negatives on the axis", lo <= -40 and hi >= 170, f"{lo}..{hi}")
+
+
+def test_chart_compact_size_narrows_the_canvas() -> None:
+    full = render_chart(BAR)
+    compact = render_chart({**BAR, "size": "compact"})
+    width = lambda svg: float(re.search(r'viewBox="0 0 ([0-9.]+) ', svg).group(1))
+    check("compact charts draw on a narrower canvas with the same type sizes",
+          width(compact) < width(full) * 0.7 and 'font-size="12"' in compact)
+    check("an unknown size is refused", "size must be" in _raises({**BAR, "size": "huge"}))
+
+
+def test_chart_ticks_start_at_the_left_edge() -> None:
+    svg = render_chart(BAR)
+    xs = [float(x) for x in re.findall(r'<text x="([0-9.]+)"[^>]*text-anchor="end">', svg)]
+    widest = max(xs)
+    check("tick labels end close to the plot and leave no dead margin", 20 <= widest <= 40, str(widest))
 
 
 def test_chart_axis_ticks_follow_step_precision() -> None:
@@ -112,14 +128,17 @@ def test_chart_gate_catches_drift() -> None:
     check("gate ignores restyling of the root tag", silently(check_charts, [str(path)]) == 0)
 
     edited_label = page.replace(">100<", ">120<", 1)
+    check("tamper fixture edited_label actually changes the page", edited_label != page)
     path.write_text(edited_label, encoding="utf-8")
     check("gate fails a hand-edited value label", silently(check_charts, [str(path)]) == 1)
 
-    edited_bar = page.replace('height="280"', 'height="300"', 1)
+    edited_bar = page.replace('height="200"', 'height="220"', 1)
+    check("tamper fixture edited_bar actually changes the page", edited_bar != page)
     path.write_text(edited_bar, encoding="utf-8")
     check("gate fails a hand-edited bar height", silently(check_charts, [str(path)]) == 1)
 
     dropped = re.sub(r"<rect x=[^>]*fill=\"#1B365D\"[^>]*/>", "", page, count=1)
+    check("tamper fixture dropped actually changes the page", dropped != page)
     path.write_text(dropped, encoding="utf-8")
     check("gate fails a removed mark", silently(check_charts, [str(path)]) == 1)
     path.unlink()
