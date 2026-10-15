@@ -80,16 +80,33 @@ Only the entries whose role is not obvious from the filename:
   images, and a single READY / NOT READY verdict. It owns the order; the individual
   `--check-*` flags stay for debugging one gate. Template family comes from content IR
   `type`, else from stylesheet overlap with the registered templates.
+  `deliver(args, result)` also fills a dict with the same outcome for the MCP
+  `kami_deliver` tool; `mcp_server.DELIVER_GATE_RULES` maps every deliver gate to a
+  `kami_check` rule or declares it deliver-only, and `test_mcp` fails on a new gate
+  that is in neither.
+- `scripts/chart.py` - `build.py --chart` / `--check-charts`: data spec to SVG for
+  bar, line, hbar, donut, candlestick, and waterfall. Chart geometry lives only here;
+  each SVG embeds its spec in `data-kami-spec` and the drift gate regenerates and
+  compares the marks. The five chart files in `assets/diagrams/` are its output for
+  their demo data: change a chart's look in `chart.py` and regenerate them, never
+  edit their SVG by hand (`--check` fails on drift).
+- `scripts/brand_extract.py` - drafts a brand profile from a public website (colors,
+  fonts, logo candidates, one contrast-checked accent). It fetches only the page and
+  same-site stylesheets and never writes into `~/.config/kami/`.
 - `scripts/html_visibility.py` - shared static HTML/CSS visibility analysis for
   `content.py` coverage and `checks.py` residue checks. Keep its conservative
   coverage and residue modes distinct; it does not implement browser layout.
 - `scripts/tests/test_build.py` - the stable test entry point; sibling `test_*.py`
   modules group tests by responsibility, with counters and fixtures in `support.py`.
+  `scripts/tests/corpus/<gate>/{flag,pass}/` is the labelled corpus for the PDF
+  gates (orphans, density, resume balance), rendered and judged by `test_corpus.py`.
+  Before changing a value in `checks_thresholds.json`, run it and read the per-gate
+  `CORPUS:` line; a fixture that flips is the cost of the change, not noise.
 - `scripts/mermaid_normalize.py` - re-themes a beautiful-mermaid SVG to the Kami
   palette and makes it WeasyPrint-safe. Pure Python, no Node, ships in the package.
 - `scripts/mcp_server.py` - zero-dependency MCP stdio server exposing
   `kami_templates` / `kami_doctor` / `kami_render` / `kami_check` /
-  `kami_screenshot`, so an MCP-capable agent can diagnose, render, and verify
+  `kami_deliver` / `kami_screenshot`, so an MCP-capable agent can diagnose, render, and verify
   without reading `SKILL.md`. Register
   with `claude mcp add kami -- python3 <checkout>/skills/kami/scripts/mcp_server.py`.
 - `scripts/math_render.py`, `scripts/mathjax_svg.js`, `scripts/ensure_mathjax.sh`,
@@ -421,11 +438,16 @@ Applies before handing off any user-visible typeset deliverable (rendered PDF,
 ## Evals
 
 `evals/<case>/` holds end-to-end cases for `claude plugin eval`: a realistic request
-with invented data (`prompt.md`), and graders for skill trigger, PDF creation,
-unfilled placeholders, and an LLM read of fact fidelity in the HTML. `evals/score.py`
-then applies Kami's own gates to each kept run workspace (page contract, atomic facts
-in the PDF text, fonts, density, residue, style, resume balance), which the harness
-cannot run itself. One suite run is 12 document builds at roughly $1-3 each.
+with invented data (`prompt.md`), and graders for skill trigger, PDF (or HTML)
+creation, and unfilled placeholders, plus fact fidelity in the HTML. Fact fidelity is
+a `regex` grader wherever the facts are literal (one-pager-en, resume-cn): LLM judges
+split on derived figures and reported false FAILs on outputs whose facts were all
+present. Keep an LLM judge only for what a pattern cannot read (Korean-only text,
+assertion titles, arithmetic). `evals/score.py` then applies Kami's own gates to each
+kept run workspace (page contract, atomic facts in the PDF text, fonts, density,
+residue, style, resume balance, generated chart count), which the harness cannot run
+itself; it is read-only unless given `--write`, which saves `gate-scores.json`. One
+suite run is 9 cases, 18 document builds at `--runs 2`, at roughly $1-3 each.
 
 - Run it after any change to `SKILL.md`, a reference the tier table routes to, a
   template, or a gate an agent relies on, and compare against the previous run on the
@@ -438,6 +460,10 @@ cannot run itself. One suite run is 12 document builds at roughly $1-3 each.
 - Kept workspaces live under `/private/tmp/e-*/sealed/home/cwd` with mode 000;
   `score.py` opens them itself. Results stay in the ignored `evals/results/`.
 - Mathematics is not covered: the sandbox cannot install the MathJax runtime.
+- resume-cn deliberately supplies thin notes (three employers, eight bullets). The
+  expected behavior is two honest pages with `[DATA NEEDED]` gaps and a reported
+  balance shortfall (`references/resume-writing.md` «Thin source»), so a balance FAIL
+  there with that report is the intended outcome, not a regression.
 
 ## Verification
 
