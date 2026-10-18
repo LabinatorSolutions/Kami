@@ -1222,3 +1222,14 @@
   .family { padding: 20px 16px 16px; }
   .radius .box { width: 56px; height: 56px; }
 }
+
+/* Readers who ask the system for less motion get state changes without the
+   slide and fade: menus, the gallery and hover lifts all switch at once. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
