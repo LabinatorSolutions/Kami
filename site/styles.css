@@ -958,7 +958,7 @@
     font-weight: 500;
   }
   .prose a:hover {
-    text-decoration: underline;
+    color: var(--brand-light);
   }
   .prose code {
     font-family: var(--mono);

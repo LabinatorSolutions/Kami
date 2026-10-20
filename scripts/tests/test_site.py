@@ -135,18 +135,17 @@ def test_public_site_typography_contract_matches_templates() -> None:
           f"offenders: {', '.join(offenders)}")
 
 
-def test_landing_page_ctas_stack_at_320px() -> None:
+def test_landing_page_ctas_wrap_on_phones() -> None:
     """Localized double CTAs must fit the smallest supported viewport."""
     offenders = []
     for path in sorted(TEMPLATES.glob("landing-page*.html")):
         text = path.read_text(encoding="utf-8")
         if not (
-            "@media (max-width: 360px)" in text
-            and ".hero-cta { flex-direction: column; align-items: stretch" in text
-            and ".btn-ghost { width: 100%; }" in text
+            ".hero-cta { flex-direction: row; flex-wrap: wrap;" in text
+            and ".hero-cta .btn-ghost { flex: 1 1 auto; white-space: nowrap; }" in text
         ):
             offenders.append(path.name)
-    check("landing page CTAs stack at 320px",
+    check("landing page CTAs wrap instead of truncating on phones",
           not offenders,
           f"offenders: {', '.join(offenders)}")
 
