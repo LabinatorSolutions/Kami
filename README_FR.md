@@ -185,11 +185,9 @@ Plus tard, devant préparer une présentation sur les agents d'IA, je disposais 
 - Si Kami vous a été utile, vous pouvez lui attribuer une étoile sur GitHub, [le recommander](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.) ou contribuer via une issue ou une PR
 - J'ai deux chats, TangYuan et Coke, et si Kami embellit vos journées, vous pouvez leur offrir <a href="https://cats.tw93.fun?name=Kami" target="_blank">une friandise 🥩</a>
 
-<details>
-<summary>Ceux qui ont déjà manifesté leur soutien 🐱</summary>
-<br/>
+Ceux qui ont déjà manifesté leur soutien 🐱
+
 <a href="https://cats.tw93.fun?name=Kami"><img src="https://cdn.jsdelivr.net/gh/tw93/sponsors@main/assets/sponsors.svg" width="1000" loading="lazy" /></a>
-</details>
 
 ## Licence
 

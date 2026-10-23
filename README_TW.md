@@ -184,11 +184,9 @@ Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), 
 - 如果 Kami 幫到了你，歡迎給它一個 Star，[在 Twitter 分享](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.)，或提交 Issue 和 PR
 - 我有兩隻貓，湯圓和可樂，如果 Kami 讓你順手，歡迎<a href="https://cats.tw93.fun?name=Kami" target="_blank">請她們吃罐頭 🥩</a>
 
-<details>
-<summary>這些可愛的朋友已經請過啦 🐱</summary>
-<br/>
+這些可愛的朋友已經請過啦 🐱
+
 <a href="https://cats.tw93.fun?name=Kami"><img src="https://cdn.jsdelivr.net/gh/tw93/sponsors@main/assets/sponsors.svg" width="1000" loading="lazy" /></a>
-</details>
 
 ## 授權條款
 

@@ -184,11 +184,9 @@ Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), 
 - Kami가 유용했다면 Star를 주시거나, [Twitter에 공유](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.)하거나, Issue와 PR을 남겨주세요
 - 저에게는 탕위안(TangYuan)과 콜라(Coke)라는 두 마리의 고양이가 있는데, Kami가 도움이 되었다면 <a href="https://cats.tw93.fun?name=Kami" target="_blank">캔을 선물해 주세요 🥩</a>
 
-<details>
-<summary>후원해 주신 분들 🐱</summary>
-<br/>
+후원해 주신 분들 🐱
+
 <a href="https://cats.tw93.fun?name=Kami"><img src="https://cdn.jsdelivr.net/gh/tw93/sponsors@main/assets/sponsors.svg" width="1000" loading="lazy" /></a>
-</details>
 
 ## 라이선스
 

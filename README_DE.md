@@ -185,11 +185,9 @@ Später stand ein Vortrag über KI-Agenten an. Das Dokument war fertig, aber ich
 - Wenn Kami Ihnen geholfen hat, vergeben Sie einen Stern auf GitHub, [teilen Sie das Projekt](https://twitter.com/intent/tweet?url=https://github.com/tw93/kami&text=Kami%20-%20A%20quiet%20design%20system%20for%20professional%20documents.) oder beteiligen Sie sich per Issue und PR
 - Ich habe zwei Katzen, TangYuan und Coke, und wenn Kami Ihren Alltag bereichert hat, spendieren Sie ihnen gerne ein <a href="https://cats.tw93.fun?name=Kami" target="_blank">Dosenfutter 🥩</a>
 
-<details>
-<summary>Diese freundlichen Menschen haben bereits gespendet 🐱</summary>
-<br/>
+Diese freundlichen Menschen haben bereits gespendet 🐱
+
 <a href="https://cats.tw93.fun?name=Kami"><img src="https://cdn.jsdelivr.net/gh/tw93/sponsors@main/assets/sponsors.svg" width="1000" loading="lazy" /></a>
-</details>
 
 ## Lizenz
 
