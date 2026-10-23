@@ -257,6 +257,8 @@
     gap: 13px;
     align-items: center;
     flex: 0 0 auto;
+    /* Subpages carry only the links in this row; keep them on the right. */
+    margin-left: auto;
   }
   .hero-links a {
     color: var(--stone);
