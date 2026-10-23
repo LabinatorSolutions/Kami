@@ -142,7 +142,7 @@ def test_landing_page_ctas_wrap_on_phones() -> None:
         text = path.read_text(encoding="utf-8")
         if not (
             ".hero-cta { flex-direction: row; flex-wrap: wrap;" in text
-            and ".hero-cta .btn-ghost { flex: 1 1 auto; white-space: nowrap; }" in text
+            and ".hero-cta .btn-ghost { flex: 0 0 auto; white-space: nowrap; }" in text
         ):
             offenders.append(path.name)
     check("landing page CTAs wrap instead of truncating on phones",
