@@ -187,7 +187,7 @@ Plus tard, devant préparer une présentation sur les agents d'IA, je disposais 
 
 Ceux qui ont déjà manifesté leur soutien 🐱
 
-<a href="https://cats.tw93.fun?name=Kami"><img src="https://cdn.jsdelivr.net/gh/tw93/sponsors@main/assets/sponsors.svg" width="1000" loading="lazy" /></a>
+<a href="https://cats.tw93.fun?name=Kami"><img src="https://raw.githubusercontent.com/tw93/sponsors/main/assets/sponsors.svg" width="1000" loading="lazy" /></a>
 
 ## Licence
 

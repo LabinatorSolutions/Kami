@@ -186,7 +186,7 @@ Redraw this as a clean editorial diagram. Background: warm parchment (#f5f4ed), 
 
 支援してくださった方々 🐱
 
-<a href="https://cats.tw93.fun?name=Kami"><img src="https://cdn.jsdelivr.net/gh/tw93/sponsors@main/assets/sponsors.svg" width="1000" loading="lazy" /></a>
+<a href="https://cats.tw93.fun?name=Kami"><img src="https://raw.githubusercontent.com/tw93/sponsors/main/assets/sponsors.svg" width="1000" loading="lazy" /></a>
 
 ## ライセンス
 
