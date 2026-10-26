@@ -1226,8 +1226,9 @@
 }
 
 /* Phone text ladder, shared with the other product sites: body 17, secondary
-   15, meta 13, floor 12. It only lifts; headings and the specimens that show
-   document sizes (type samples, buttons, tags, metric labels) keep theirs. */
+   15, meta 13, floor 12. It only lifts; headings rise only to match the text
+   under them, and the specimens that show document sizes (type samples,
+   buttons, tags, metric labels) keep theirs. */
 @media (max-width: 640px) {
   /* Body 17 */
   .section-lede,
@@ -1236,6 +1237,10 @@
   .faq-pair dd,
   .prose p,
   .prose li { font-size: 17px; }
+
+  /* A heading never sits under the 17px text it heads; weight is kept */
+  .faq-pair dt,
+  .subhead { font-size: 17px; }
 
   /* Secondary 15 */
   .rules p,
