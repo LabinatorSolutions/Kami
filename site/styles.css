@@ -1225,22 +1225,29 @@
   .radius .box { width: 56px; height: 56px; }
 }
 
-/* Phone text ladder, shared with the other product sites: body 17, secondary
-   15, meta 13, floor 12. It only lifts; headings rise only to match the text
-   under them, and the specimens that show document sizes (type samples,
+/* Phone text ladder, shared with the other product sites: body 16, secondary
+   15, meta 13, floor 12. Running text is one size here and on the inner pages,
+   so the hero tagline and manifesto come down to it; headings sit at least at
+   the body size, and the specimens that show document sizes (type samples,
    buttons, tags, metric labels) keep theirs. */
 @media (max-width: 640px) {
-  /* Body 17 */
+  /* Body 16 */
+  .hero .tagline,
+  .manifesto,
   .section-lede,
   section > p:not([class]),
   .background-text,
   .faq-pair dd,
   .prose p,
-  .prose li { font-size: 17px; }
+  .prose li { font-size: 16px; }
 
-  /* A heading never sits under the 17px text it heads; weight is kept */
+  /* A heading never sits under the body text it heads; weight is kept */
   .faq-pair dt,
-  .subhead { font-size: 17px; }
+  .subhead { font-size: 16px; }
+
+  /* Text in a box keeps 16px sides */
+  .code,
+  .swatch .info { padding-left: 16px; padding-right: 16px; }
 
   /* Secondary 15 */
   .rules p,
