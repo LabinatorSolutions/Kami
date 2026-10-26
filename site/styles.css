@@ -1225,6 +1225,52 @@
   .radius .box { width: 56px; height: 56px; }
 }
 
+/* Phone text ladder, shared with the other product sites: body 17, secondary
+   15, meta 13, floor 12. It only lifts; headings and the specimens that show
+   document sizes (type samples, buttons, tags, metric labels) keep theirs. */
+@media (max-width: 640px) {
+  /* Body 17 */
+  .section-lede,
+  section > p:not([class]),
+  .background-text,
+  .faq-pair dd,
+  .prose p,
+  .prose li { font-size: 17px; }
+
+  /* Secondary 15 */
+  .rules p,
+  .anti-line,
+  .decision td.task,
+  .decision td.how,
+  .space-table td,
+  .demo-card .demo-title,
+  .landing-card .demo-title,
+  .prose .note,
+  .footer .mark .wm-sub,
+  .footer .colophon { font-size: 15px; }
+
+  /* Meta 13 */
+  .eyebrow,
+  .lang-trigger,
+  .lang-menu a,
+  .anti-line .cue,
+  .demo-card .demo-desc,
+  .landing-card .demo-desc,
+  .swatch .role,
+  .swatch .hex,
+  .tint .flag,
+  .tint .hex,
+  .family .name,
+  .family .use,
+  .type-specs,
+  .radius .r,
+  .radius .label,
+  .comp .hint,
+  .chart-label,
+  .chart-caption,
+  .decision th { font-size: 13px; }
+}
+
 /* Readers who ask the system for less motion get state changes without the
    slide and fade: menus, the gallery and hover lifts all switch at once. */
 @media (prefers-reduced-motion: reduce) {
