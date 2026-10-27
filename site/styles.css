@@ -400,6 +400,9 @@
     margin: 0;
     line-height: 1.25;
   }
+  /* Korean breaks at spaces, so a word never splits across lines (Kata
+     rules/site.md «Line endings»); Chinese and Japanese keep normal breaking. */
+  html[lang="ko"] body { word-break: keep-all; }
   .swatch .role {
     font-size: 12px;
     color: var(--olive);
