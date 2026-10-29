@@ -441,10 +441,15 @@ Applies before handing off any user-visible typeset deliverable (rendered PDF,
 with invented data (`prompt.md`), and graders for skill trigger, PDF (or HTML)
 creation, and unfilled placeholders, plus fact fidelity in the HTML. Fact fidelity is
 a `regex` grader wherever the facts are literal (one-pager-en, resume-cn, long-doc-cn,
-equity-report-cn): LLM judges split on derived figures and reported false FAILs on
-outputs whose facts were all present. Keep an LLM judge only for what a pattern cannot
-read (Korean-only text, assertion titles, arithmetic), as its own lower-weight grader
-such as `derived-figures.md`, so judge noise never fails fact fidelity with it.
+equity-report-cn, letter-ko): LLM judges split on derived figures and reported false
+FAILs on outputs whose facts were all present. What a judge was asked beyond the facts
+is a `not_contains` regex too where it can be: invented contact details and non-Korean
+copy in letter-ko, outside companies and consensus in equity-report-cn. A `focus` on a
+long HTML file drew unanimous FAIL votes on outputs a standalone sonnet judge passed
+with every figure rechecked (2026-10-30), matching the harness docs' advice to keep
+`llm` graders for short outputs. Keep an LLM judge only for what no pattern can read,
+as its own lower-weight grader such as long-doc-cn `derived-figures.md`, so judge noise
+never fails fact fidelity with it.
 `evals/score.py` then applies Kami's own gates to each kept run workspace (page
 contract, atomic facts in the PDF text, fonts, density, residue, style, resume
 balance, generated chart count), which the harness cannot run itself; it is

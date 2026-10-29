@@ -1,24 +1,7 @@
 ---
-type: llm
+type: regex
 weight: 2
-focus: {source: file, path: "letter.html"}
+target: {source: file, path: "letter.html"}
+match: contains
+pattern: '<body\b(?=[\s\S]*?(?:박서연))(?=[\s\S]*?(?:한빛데이터))(?=[\s\S]*?(?:데이터플랫폼팀))(?=[\s\S]*?(?:팀장))(?=[\s\S]*?(?:김도윤))(?=[\s\S]*?(?:(?<![\d.])2(?:\s|&nbsp;|<[^>]*>)*년(?:\s|&nbsp;|<[^>]*>)*4(?:\s|&nbsp;|<[^>]*>)*개월))(?=[\s\S]*?(?:서울대학교))(?=[\s\S]*?(?:데이터사이언스대학원))(?=[\s\S]*?(?:석사))(?=[\s\S]*?(?:(?<![\d.])45(?:\s|&nbsp;|<[^>]*>)*분))(?=[\s\S]*?(?:(?<![\d.])90(?:\s|&nbsp;|<[^>]*>)*초))(?=[\s\S]*?(?:Kafka))(?=[\s\S]*?(?:Flink))(?=[\s\S]*?(?:(?<![\d.])18(?:\s|&nbsp;|<[^>]*>)*개))(?=[\s\S]*?(?:(?<![\d.])3(?:\s|&nbsp;|<[^>]*>)*명))(?=[\s\S]*?(?:(?<![\d.])2026(?:\s|&nbsp;|<[^>]*>)*년(?:\s|&nbsp;|<[^>]*>)*9(?:\s|&nbsp;|<[^>]*>)*월(?:\s|&nbsp;|<[^>]*>)*20(?:\s|&nbsp;|<[^>]*>)*일))'
 ---
-
-PASS only if all of these hold in the filled HTML letter:
-- It is written in natural Korean throughout (no leftover English or Chinese template copy in the body).
-- The facts survive: 박서연 (팀장, 한빛데이터 데이터플랫폼팀), 김도윤, 2년 4개월, 서울대학교 데이터사이언스대학원 석사과정, 45분 to 90초, Kafka and Flink, 18개 팀, 신입 3명, 2026년 9월 20일.
-- No invented achievements, awards, grades, or contact details.
-FAIL if any fact is changed or invented, or the body mixes in non-Korean template text.
-
-The brief the author worked from follows. Everything it states is supplied, not invented, so judge invention only against it, and do not fail a fact because the list above omits it:
-
-> 다음 내용으로 한국어 추천서를 PDF로 만들어 현재 디렉터리에 저장해 주세요. 질문하지 말고 바로 완성해 주세요. HTML 파일은 letter.html, PDF는 letter.pdf로 저장해 주세요.
->
-> - 추천인: 박서연, 한빛데이터 데이터플랫폼팀 팀장
-> - 추천 대상: 김도윤, 같은 팀 데이터 엔지니어로 2년 4개월 함께 근무
-> - 지원처: 서울대학교 데이터사이언스대학원 석사과정
-> - 김도윤은 실시간 로그 파이프라인을 Kafka와 Flink로 재구축해 데이터 지연을 45분에서 90초로 줄였습니다.
-> - 사내 데이터 품질 검사 도구를 직접 설계해 18개 팀이 사용하고 있습니다.
-> - 신입 3명의 온보딩을 맡아 멘토링했습니다.
-> - 통계 공부에 관심이 많아 퇴근 후 온라인 과정을 수료했습니다.
-> - 날짜: 2026년 9월 20일
