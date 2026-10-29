@@ -233,13 +233,10 @@
   .risk-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8pt;
-    margin: 6pt 0;
+    gap: 10pt 24pt;
+    margin: 8pt 0 14pt;
   }
   .risk-item {
-    padding: 5pt 9pt;
-    background: var(--ivory);
-    border-radius: 3pt;
     break-inside: avoid;
   }
   .risk-label {
@@ -254,22 +251,12 @@
     line-height: 1.42;
   }
 
-  /* ========== ANALYST BOX ========== */
-  .analyst-box {
-    background: var(--ivory);
-    border: 0.5pt solid var(--border);
-    border-radius: 4pt;
-    padding: 8pt 12pt;
-    margin: 6pt 0;
-    break-inside: avoid;
-  }
-  .analyst-label {
-    font-size: 9pt;
-    color: var(--brand);
-    letter-spacing: 0.5pt;
-    text-transform: uppercase;
-    margin-bottom: 4pt;
-  }
+  .verdict { border-top: 0.6pt solid var(--border); padding-top: 8pt; break-inside: avoid; }
+  .verdict h3 { margin-top: 0; }
+  .verdict-lead { font-family: var(--serif); font-size: 11pt; color: var(--near-black); line-height: 1.5; margin-bottom: 6pt; }
+  .verdict-list { display: grid; grid-template-columns: 50pt 1fr; column-gap: 10pt; row-gap: 4pt; line-height: 1.45; }
+  .verdict-list dt { color: var(--brand); font-weight: 500; }
+  .verdict-list dd { margin: 0; }
 
   /* ========== FOOTER ========== */
   .report-footer {
@@ -483,9 +470,15 @@
   </div>
 </div>
 
-<div class="analyst-box">
-  <div class="analyst-label">总结</div>
-  利润率恢复了，营收超预期了，但股价跌了，因为 $25B capex + 负 FCF 在 Robotaxi 尚无规模收入时是硬伤。多头核心：Dallas/Houston Robotaxi 数据会在 Q2 验证单位经济学并触发重估。空头核心：$25B/年烧在 3-5 年才能变现的项目上，而核心汽车业务在萎缩。已持有者：继续持有到 Q2，等 Robotaxi 数据再评估。新建仓：建议等 7 月交付和 Robotaxi 数据再决定。
+<div class="verdict">
+  <h3>总结</h3>
+  <p class="verdict-lead">利润率恢复，营收超预期，但股价跌了，$25B capex + 负 FCF 在 Robotaxi 尚无规模收入时是硬伤。</p>
+  <dl class="verdict-list">
+    <dt>多头核心</dt><dd>Dallas/Houston Robotaxi 数据会在 Q2 验证单位经济学并触发重估</dd>
+    <dt>空头核心</dt><dd>$25B/年烧在 3-5 年才能变现的项目上，而核心汽车业务在萎缩</dd>
+    <dt>已持有者</dt><dd>继续持有到 Q2，等 Robotaxi 数据再评估</dd>
+    <dt>新建仓</dt><dd>建议等 7 月交付和 Robotaxi 数据再决定</dd>
+  </dl>
 </div>
 
 <!-- ========== FOOTER ========== -->
