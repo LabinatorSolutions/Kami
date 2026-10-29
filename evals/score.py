@@ -33,7 +33,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "skills" / "kami" / "scripts"))
 
 from checks import (  # noqa: E402
-    check_density, check_markdown_residue, check_placeholders, check_resume_balance, resume_thin_source,
+    check_markdown_residue, check_placeholders, check_resume_balance, resume_thin_source, scan_density,
 )
 from lint import check_style  # noqa: E402
 from verify import check_fonts  # noqa: E402
@@ -156,9 +156,9 @@ def score_run(case: str, run: dict) -> dict:
     _facts(row, text, facts)
     row.update({
         "fonts": _quiet(check_fonts, [str(pdf)])[0] == 0,
-        "density": _quiet(check_density, [str(pdf)])[0] == 0,
         "residue": _quiet(check_markdown_residue, [str(pdf)])[0] == 0,
     })
+    _density(row, pdf)
     if case == "resume-cn":
         # Same verdict as --deliver: a shortfall the source cannot fill is a
         # reported data gap, not a layout failure.
@@ -169,6 +169,20 @@ def score_run(case: str, run: dict) -> dict:
     elif case in MIN_CHARTS:
         row["charts"] = False  # charts are counted in the HTML source
     return row
+
+
+def _density(row: dict, pdf: Path) -> None:
+    """Same verdict as --deliver, which runs density as advisory: only a SPARSE
+    page (past `sparse_pct`, the half-empty page writing.md calls a draft
+    defect) fails. WARN pages are look-here hints, counted in `density_warn`."""
+    with contextlib.redirect_stdout(io.StringIO()):
+        result = scan_density([str(pdf)], scan_single_page=True)
+    if result is None:
+        row["density"] = False
+        return
+    sparse, warn, missing, scanned = result
+    row["density"] = scanned > 0 and missing == 0 and sparse == 0
+    row["density_warn"] = warn
 
 
 def gate_score(row: dict) -> float | None:
