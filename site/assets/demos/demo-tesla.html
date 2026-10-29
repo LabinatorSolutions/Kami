@@ -227,7 +227,6 @@
 
   /* ========== FIGURE ========== */
   figure { margin: 8pt 0; break-inside: avoid; }
-  figure svg { width: 100%; height: auto; max-height: 70mm; }
   figcaption {
     font-size: 9pt;
     color: var(--stone);
@@ -338,137 +337,78 @@
 <!-- ========== K 线图 ========== -->
 <h2>近期价格走势</h2>
 <figure>
-  <svg viewBox="0 0 760 270" xmlns="http://www.w3.org/2000/svg">
-    <rect width="100%" height="100%" fill="#f5f4ed"/>
-
-    <!-- 网格：价格区间 335-410，图表区 x=56 y=20 w=660 h=220，基线 y=240 -->
-    <!-- scale: 1 dollar = 2.93px (220/75) -->
-    <line x1="56" y1="240" x2="716" y2="240" stroke="#e8e7e1" stroke-width="0.8"/>
-    <line x1="56" y1="211" x2="716" y2="211" stroke="#e8e7e1" stroke-width="0.8"/>
-    <line x1="56" y1="181" x2="716" y2="181" stroke="#e8e7e1" stroke-width="0.8"/>
-    <line x1="56" y1="152" x2="716" y2="152" stroke="#e8e7e1" stroke-width="0.8"/>
-    <line x1="56" y1="123" x2="716" y2="123" stroke="#e8e7e1" stroke-width="0.8"/>
-    <line x1="56" y1="93"  x2="716" y2="93"  stroke="#e8e7e1" stroke-width="0.8"/>
-    <line x1="56" y1="64"  x2="716" y2="64"  stroke="#e8e7e1" stroke-width="0.8"/>
-    <line x1="56" y1="35"  x2="716" y2="35"  stroke="#e8e7e1" stroke-width="0.8"/>
-
-    <!-- Y 轴标签 -->
-    <text x="48" y="244" fill="#6b6a64" font-size="9" text-anchor="end" font-family="Charter,Georgia,serif">335</text>
-    <text x="48" y="215" fill="#6b6a64" font-size="9" text-anchor="end" font-family="Charter,Georgia,serif">345</text>
-    <text x="48" y="185" fill="#6b6a64" font-size="9" text-anchor="end" font-family="Charter,Georgia,serif">355</text>
-    <text x="48" y="156" fill="#6b6a64" font-size="9" text-anchor="end" font-family="Charter,Georgia,serif">365</text>
-    <text x="48" y="127" fill="#6b6a64" font-size="9" text-anchor="end" font-family="Charter,Georgia,serif">375</text>
-    <text x="48" y="97"  fill="#6b6a64" font-size="9" text-anchor="end" font-family="Charter,Georgia,serif">385</text>
-    <text x="48" y="68"  fill="#6b6a64" font-size="9" text-anchor="end" font-family="Charter,Georgia,serif">395</text>
-    <text x="48" y="39"  fill="#6b6a64" font-size="9" text-anchor="end" font-family="Charter,Georgia,serif">405</text>
-
-    <!-- 20 K 线, y = 240 - (price-335)*2.93 -->
-
-    <!-- Day 1 Mar 26: O=381.60 H=384.44 L=371.87 C=372.11 DOWN -->
-    <line x1="72" y1="95" x2="72" y2="132" stroke="#6b6a64" stroke-width="1.2"/>
-    <rect x="64" y="103" width="16" height="27" fill="#6b6a64" rx="1"/>
-
-    <!-- Day 2 Mar 27: O=369.69 H=369.86 L=359.47 C=361.83 DOWN -->
-    <line x1="105" y1="138" x2="105" y2="168" stroke="#6b6a64" stroke-width="1.2"/>
-    <rect x="97" y="138" width="16" height="23" fill="#6b6a64" rx="1"/>
-
-    <!-- Day 3 Mar 30: O=365.86 H=367.29 L=352.14 C=355.28 DOWN -->
-    <line x1="138" y1="146" x2="138" y2="190" stroke="#6b6a64" stroke-width="1.2"/>
-    <rect x="130" y="149" width="16" height="31" fill="#6b6a64" rx="1"/>
-
-    <!-- Day 4 Mar 31: O=361.51 H=373.33 L=361.00 C=371.75 UP -->
-    <line x1="171" y1="128" x2="171" y2="164" stroke="#1B365D" stroke-width="1.2"/>
-    <rect x="163" y="132" width="16" height="30" fill="#1B365D" rx="1"/>
-
-    <!-- Day 5 Apr 1: O=378.63 H=383.14 L=374.08 C=381.26 UP -->
-    <line x1="204" y1="99" x2="204" y2="126" stroke="#1B365D" stroke-width="1.2"/>
-    <rect x="196" y="104" width="16" height="15" fill="#1B365D" rx="1"/>
-
-    <!-- Day 6 Apr 2: O=364.20 H=370.28 L=359.03 C=360.59 DOWN -->
-    <line x1="237" y1="137" x2="237" y2="169" stroke="#6b6a64" stroke-width="1.2"/>
-    <rect x="229" y="143" width="16" height="18" fill="#6b6a64" rx="1"/>
-
-    <!-- Day 7 Apr 6: O=362.59 H=367.72 L=346.64 C=352.82 DOWN -->
-    <line x1="270" y1="144" x2="270" y2="206" stroke="#6b6a64" stroke-width="1.2"/>
-    <rect x="262" y="149" width="16" height="40" fill="#6b6a64" rx="1"/>
-
-    <!-- Day 8 Apr 7: O=346.44 H=348.02 L=337.24 C=346.65 UP -->
-    <line x1="303" y1="202" x2="303" y2="233" stroke="#1B365D" stroke-width="1.2"/>
-    <rect x="295" y="202" width="16" height="15" fill="#1B365D" rx="1"/>
-
-    <!-- Day 9 Apr 8: O=363.79 H=364.50 L=339.67 C=343.25 DOWN -->
-    <line x1="336" y1="154" x2="336" y2="226" stroke="#6b6a64" stroke-width="1.2"/>
-    <rect x="328" y="154" width="16" height="60" fill="#6b6a64" rx="1"/>
-
-    <!-- Day 10 Apr 9: O=343.15 H=348.88 L=337.25 C=345.62 UP -->
-    <line x1="369" y1="199" x2="369" y2="233" stroke="#1B365D" stroke-width="1.2"/>
-    <rect x="361" y="209" width="16" height="17" fill="#1B365D" rx="1"/>
-
-    <!-- Day 11 Apr 10: O=346.29 H=350.36 L=342.74 C=348.95 UP -->
-    <line x1="402" y1="195" x2="402" y2="217" stroke="#1B365D" stroke-width="1.2"/>
-    <rect x="394" y="199" width="16" height="13" fill="#1B365D" rx="1"/>
-
-    <!-- Day 12 Apr 13: O=350.07 H=356.35 L=348.57 C=352.42 UP -->
-    <line x1="435" y1="177" x2="435" y2="200" stroke="#1B365D" stroke-width="1.2"/>
-    <rect x="427" y="189" width="16" height="7" fill="#1B365D" rx="1"/>
-
-    <!-- Day 13 Apr 14: O=357.67 H=367.63 L=354.77 C=364.20 UP -->
-    <line x1="468" y1="144" x2="468" y2="182" stroke="#1B365D" stroke-width="1.2"/>
-    <rect x="460" y="154" width="16" height="19" fill="#1B365D" rx="1"/>
-
-    <!-- Day 14 Apr 15: O=366.83 H=394.65 L=362.50 C=391.95 UP -->
-    <line x1="501" y1="65" x2="501" y2="159" stroke="#1B365D" stroke-width="1.2"/>
-    <rect x="493" y="73" width="16" height="74" fill="#1B365D" rx="1"/>
-
-    <!-- Day 15 Apr 16: O=393.81 H=394.06 L=381.80 C=388.90 DOWN -->
-    <line x1="534" y1="67" x2="534" y2="103" stroke="#6b6a64" stroke-width="1.2"/>
-    <rect x="526" y="68" width="16" height="14" fill="#6b6a64" rx="1"/>
-
-    <!-- Day 16 Apr 17: O=395.92 H=409.28 L=391.65 C=400.62 UP -->
-    <line x1="567" y1="23" x2="567" y2="74" stroke="#1B365D" stroke-width="1.2"/>
-    <rect x="559" y="48" width="16" height="14" fill="#1B365D" rx="1"/>
-
-    <!-- Day 17 Apr 20: O=402.58 H=406.80 L=388.33 C=392.50 DOWN -->
-    <line x1="600" y1="30" x2="600" y2="84" stroke="#6b6a64" stroke-width="1.2"/>
-    <rect x="592" y="42" width="16" height="30" fill="#6b6a64" rx="1"/>
-
-    <!-- Day 18 Apr 21: O=393.00 H=393.95 L=385.22 C=386.42 DOWN -->
-    <line x1="633" y1="67" x2="633" y2="94" stroke="#6b6a64" stroke-width="1.2"/>
-    <rect x="625" y="70" width="16" height="19" fill="#6b6a64" rx="1"/>
-
-    <!-- Day 19 Apr 22: O=387.57 H=393.01 L=385.30 C=387.51 DOWN -->
-    <line x1="666" y1="70" x2="666" y2="94" stroke="#6b6a64" stroke-width="1.2"/>
-    <rect x="658" y="86" width="16" height="4" fill="#6b6a64" rx="1"/>
-
-    <!-- Day 20 Apr 23: O=375.28 H=386.00 L=368.39 C=373.72 DOWN -->
-    <line x1="699" y1="91" x2="699" y2="143" stroke="#6b6a64" stroke-width="1.2"/>
-    <rect x="691" y="101" width="16" height="22" fill="#6b6a64" rx="1"/>
-
-    <!-- X 轴 -->
-    <text x="72"  y="260" fill="#6b6a64" font-size="8" text-anchor="middle" font-family="Charter,Georgia,serif">3/26</text>
-    <text x="237" y="260" fill="#6b6a64" font-size="8" text-anchor="middle" font-family="Charter,Georgia,serif">4/2</text>
-    <text x="402" y="260" fill="#6b6a64" font-size="8" text-anchor="middle" font-family="Charter,Georgia,serif">4/10</text>
-    <text x="567" y="260" fill="#6b6a64" font-size="8" text-anchor="middle" font-family="Charter,Georgia,serif">4/17</text>
-    <text x="699" y="260" fill="#6b6a64" font-size="8" text-anchor="middle" font-family="Charter,Georgia,serif">4/23</text>
-
-    <!-- 财报标注 -->
-    <line x1="682" y1="24" x2="682" y2="82" stroke="#1B365D" stroke-width="0.8" stroke-dasharray="3,2"/>
-    <text x="680" y="20" fill="#1B365D" font-size="8" text-anchor="end" font-weight="500" font-family="Charter,Georgia,serif">Earnings</text>
-
-    <!-- 图例 -->
-    <line x1="56" y1="280" x2="716" y2="280" stroke="#e8e7e1" stroke-width="0.8"/>
-    <rect x="56" y="290" width="10" height="10" fill="#1B365D" rx="2"/>
-    <text x="72" y="299" fill="#504e49" font-size="9" font-family="Charter,Georgia,serif">Up</text>
-    <rect x="120" y="290" width="10" height="10" fill="#6b6a64" rx="2"/>
-    <text x="136" y="299" fill="#504e49" font-size="9" font-family="Charter,Georgia,serif">Down</text>
-    <text x="240" y="299" fill="#504e49" font-size="9" font-family="Charter,Georgia,serif">20 trading days | $337 - $409</text>
-  </svg>
+  <svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TSLA 近 20 个交易日走势" data-kami-chart="candlestick" data-kami-spec="{&quot;decimals&quot;:0,&quot;lang&quot;:&quot;cn&quot;,&quot;points&quot;:[{&quot;close&quot;:372.11,&quot;high&quot;:384.44,&quot;label&quot;:&quot;3/26&quot;,&quot;low&quot;:371.87,&quot;open&quot;:381.6},{&quot;close&quot;:361.83,&quot;high&quot;:369.86,&quot;label&quot;:&quot;3/27&quot;,&quot;low&quot;:359.47,&quot;open&quot;:369.69},{&quot;close&quot;:355.28,&quot;high&quot;:367.29,&quot;label&quot;:&quot;3/30&quot;,&quot;low&quot;:352.14,&quot;open&quot;:365.86},{&quot;close&quot;:371.75,&quot;high&quot;:373.33,&quot;label&quot;:&quot;3/31&quot;,&quot;low&quot;:361.0,&quot;open&quot;:361.51},{&quot;close&quot;:381.26,&quot;high&quot;:383.14,&quot;label&quot;:&quot;4/1&quot;,&quot;low&quot;:374.08,&quot;open&quot;:378.63},{&quot;close&quot;:360.59,&quot;high&quot;:370.28,&quot;label&quot;:&quot;4/2&quot;,&quot;low&quot;:359.03,&quot;open&quot;:364.2},{&quot;close&quot;:352.82,&quot;high&quot;:367.72,&quot;label&quot;:&quot;4/6&quot;,&quot;low&quot;:346.64,&quot;open&quot;:362.59},{&quot;close&quot;:346.65,&quot;high&quot;:348.02,&quot;label&quot;:&quot;4/7&quot;,&quot;low&quot;:337.24,&quot;open&quot;:346.44},{&quot;close&quot;:343.25,&quot;high&quot;:364.5,&quot;label&quot;:&quot;4/8&quot;,&quot;low&quot;:339.67,&quot;open&quot;:363.79},{&quot;close&quot;:345.62,&quot;high&quot;:348.88,&quot;label&quot;:&quot;4/9&quot;,&quot;low&quot;:337.25,&quot;open&quot;:343.15},{&quot;close&quot;:348.95,&quot;high&quot;:350.36,&quot;label&quot;:&quot;4/10&quot;,&quot;low&quot;:342.74,&quot;open&quot;:346.29},{&quot;close&quot;:352.42,&quot;high&quot;:356.35,&quot;label&quot;:&quot;4/13&quot;,&quot;low&quot;:348.57,&quot;open&quot;:350.07},{&quot;close&quot;:364.2,&quot;high&quot;:367.63,&quot;label&quot;:&quot;4/14&quot;,&quot;low&quot;:354.77,&quot;open&quot;:357.67},{&quot;close&quot;:391.95,&quot;high&quot;:394.65,&quot;label&quot;:&quot;4/15&quot;,&quot;low&quot;:362.5,&quot;open&quot;:366.83},{&quot;close&quot;:388.9,&quot;high&quot;:394.06,&quot;label&quot;:&quot;4/16&quot;,&quot;low&quot;:381.8,&quot;open&quot;:393.81},{&quot;close&quot;:400.62,&quot;high&quot;:409.28,&quot;label&quot;:&quot;4/17&quot;,&quot;low&quot;:391.65,&quot;open&quot;:395.92},{&quot;close&quot;:392.5,&quot;high&quot;:406.8,&quot;label&quot;:&quot;4/20&quot;,&quot;low&quot;:388.33,&quot;open&quot;:402.58},{&quot;close&quot;:386.42,&quot;high&quot;:393.95,&quot;label&quot;:&quot;4/21&quot;,&quot;low&quot;:385.22,&quot;open&quot;:393.0},{&quot;close&quot;:387.51,&quot;high&quot;:393.01,&quot;label&quot;:&quot;4/22&quot;,&quot;low&quot;:385.3,&quot;open&quot;:387.57},{&quot;close&quot;:373.72,&quot;high&quot;:386.0,&quot;label&quot;:&quot;4/23&quot;,&quot;low&quot;:368.39,&quot;open&quot;:375.28}],&quot;prefix&quot;:&quot;$&quot;,&quot;title&quot;:&quot;TSLA 近 20 个交易日走势&quot;,&quot;type&quot;:&quot;candlestick&quot;}">
+  <rect width="100%" height="100%" fill="#f5f4ed"/>
+  <line x1="28.5" y1="224" x2="756" y2="224" stroke="#e8e7e1" stroke-width="0.8"/>
+  <text x="20.5" y="228" fill="#6b6a64" font-size="11" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif" text-anchor="end">320</text>
+  <line x1="28.5" y1="184" x2="756" y2="184" stroke="#e8e7e1" stroke-width="0.8"/>
+  <text x="20.5" y="188" fill="#6b6a64" font-size="11" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif" text-anchor="end">340</text>
+  <line x1="28.5" y1="144" x2="756" y2="144" stroke="#e8e7e1" stroke-width="0.8"/>
+  <text x="20.5" y="148" fill="#6b6a64" font-size="11" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif" text-anchor="end">360</text>
+  <line x1="28.5" y1="104" x2="756" y2="104" stroke="#e8e7e1" stroke-width="0.8"/>
+  <text x="20.5" y="108" fill="#6b6a64" font-size="11" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif" text-anchor="end">380</text>
+  <line x1="28.5" y1="64" x2="756" y2="64" stroke="#e8e7e1" stroke-width="0.8"/>
+  <text x="20.5" y="68" fill="#6b6a64" font-size="11" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif" text-anchor="end">400</text>
+  <line x1="28.5" y1="24" x2="756" y2="24" stroke="#e8e7e1" stroke-width="0.8"/>
+  <text x="20.5" y="28" fill="#6b6a64" font-size="11" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif" text-anchor="end">420</text>
+  <line x1="46.7" y1="95.1" x2="46.7" y2="120.3" stroke="#6b6a64" stroke-width="1.2"/>
+  <rect x="38.7" y="100.8" width="16" height="19" fill="#6b6a64" rx="1"/>
+  <text x="46.7" y="246" fill="#6b6a64" font-size="11" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif" text-anchor="middle">3/26</text>
+  <line x1="83" y1="124.3" x2="83" y2="145.1" stroke="#6b6a64" stroke-width="1.2"/>
+  <rect x="75" y="124.6" width="16" height="15.7" fill="#6b6a64" rx="1"/>
+  <line x1="119.4" y1="129.4" x2="119.4" y2="159.7" stroke="#6b6a64" stroke-width="1.2"/>
+  <rect x="111.4" y="132.3" width="16" height="21.2" fill="#6b6a64" rx="1"/>
+  <line x1="155.8" y1="117.3" x2="155.8" y2="142" stroke="#1B365D" stroke-width="1.2"/>
+  <rect x="147.8" y="120.5" width="16" height="20.5" fill="#1B365D" rx="1"/>
+  <line x1="192.2" y1="97.7" x2="192.2" y2="115.8" stroke="#1B365D" stroke-width="1.2"/>
+  <rect x="184.2" y="101.5" width="16" height="5.3" fill="#1B365D" rx="1"/>
+  <text x="192.2" y="246" fill="#6b6a64" font-size="11" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif" text-anchor="middle">4/1</text>
+  <line x1="228.5" y1="123.4" x2="228.5" y2="145.9" stroke="#6b6a64" stroke-width="1.2"/>
+  <rect x="220.5" y="135.6" width="16" height="7.2" fill="#6b6a64" rx="1"/>
+  <line x1="264.9" y1="128.6" x2="264.9" y2="170.7" stroke="#6b6a64" stroke-width="1.2"/>
+  <rect x="256.9" y="138.8" width="16" height="19.5" fill="#6b6a64" rx="1"/>
+  <line x1="301.3" y1="168" x2="301.3" y2="189.5" stroke="#1B365D" stroke-width="1.2"/>
+  <rect x="293.3" y="170.7" width="16" height="1" fill="#1B365D" rx="1"/>
+  <line x1="337.7" y1="135" x2="337.7" y2="184.7" stroke="#6b6a64" stroke-width="1.2"/>
+  <rect x="329.7" y="136.4" width="16" height="41.1" fill="#6b6a64" rx="1"/>
+  <text x="337.7" y="246" fill="#6b6a64" font-size="11" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif" text-anchor="middle">4/8</text>
+  <line x1="374.1" y1="166.2" x2="374.1" y2="189.5" stroke="#1B365D" stroke-width="1.2"/>
+  <rect x="366.1" y="172.8" width="16" height="4.9" fill="#1B365D" rx="1"/>
+  <line x1="410.4" y1="163.3" x2="410.4" y2="178.5" stroke="#1B365D" stroke-width="1.2"/>
+  <rect x="402.4" y="166.1" width="16" height="5.3" fill="#1B365D" rx="1"/>
+  <line x1="446.8" y1="151.3" x2="446.8" y2="166.9" stroke="#1B365D" stroke-width="1.2"/>
+  <rect x="438.8" y="159.2" width="16" height="4.7" fill="#1B365D" rx="1"/>
+  <line x1="483.2" y1="128.7" x2="483.2" y2="154.5" stroke="#1B365D" stroke-width="1.2"/>
+  <rect x="475.2" y="135.6" width="16" height="13.1" fill="#1B365D" rx="1"/>
+  <text x="483.2" y="246" fill="#6b6a64" font-size="11" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif" text-anchor="middle">4/14</text>
+  <line x1="519.6" y1="74.7" x2="519.6" y2="139" stroke="#1B365D" stroke-width="1.2"/>
+  <rect x="511.6" y="80.1" width="16" height="50.2" fill="#1B365D" rx="1"/>
+  <line x1="555.9" y1="75.9" x2="555.9" y2="100.4" stroke="#6b6a64" stroke-width="1.2"/>
+  <rect x="547.9" y="76.4" width="16" height="9.8" fill="#6b6a64" rx="1"/>
+  <line x1="592.3" y1="45.4" x2="592.3" y2="80.7" stroke="#1B365D" stroke-width="1.2"/>
+  <rect x="584.3" y="62.8" width="16" height="9.4" fill="#1B365D" rx="1"/>
+  <line x1="628.7" y1="50.4" x2="628.7" y2="87.3" stroke="#6b6a64" stroke-width="1.2"/>
+  <rect x="620.7" y="58.8" width="16" height="20.2" fill="#6b6a64" rx="1"/>
+  <text x="628.7" y="246" fill="#6b6a64" font-size="11" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif" text-anchor="middle">4/20</text>
+  <line x1="665.1" y1="76.1" x2="665.1" y2="93.6" stroke="#6b6a64" stroke-width="1.2"/>
+  <rect x="657.1" y="78" width="16" height="13.2" fill="#6b6a64" rx="1"/>
+  <line x1="701.4" y1="78" x2="701.4" y2="93.4" stroke="#6b6a64" stroke-width="1.2"/>
+  <rect x="693.4" y="88.9" width="16" height="1" fill="#6b6a64" rx="1"/>
+  <line x1="737.8" y1="92" x2="737.8" y2="127.2" stroke="#6b6a64" stroke-width="1.2"/>
+  <rect x="729.8" y="113.4" width="16" height="3.1" fill="#6b6a64" rx="1"/>
+  <text x="737.8" y="246" fill="#6b6a64" font-size="11" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif" text-anchor="middle">4/23</text>
+  <line x1="28.5" y1="268" x2="756" y2="268" stroke="#e8e7e1" stroke-width="0.8"/>
+  <rect x="28.5" y="281" width="12" height="12" fill="#1B365D" rx="2"/>
+  <text x="46.5" y="292" fill="#504e49" font-size="12" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif">上涨</text>
+  <rect x="102.5" y="281" width="12" height="12" fill="#6b6a64" rx="2"/>
+  <text x="120.5" y="292" fill="#504e49" font-size="12" font-family="'TsangerJinKai02', 'Source Han Serif SC', 'Source Han Serif CN', 'Noto Serif CJK SC', 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', Charter, Georgia, serif">下跌</text>
+</svg>
   <figcaption>图 1. TSLA 近 20 个交易日走势（3/26 - 4/23）。4/17 冲高 $409 后回落，财报后因 capex 指引下跌。</figcaption>
 </figure>
 
 <!-- ========== 财务概览 ========== -->
 <h2>财务概览</h2>
-<table class="financial">
+<table class="financial compact">
   <thead>
     <tr>
       <th>指标</th>
