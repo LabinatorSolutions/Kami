@@ -440,14 +440,16 @@ Applies before handing off any user-visible typeset deliverable (rendered PDF,
 `evals/<case>/` holds end-to-end cases for `claude plugin eval`: a realistic request
 with invented data (`prompt.md`), and graders for skill trigger, PDF (or HTML)
 creation, and unfilled placeholders, plus fact fidelity in the HTML. Fact fidelity is
-a `regex` grader wherever the facts are literal (one-pager-en, resume-cn): LLM judges
-split on derived figures and reported false FAILs on outputs whose facts were all
-present. Keep an LLM judge only for what a pattern cannot read (Korean-only text,
-assertion titles, arithmetic). `evals/score.py` then applies Kami's own gates to each
-kept run workspace (page contract, atomic facts in the PDF text, fonts, density,
-residue, style, resume balance, generated chart count), which the harness cannot run
-itself; it is read-only unless given `--write`, which saves `gate-scores.json`. One
-suite run is 9 cases, 18 document builds at `--runs 2`, at roughly $1-3 each.
+a `regex` grader wherever the facts are literal (one-pager-en, resume-cn, long-doc-cn,
+equity-report-cn): LLM judges split on derived figures and reported false FAILs on
+outputs whose facts were all present. Keep an LLM judge only for what a pattern cannot
+read (Korean-only text, assertion titles, arithmetic), as its own lower-weight grader
+such as `derived-figures.md`, so judge noise never fails fact fidelity with it.
+`evals/score.py` then applies Kami's own gates to each kept run workspace (page
+contract, atomic facts in the PDF text, fonts, density, residue, style, resume
+balance, generated chart count), which the harness cannot run itself; it is
+read-only unless given `--write`, which saves `gate-scores.json`. One suite run is 9
+cases, 18 document builds at `--runs 2`, at roughly $1-3 each.
 
 - Run it after any change to `SKILL.md`, a reference the tier table routes to, a
   template, or a gate an agent relies on, and compare against the previous run on the
