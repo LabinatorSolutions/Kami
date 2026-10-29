@@ -447,9 +447,11 @@ is a `not_contains` regex too where it can be: invented contact details and non-
 copy in letter-ko, outside companies and consensus in equity-report-cn. A `focus` on a
 long HTML file drew unanimous FAIL votes on outputs a standalone sonnet judge passed
 with every figure rechecked (2026-10-30), matching the harness docs' advice to keep
-`llm` graders for short outputs. Keep an LLM judge only for what no pattern can read,
-as its own lower-weight grader such as long-doc-cn `derived-figures.md`, so judge noise
-never fails fact fidelity with it.
+`llm` graders for short outputs. Invented numbers in long-doc-cn are `score.py`'s
+`invented` gate: every number with a unit must be supplied, or for % and 倍 a ratio or
+percent change of two supplied ones; it catches invented seconds, 万, 元 and 台 but
+not an invented percentage, since ratios of a dozen inputs reach most integers.
+slides-en keeps the one LLM fidelity judge, which has passed every run on its deck.
 `evals/score.py` then applies Kami's own gates to each kept run workspace (page
 contract, atomic facts in the PDF text, fonts, density, residue, style, resume
 balance, generated chart count), which the harness cannot run itself; it is

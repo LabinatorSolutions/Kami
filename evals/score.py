@@ -5,7 +5,8 @@ The eval harness grades what it can see (skill fired, files created, regex
 and LLM reads of the HTML). It cannot run Kami's own gates on the rendered PDF,
 so this script walks each kept run workspace and applies them: page contract,
 atomic fact survival in the PDF text, font family, density, Markdown residue,
-template style drift, and the chart count for chart cases. HTML-only cases
+template style drift, the chart count for chart cases, and, for a brief that
+withholds data, numbers no supplied figure accounts for. HTML-only cases
 (landing pages) skip every PDF gate and read facts from the HTML text.
 
 Run the suite with --keep-temp, then:
@@ -56,8 +57,17 @@ HTML_ONLY = {"landing-page-en"}
 # Cases whose prompt asks for charts: minimum <svg data-kami-chart> count.
 MIN_CHARTS = {"equity-report-charts-en": 2}
 CHART_SVG = re.compile(r"<svg\b[^>]*\bdata-kami-chart\b", re.I)
+# Cases whose brief withholds data: every number with a unit in the HTML must be a
+# supplied one, or, for a share or multiple (% or 倍), a ratio or percent change
+# between two supplied ones, the complement of a supplied percentage, or a
+# definitional percentage. Absolute units (万, 毫秒, 家, 元) take supplied values only,
+# and differences are left out: with a dozen inputs they reach almost any small number.
+SUPPLIED = {"long-doc-cn": (18.5, 12.1, 2.3, 4.2, 11, 48, 350, 16, 32, 3, 94, 81, 97, 90)}
+DEFINITIONAL = {1.0, 50.0, 99.0, 100.0}
+RELATIVE_UNITS = {"%", "个百分点", "倍"}
+UNIT_NUMBER = re.compile(r"(?<![\d.A-Za-z])(\d+(?:\.\d+)?)\s*(%|个百分点|万|毫秒|ms|倍|秒|家|元|台)")
 # Boolean gate columns; a row carries only the ones that applied to it.
-GATES = ("contract", "fonts", "density", "residue", "balance", "placeholders", "style", "charts")
+GATES = ("contract", "fonts", "density", "residue", "balance", "placeholders", "style", "charts", "invented")
 
 
 def _quiet(fn, argv: list[str]) -> tuple[int, str]:
@@ -94,9 +104,11 @@ def _pdf_text(pdf: Path) -> tuple[int, str]:
         return len(doc), "".join(page.get_text() for page in doc)
 
 
-def _html_text(html: Path) -> str:
+def _html_text(html: Path, drop_svg: bool = False) -> str:
     raw = html.read_text(encoding="utf-8", errors="replace")
     raw = re.sub(r"(?is)<(style|script)\b.*?</\1>|<!--.*?-->", " ", raw)
+    if drop_svg:  # chart axis ticks (0 5 10 15 20 万) are scale, not claims
+        raw = re.sub(r"(?is)<svg\b.*?</svg>", " ", raw)
     import html as htmlmod
 
     return htmlmod.unescape(re.sub(r"<[^>]+>", " ", raw))
@@ -109,6 +121,30 @@ def _facts(row: dict, text: str, facts: list[str]) -> None:
     row["missing"] = [f for f in facts if f not in found]
 
 
+def _derivable(supplied: tuple[float, ...]) -> set[float]:
+    values = DEFINITIONAL | {100 - a for a in supplied if a < 100}
+    for a in supplied:
+        for b in supplied:
+            if a != b:
+                values |= {a / b, a / b * 100, (a / b - 1) * 100, (1 - a / b) * 100}
+    return values
+
+
+def _invented(row: dict, text: str, supplied: tuple[float, ...]) -> None:
+    """Numbers with a unit that no supplied figure accounts for, compared at the
+    precision the text shows."""
+    derived = _derivable(supplied)
+    stray = []
+    for value, unit in UNIT_NUMBER.findall(text):
+        digits = len(value.split(".")[1]) if "." in value else 0
+        pool = set(supplied) | (derived if unit in RELATIVE_UNITS else set())
+        if not any(round(c, digits) == float(value) for c in pool):
+            stray.append(value + unit)
+    row["invented"] = not stray
+    if stray:
+        row["stray"] = sorted(set(stray))
+
+
 def _html_gates(row: dict, case: str, html: Path, screen: bool | None) -> None:
     row["placeholders"] = _quiet(check_placeholders, [str(html)])[0] == 0
     row["style"] = _quiet(lambda argv: check_style(argv, screen=screen), [str(html)])[0] == 0
@@ -117,6 +153,8 @@ def _html_gates(row: dict, case: str, html: Path, screen: bool | None) -> None:
         row["chart_count"] = count
     if case in MIN_CHARTS:
         row["charts"] = count >= MIN_CHARTS[case]
+    if case in SUPPLIED:
+        _invented(row, _html_text(html, drop_svg=True), SUPPLIED[case])
 
 
 def score_run(case: str, run: dict) -> dict:
@@ -253,7 +291,7 @@ def main(argv: list[str]) -> int:
             rows.append(row)
 
     cols = ["case", "harness", "gates", "pages", "contract", "facts", "fonts", "density",
-            "residue", "style", "placeholders", "balance", "charts", "turns", "secs", "cost"]
+            "residue", "style", "placeholders", "balance", "charts", "invented", "turns", "secs", "cost"]
     print("\t".join(cols))
     total_cost = 0.0
     for row in rows:
@@ -273,6 +311,8 @@ def main(argv: list[str]) -> int:
                 print(f"  {row['case']}: {key}: {row[key]}")
         if row.get("missing"):
             print(f"  {row['case']}: missing facts: {', '.join(row['missing'])}")
+        if row.get("stray"):
+            print(f"  {row['case']}: numbers the brief does not account for: {', '.join(row['stray'])}")
     scored = [r["gates"] for r in rows if r["gates"] is not None]
     if scored:
         print(f"mean gate score {sum(scored) / len(scored):.2f} over {len(scored)} run(s); agent cost ${total_cost:.2f}")
