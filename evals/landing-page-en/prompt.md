@@ -6,7 +6,7 @@ timeout_seconds: 2400
 allowed_tools: [Read, Glob, Grep, Skill, Bash, Write, Edit, TodoWrite]
 ---
 
-Make a landing page for my product as a single HTML file in the current directory, named index.html. It is a web page only, no PDF needed. Don't ask me questions, just make reasonable calls and tell me at the end what's missing.
+Make a Kami landing page for my product as a single HTML file in the current directory, named index.html. It is a web page only, no PDF needed. Don't ask me questions, just make reasonable calls and tell me at the end what's missing.
 
 Product: Ledgerly, bookkeeping for freelancers.
 - Import bank statements as CSV and Ledgerly sorts transactions into tax categories.

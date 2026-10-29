@@ -457,6 +457,11 @@ cases, 18 document builds at `--runs 2`, at roughly $1-3 each.
 - The harness reads the plugin from `plugins/kami` live. Never run
   `scripts/build_metadata.py` while a suite is running, and regenerate it before a run
   so the suite tests the current skill.
+- landing-page-en names Kami in its prompt because the description only claims a
+  Kami landing page (6b39d04); an unnamed landing-page request fired the skill in 3 of
+  4 runs, so the case measured trigger noise instead of the template.
+- `--case` takes one glob, and a second `--case` replaces the first: on 2026-10-29
+  `--case long-doc-cn --case equity-report-cn` ran only equity-report-cn.
 - A file grader takes an exact path; globs such as `*.html` fail with "path does not
   exist". Every prompt pins its output file names for that reason.
 - Kept workspaces live under `/private/tmp/e-*/sealed/home/cwd` with mode 000;
