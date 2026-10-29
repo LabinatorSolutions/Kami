@@ -74,6 +74,9 @@
 
   strong { font-weight: 500; }
   .hl { color: var(--brand); font-weight: 500; }
+  h2.with-rating { display: flex; justify-content: space-between; align-items: baseline; }
+  .h2-rating { font-size: 9pt; font-weight: 400; color: var(--stone); }
+  .h2-rating b { font-size: 15pt; font-weight: 500; color: var(--brand); margin-left: 5pt; }
 
   /* ========== HEADER ========== */
   .report-header {
@@ -217,16 +220,6 @@
   table:not(.striped) th:first-child, table:not(.striped) td:first-child { padding-left: 0; }
   table:not(.striped) th:last-child, table:not(.striped) td:last-child { padding-right: 0; }
 
-  /* ========== CALLOUT ========== */
-  .callout {
-    background: var(--ivory);
-    padding: 8pt 12pt;
-    border-radius: 3pt;
-    margin: 8pt 0;
-    line-height: 1.42;
-    break-inside: avoid;
-  }
-
   /* ========== FIGURE ========== */
   figure { margin: 8pt 0 16pt; break-inside: avoid; }
   figcaption {
@@ -327,14 +320,12 @@
 </div>
 
 <!-- ========== 投资逻辑 ========== -->
-<h2>投资逻辑</h2>
+<h2 class="with-rating">投资逻辑<span class="h2-rating">评级<b>持有</b></span></h2>
 <p>特斯拉 Q1 2026 营收 <span class="hl">$22.39B（同比 +16%）</span>，超市场预期的 $21.92B；Non-GAAP EPS <span class="hl">$0.41，高于预期的 $0.37</span>。毛利率从去年同期的 16.3% 恢复到 21.1%（+478 bps），能源业务毛利率创历史新高 39.5%。汽车业务释放了矛盾信号：交付 358,023 辆，低于市场预期约 7,600 辆，但利润率扩张的叙事依然成立。</p>
 
 <p>核心矛盾：短期利润率恢复 vs 2026 全年 $25B+ 资本开支承诺。管理层预期全年自由现金流转负。财报后股价下跌 3.56%，市场定价的是资本开支冲击而非盈利超预期。</p>
 
-<div class="callout">
-  <strong>持有。</strong>Q1 利润率恢复验证了降本能力，但 $25B capex + 负 FCF 指引意味着当前股价定价了 AI/Robotaxi 的期权价值，而这部分尚无规模化收入贡献。建议等 Q2 交付数据和 Robotaxi 单位经济学落地后再做加仓决策。
-</div>
+<p><strong>持有。</strong>Q1 利润率恢复验证了降本能力，但 $25B capex + 负 FCF 指引意味着当前股价定价了 AI/Robotaxi 的期权价值，而这部分尚无规模化收入贡献。建议等 Q2 交付数据和 Robotaxi 单位经济学落地后再做加仓决策。</p>
 
 <!-- ========== K 线图 ========== -->
 <h2>近期价格走势</h2>
