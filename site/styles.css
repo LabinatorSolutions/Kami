@@ -1106,9 +1106,9 @@
     white-space: nowrap;
   }
   .footer-links a:not(:last-child)::after {
-    content: " ·";
+    content: "·";
     color: var(--stone);
-    margin-right: 8px;
+    margin: 0 6px;
   }
   .footer .colophon b { color: var(--dark-warm); font-weight: 500; }
 
