@@ -150,9 +150,9 @@ def test_landing_page_ctas_wrap_on_phones() -> None:
           f"offenders: {', '.join(offenders)}")
 
 
-def test_public_site_og_dimensions_match_showcase_image() -> None:
+def test_public_site_og_dimensions_match_share_card() -> None:
     """Social metadata must describe the image bytes platforms will fetch."""
-    image = (SITE_ROOT / "assets" / "showcase" / "kami-landing.png").read_bytes()
+    image = (SITE_ROOT / "assets" / "og.png").read_bytes()
     valid_png = image[:8] == b"\x89PNG\r\n\x1a\n" and image[12:16] == b"IHDR"
     width = int.from_bytes(image[16:20], "big") if valid_png else 0
     height = int.from_bytes(image[20:24], "big") if valid_png else 0
