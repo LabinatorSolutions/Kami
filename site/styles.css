@@ -131,9 +131,7 @@
     padding: 5px;
     border: 1px solid var(--border-soft);
     border-radius: 8px;
-    background: color-mix(in srgb, var(--ivory) 97%, transparent);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
+    background: var(--ivory);
     box-shadow: 0 8px 24px rgba(20, 19, 19, 0.08);
     opacity: 0;
     visibility: hidden;
